@@ -1,0 +1,12 @@
+build
+coverage
+dist
+.DS_Store
+.eslintcache
+.gradle
+logs
+node_modules
+package-lock.json
+.dockerignore
+.tmp
+.vscode

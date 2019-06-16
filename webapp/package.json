@@ -1,0 +1,64 @@
+{
+  "name": "colorwheel",
+  "version": "1.0.0",
+  "description": "a holistic tool to help writers take their stories from planning to publishing",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MarisaRichmond94/ColorWheel.git"
+  },
+  "author": "Marisa Richmond",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/polyfill": "^7.0.0",
+    "bootstrap": "^4.3.1",
+    "crypto-js": "^3.1.9-1",
+    "jquery": "^3.4.1",
+    "prop-types": "^15.6.2",
+    "react": "16.8.2",
+    "react-app-env": "^1.2.3",
+    "react-dom": "^16.8.2",
+    "react-redux": "^5.1.1",
+    "react-router-dom": "^4.3.1",
+    "react-router-redux": "^4.0.8",
+    "react-scripts": "^2.1.5",
+    "react-svg-piechart": "^2.1.1",
+    "reactstrap": "^6.5.0",
+    "redux": "^4.0.1",
+    "redux-persist": "^5.10.0",
+    "redux-persist-transform-filter": "0.0.18",
+    "redux-saga": "^0.16.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
+    "@babel/preset-react": "^7.0.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-eslint": "9.0.0",
+    "eslint": "5.12.0",
+    "eslint-config-google": "^0.11.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^8.0.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-react": "^7.11.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-watch": "^4.0.2",
+    "redux-devtools-extension": "^2.13.7",
+    "redux-logger": "^3.0.6"
+  },
+  "scripts": {
+    "build": "react-app-env --env-file=config/${BUILD_ENV:-local}.env build",
+    "lint": "eslint src/",
+    "lint:fix": "npm run lint -- --fix",
+    "lint:watch": "esw src/",
+    "start": "react-app-env --env-file=config/${BUILD_ENV:-local}.env start"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}

@@ -1,0 +1,9 @@
+version: '3.7'
+services:
+  colorwheel_client:
+    image: colorwheel_client
+    build:
+      context: ./webapp
+  mongodb:
+    image: mongo:latest
+    command: mongod
