@@ -7,7 +7,7 @@ many of the better ones cost money or do not offer a comprehensive option. As a 
 a programmer, I have created ColorWheel to help writers organize everything in one place.
 ColorWheel will provide the following helpful features:
 
-![alt text](https://raw.githubusercontent.com/MarisaRichmond94/ColorWheel/master/client/public/images/colorwheel_example.jpeg)
+![alt text](https://raw.githubusercontent.com/MarisaRichmond94/ColorWheel/master/webapp/public/images/colorwheel_example.jpeg)
 
 ## Features
 - An online hub for storing all of your novels, allowing them to be accessed and downloaded from any computer as long as it has access to the Internet
