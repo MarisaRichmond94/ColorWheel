@@ -1,1 +1,0 @@
-export const BUILD_ENV = process.env.REACT_APP_BUILD_ENV;
