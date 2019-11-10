@@ -1,9 +1,11 @@
+import './global';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 function App(props) {
 	return (
-		<>Color Wheel</>
+		<h2 className={styles.red}>Color Wheel</h2>
 	);
 }
 
