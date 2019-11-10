@@ -1,2 +1,9 @@
+.babelrc
+dist
+.DS_Store
+.editorconfig
+.eslintrc
 node_modules
+package-lock.json
+.prettierrc
 .vscode
