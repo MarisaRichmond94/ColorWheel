@@ -1,8 +1,14 @@
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const isDevelopment = process.env.NODE_ENV === 'development';
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require('path');
 
 module.exports = {
+	devServer: {
+		contentBase: path.join(__dirname, 'dist'),
+		compress: true,
+		port: 3000
+	},
 	module: {
 		rules: [
 			{
@@ -52,17 +58,20 @@ module.exports = {
 						}
 					}
 				]
+			},
+			{
+				test: /\.(png|svg|jpg|gif)$/,
+				use: [
+					'file-loader',
+				]
 			}
 		]
-	},
-	resolve: {
-		extensions: ['.js', '.jsx', '.scss']
 	},
 	plugins: [
 		new HtmlWebPackPlugin(
 			{
-				template: './src/index.html',
-				favicon: "./src/favicon.ico",
+				template: './public/index.html',
+				favicon: "./public/favicon.ico",
 				filename: './index.html',
 			}
 		),
@@ -72,5 +81,8 @@ module.exports = {
 				chunkFilename: isDevelopment ? '[id].css' : '[id].[hash].css'
 			}
 		)
-	]
+	],
+	resolve: {
+		extensions: ['.js', '.jsx', '.scss']
+	},
 };
