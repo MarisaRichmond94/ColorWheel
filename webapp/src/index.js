@@ -1,16 +1,34 @@
+import 'babel-polyfill';
 import './global';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Col, Row } from 'react-bootstrap';
+import { Provider } from 'react-redux';
+import { Router } from 'react-router-dom';
+import { applyMiddleware, compose, createStore } from 'redux';
+import createSagaMiddleware from 'redux-saga';
 
-function App(props) {
-	return (
-		<Row>
-			<Col xs={12}>
-			</Col>
-		</Row>
-	);
-}
+import App from './app';
+import history from './history';
+import reducer from './redux/reducers';
+import rootSaga from './sagas';
 
-ReactDOM.render(<App />, document.getElementById('app'));
+const composeEnhancers = (process.env.NODE_ENV === 'development' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
+const sagaMiddleware = createSagaMiddleware();
+const store = createStore(
+	reducer,
+	undefined,
+	composeEnhancers(applyMiddleware(sagaMiddleware)),
+);
+sagaMiddleware.run(rootSaga);
+const action = (type, payload) => store.dispatch({ type, payload });
+window.dispatchAction = action;
+
+ReactDOM.render(
+	<Provider store={store}>
+		<Router history={history}>
+			<App />
+		</Router>
+	</Provider>,
+	document.getElementById('app')
+);
