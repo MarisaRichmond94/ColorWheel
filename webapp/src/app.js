@@ -1,8 +1,10 @@
 import React from 'react';
 
+import SmartRouter from './router';
+
 function App(props) {
 	return (
-		<h1>Welcome</h1>
+		<SmartRouter />
 	);
 }
 

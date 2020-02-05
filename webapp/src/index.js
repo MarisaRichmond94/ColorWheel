@@ -9,7 +9,7 @@ import { applyMiddleware, compose, createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
 import App from './app';
-import history from './history';
+import history from './utils/history';
 import reducer from './redux/reducers';
 import rootSaga from './sagas';
 
@@ -23,6 +23,7 @@ const store = createStore(
 sagaMiddleware.run(rootSaga);
 const action = (type, payload) => store.dispatch({ type, payload });
 window.dispatchAction = action;
+window.historyPush = history.push;
 
 ReactDOM.render(
 	<Provider store={store}>
