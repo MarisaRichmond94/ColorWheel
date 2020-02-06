@@ -1,14 +1,22 @@
+import loadable from 'react-loadable';
 import React from 'react';
 import { Route } from 'react-router-dom';
 
-import Home from './routes/home';
-import Login from './routes/login';
+const LoginRoute = loadable({
+	loader: () => import('./routes/login'),
+	loading: () => <h1>Loading Login...</h1>
+});
+
+const HomeRoute = loadable({
+	loader: () => import('./routes/home'),
+	loading: () => <h1>Loading Home...</h1>
+});
 
 function SmartRouter(props) {
 	return (
 		<>
-			<Route exact path='/' component={Login} />
-			<Route exact path='/home' component={Home} />
+			<Route exact path='/' component={LoginRoute} />
+			<Route path='/home' component={HomeRoute} />
 		</>
 	)
 }

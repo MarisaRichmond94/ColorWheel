@@ -8,7 +8,11 @@ module.exports = {
 	devServer: {
 		contentBase: path.join(__dirname, 'dist'),
 		compress: true,
+		historyApiFallback: true,
 		port: 3000
+	},
+	entry: {
+		index: './src/index.js',
 	},
 	module: {
 		rules: [
@@ -67,6 +71,25 @@ module.exports = {
 				]
 			}
 		]
+	},
+	optimization: {
+		splitChunks: {
+			cacheGroups: {
+				default: false,
+				vendors: false,
+				vendor: {
+					chunks: 'all',
+					name: 'vendor',
+					test: /node_modules/,
+				}
+			},
+		},
+	},
+	output: {
+		chunkFilename: '[name].js',
+		filename: '[name].bundle.js',
+		path: path.resolve(__dirname, 'dist'),
+		publicPath: '/',
 	},
 	plugins: [
 		new HtmlWebPackPlugin(
