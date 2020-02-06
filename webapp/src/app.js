@@ -1,6 +1,6 @@
 import React from 'react';
 
-import SmartRouter from './router';
+import SmartRouter from '~/router';
 
 function App(props) {
 	return (

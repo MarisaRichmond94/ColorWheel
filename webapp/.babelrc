@@ -1,4 +1,16 @@
 {
+	"plugins": [
+		[
+			"babel-plugin-root-import",
+			{
+				"rootPathSuffix": "src",
+				"rootPathPrefix": "~"
+			}
+		],
+		[
+			"babel-plugin-idx"
+		]
+	],
 	"presets": [
 		"@babel/preset-env",
 		"@babel/preset-react"
