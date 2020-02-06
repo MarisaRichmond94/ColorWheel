@@ -2,4 +2,63 @@ body {
 	background: url(../public/images/background.jpg);
 	background-size: cover;
 	height: 100%;
+	overflow-x: hidden;
+	width: 100%;
+}
+
+.icon-button {
+	background-color: transparent;
+	color: white;
+	font-size: 25px;
+	margin: 5px;
+}
+
+.text-button {
+	background-color: grey;
+	border: none;
+	margin: 10px;
+}
+
+.text-button:active,
+.text-button:hover {
+	background-color: lightgrey !important;
+}
+
+.text-button:focus,
+.text-button:active:focus {
+	box-shadow: none !important;
+}
+
+.title {
+	color: white;
+	font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+	font-size: 30px;
+}
+
+//------------------------MOVE EVERYTHING BELOW THIS LATER!--------------------------
+// components/footer
+#main-footer {
+	background-color: #333333;
+	bottom: 0;
+	position: fixed;
+	text-align: center;
+	width: 105%;
+}
+
+// components/login_panel
+#login-panel-wrapper {
+	background-color: #333333;
+	border-radius: 8px;
+	margin-top: 30vh;
+	padding-bottom: 15px;
+}
+
+#secret-prompt {
+	padding: 20px;
+}
+
+#passcode-input {
+	border: none !important;
+	margin-left: 5%;
+	width: 90%;
 }

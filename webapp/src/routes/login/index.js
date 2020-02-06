@@ -1,8 +1,14 @@
 import React from 'react';
 
+import Footer from '~/components/footer';
+import LoginPanel from '~/components/login_panel';
+
 function Login(props) {
 	return (
-		<h1>Welcome to the login page!</h1>
+		<>
+			<LoginPanel />
+			<Footer />
+		</>
 	);
 }
 
