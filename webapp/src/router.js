@@ -4,12 +4,12 @@ import { Route } from 'react-router-dom';
 
 const LoginRoute = loadable({
 	loader: () => import('~/routes/login'),
-	loading: () => <h1>Loading Login...</h1>
+	loading: () => <></>
 });
 
 const HomeRoute = loadable({
 	loader: () => import('~/routes/home'),
-	loading: () => <h1>Loading Home...</h1>
+	loading: () => <></>
 });
 
 function SmartRouter(props) {
