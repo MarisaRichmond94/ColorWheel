@@ -2,8 +2,10 @@ import './index.scss';
 
 import { Button, Col, FormControl, Row } from 'react-bootstrap';
 import React, { useState } from 'react';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 function LoginPanel(props) {
+	const [isHidden, setIsHidden] = useState(true);
 	const [passcode, setPasscode] = useState('');
 
 	const submit = () => {
@@ -23,15 +25,24 @@ function LoginPanel(props) {
 					</Col>
 				</Row>
 				<Row>
-					<Col xs={12}>
+					<Col xs={11}>
 						<FormControl
 							className='remove-focus-highlight'
 							id='passcode-input'
 							onChange={e => setPasscode(e.target.value)}
 							placeholder='super secret passcode'
-							type='text'
+							type={(isHidden) ? 'password' : 'text'}
 							value={passcode}
 						/>
+					</Col>
+					<Col xs={1}>
+						<Button
+							className='icon-button'
+							id='passcode-hide-button'
+							onClick={e => setIsHidden(!isHidden)}
+						>
+							{(isHidden) ? <FaEye /> : <FaEyeSlash />}
+						</Button>
 					</Col>
 				</Row>
 				<Row className='text-center' style={{ marginTop: '20px' }}>

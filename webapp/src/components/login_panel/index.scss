@@ -9,8 +9,14 @@
 	padding: 20px;
 }
 
+#passcode-hide-button {
+	background-color: transparent !important;
+	line-height: 0;
+	margin-left: -10px;
+}
+
 #passcode-input {
 	border: none !important;
-	margin-left: 5%;
-	width: 90%;
+	margin-left: 2%;
+	width: 100%;
 }

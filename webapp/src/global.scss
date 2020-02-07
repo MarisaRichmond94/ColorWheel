@@ -6,6 +6,11 @@ body {
 	width: 100%;
 }
 
+button {
+	border: none !important;
+	box-shadow: none !important;
+}
+
 .icon-button {
 	background-color: transparent;
 	color: white;
@@ -16,18 +21,12 @@ body {
 
 .text-button {
 	background-color: grey;
-	border: none;
 	margin: 10px;
 }
 
 .text-button:active,
 .text-button:hover {
 	background-color: lightgrey !important;
-}
-
-.text-button:focus,
-.text-button:active:focus {
-	box-shadow: none !important;
 }
 
 .title {
