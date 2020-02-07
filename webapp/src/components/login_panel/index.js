@@ -2,9 +2,10 @@ import { Button, Col, FormControl, Row } from 'react-bootstrap';
 import React, { useState } from 'react';
 
 function LoginPanel(props) {
-	const [passcode, setPasscode] = useState();
+	const [passcode, setPasscode] = useState('');
 
 	const submit = () => {
+		event.preventDefault();
 		console.log(passcode);
 		// TODO: call api to authenticate passcode with the backend
 	}
