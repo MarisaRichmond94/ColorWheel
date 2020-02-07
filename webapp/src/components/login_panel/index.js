@@ -8,12 +8,6 @@ function LoginPanel(props) {
 	const [isHidden, setIsHidden] = useState(true);
 	const [passcode, setPasscode] = useState('');
 
-	const submit = () => {
-		event.preventDefault();
-		console.log(passcode);
-		// TODO: call api to authenticate passcode with the backend
-	}
-
 	return (
 		<Row>
 			<Col id='login-panel-wrapper' xs={{ span: 6, offset: 3 }}>
@@ -47,7 +41,10 @@ function LoginPanel(props) {
 				</Row>
 				<Row className='text-center' style={{ marginTop: '20px' }}>
 					<Col xs={12}>
-						<Button className='text-button' onClick={submit}>
+						<Button
+							className='text-button'
+							onClick={e => window.dispatchAction('AUTHENTICATE_USER', { passcode })}
+						>
 							Submit
 						</Button>
 					</Col>
