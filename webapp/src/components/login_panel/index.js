@@ -43,6 +43,8 @@ function LoginPanel(props) {
 					<Col xs={12}>
 						<Button
 							className='text-button'
+							disabled={!passcode}
+							id='login-submit-button'
 							onClick={e => window.dispatchAction('AUTHENTICATE_USER', { passcode })}
 						>
 							Submit

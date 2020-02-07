@@ -1,0 +1,7 @@
+export default function appTypes() {
+	return {
+		AUTHENTICATE_USER: 'AUTHENTICATE_USER',
+		DEAUTHENTICATE_USER: 'DEAUTHENTICATE_USER',
+		SET_API_TOKEN: 'SET_API_TOKEN',
+	}
+};

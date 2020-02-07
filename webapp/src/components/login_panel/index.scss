@@ -9,6 +9,10 @@
 	padding: 20px;
 }
 
+#login-submit-button:disabled {
+	background-color: #D3D3D3 !important;
+}
+
 #passcode-hide-button {
 	background-color: transparent !important;
 	line-height: 0;
