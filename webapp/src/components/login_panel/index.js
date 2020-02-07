@@ -1,3 +1,5 @@
+import './index.scss';
+
 import { Button, Col, FormControl, Row } from 'react-bootstrap';
 import React, { useState } from 'react';
 

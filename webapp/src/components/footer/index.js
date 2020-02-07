@@ -1,3 +1,5 @@
+import './index.scss';
+
 import { Col, Row } from 'react-bootstrap';
 import React from 'react';
 import {
