@@ -1,0 +1,17 @@
+{
+  "name": "colorwheel_authentication",
+  "version": "0.0.1",
+  "description": "authentication service for colorwheel",
+  "author": "Marisa Richmond",
+  "license": "ISC",
+  "main": "index.js",
+  "scripts": {
+    "start": "echo \"I don't know how to do this",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1"
+  }
+}

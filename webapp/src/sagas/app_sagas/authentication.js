@@ -1,21 +1,21 @@
-import { put, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 
+import authenticationApi from '~/api/authentication';
 import types from '~/redux/types';
 
 function* authenticate(action) {
 	const passcode = window.idx(action, _ => _.payload.passcode);
 	if (passcode) {
-		const apiToken = 'aBcD.eFgH.iJkL'; // replace this with an api call
-		if (apiToken) {
+		const apiToken = yield call(authenticationApi.authenticate, passcode);
+		if (apiToken && !apiToken.message) {
 			yield put({ type: 'SET_API_TOKEN', payload: { apiToken } });
-			window.historyReplace('/home');
 		}
 	}
 }
 
 function* deauthenticate(action) {
 	yield put({ type: 'SET_API_TOKEN', payload: { apiToken: undefined } });
-	window.historyReplace('/');
+	window.historyReplace('/login');
 }
 
 export function* watchAuthenticate() {

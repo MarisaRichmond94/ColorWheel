@@ -23,6 +23,7 @@ function LoginPanel(props) {
 						<FormControl
 							className='remove-focus-highlight'
 							id='passcode-input'
+							name='passcode'
 							onChange={e => setPasscode(e.target.value)}
 							placeholder='super secret passcode'
 							type={(isHidden) ? 'password' : 'text'}
