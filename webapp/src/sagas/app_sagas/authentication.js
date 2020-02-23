@@ -9,6 +9,7 @@ function* authenticate(action) {
 		const isAuthenticated = yield call(authenticationApi.authenticate, passcode);
 		if (isAuthenticated && !isAuthenticated.message) {
 			yield put({ type: 'SET_IS_AUTHENTICATED', payload: { isAuthenticated } });
+			window.historyReplace('/');
 		}
 	}
 }

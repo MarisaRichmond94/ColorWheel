@@ -15,8 +15,8 @@ const HomeRoute = loadable({
 function SmartRouter(props) {
 	return (
 		<>
-			<Route exact path='/' component={LoginRoute} />
-			<Route path='/home' component={HomeRoute} />
+			<Route path='/login' component={LoginRoute} />
+			<Route exact path='/' component={HomeRoute} />
 		</>
 	)
 }
