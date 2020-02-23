@@ -6,15 +6,15 @@ import types from '~/redux/types';
 function* authenticate(action) {
 	const passcode = window.idx(action, _ => _.payload.passcode);
 	if (passcode) {
-		const apiToken = yield call(authenticationApi.authenticate, passcode);
-		if (apiToken && !apiToken.message) {
-			yield put({ type: 'SET_API_TOKEN', payload: { apiToken } });
+		const isAuthenticated = yield call(authenticationApi.authenticate, passcode);
+		if (isAuthenticated && !isAuthenticated.message) {
+			yield put({ type: 'SET_IS_AUTHENTICATED', payload: { isAuthenticated } });
 		}
 	}
 }
 
 function* deauthenticate(action) {
-	yield put({ type: 'SET_API_TOKEN', payload: { apiToken: undefined } });
+	yield put({ type: 'SET_IS_AUTHENTICATED', payload: { isAuthenticated: false } });
 	window.historyReplace('/login');
 }
 

@@ -1,14 +1,14 @@
 import types from '~/redux/types';
 
-const setApiToken = payload => ({
-	type: types.SET_API_TOKEN,
+const setIsAuthenticated = payload => ({
+	type: types.SET_IS_AUTHENTICATED,
 	payload: {
-		apiToken: payload.apiToken,
+		isAuthenticated: payload.isAuthenticated,
 	},
 });
 
 export default function appActions() {
 	return {
-		setApiToken,
+		setIsAuthenticated,
 	}
 }

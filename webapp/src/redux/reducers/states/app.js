@@ -1,14 +1,14 @@
 import types from '~/redux/types';
 
 const appInitialState = {
-	apiToken: undefined,
+	isAuthenticated: false,
 };
 
 const appState = (state = appInitialState, action) => {
 	switch (action.type) {
-		case types.SET_API_TOKEN:
+		case types.SET_IS_AUTHENTICATED:
 			return Object.assign({}, state, {
-				apiToken: action.payload.apiToken,
+				isAuthenticated: action.payload.isAuthenticated,
 			});
 		default:
 			return state;
