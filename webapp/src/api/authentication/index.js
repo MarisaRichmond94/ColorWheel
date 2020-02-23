@@ -5,7 +5,7 @@ class Authentication {
 
 	authenticate = async (passcode) => {
 		try {
-			return await fetch(
+			const res = await fetch(
 				this.url,
 				{
 					method: 'POST',
@@ -16,6 +16,7 @@ class Authentication {
 					body: JSON.stringify({ passcode })
 				}
 			);
+			return res.json();
 		} catch (error) {
 			console.error('Fetch failed for POST /authenticate', error);
 		}
