@@ -35,20 +35,26 @@ function initializeDB() {
 	})
 }
 
-function generateDefaults() {
-	const PASSWORD = 'hire me please';
-	bcrypt.genSalt(10, function (error, SALT) {
-		if (error) throw error;
-		bcrypt.hash(PASSWORD, SALT, function (error, HASH) {
+async function generateDefaults() {
+	const getCount = `SELECT COUNT(*) FROM ${TABLE_NAME}`;
+	const count = await CONNECTION.query(getCount);
+	if (count === 0) {
+		const PASSWORD = 'hire me please';
+		bcrypt.genSalt(10, function (error, SALT) {
 			if (error) throw error;
-			const insertRow = `INSERT INTO ${TABLE_NAME}(hash, salt) VALUES ? `;
-			const values = [[HASH, SALT]];
-			CONNECTION.query(insertRow, [values], function (error) {
+			bcrypt.hash(PASSWORD, SALT, function (error, HASH) {
 				if (error) throw error;
-				console.log(`Populated ${TABLE_NAME} with data...`);
+				const insertRow = `INSERT INTO ${TABLE_NAME}(hash, salt) VALUES ? `;
+				const values = [[HASH, SALT]];
+				CONNECTION.query(insertRow, [values], function (error) {
+					if (error) throw error;
+					console.log(`Populated ${TABLE_NAME} with data...`);
+				});
 			});
 		});
-	});
+	} else {
+		console.log(`${TABLE_NAME} already populated with data...`);
+	}
 }
 
 async function validatePasscode(passcode) {
