@@ -18,6 +18,7 @@ function App(props) {
 
 	const authenticateUser = () => {
 		try {
+			window.dispatchAction('REAUTHENTICATE_USER');
 			const path = window.location.pathname;
 			if (!props.isAuthenticated && path !== '/login') {
 				window.location = '/login';

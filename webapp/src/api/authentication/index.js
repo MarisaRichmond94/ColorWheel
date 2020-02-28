@@ -18,7 +18,23 @@ class Authentication {
 			);
 			return res.json();
 		} catch (error) {
-			console.error('Fetch failed for POST /authenticate', error);
+			console.error('Fetch failed for POST /authentication', error);
+		}
+	}
+
+	reauthenticate = async () => {
+		try {
+			const res = await fetch(
+				this.url + '/check_session',
+				{
+					credentials: 'include',
+					method: 'POST',
+					mode: 'cors',
+				}
+			);
+			return res.json();
+		} catch (error) {
+			console.error('Fetch failed for POST /authentication/check_session', error);
 		}
 	}
 }

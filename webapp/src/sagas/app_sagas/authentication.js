@@ -14,6 +14,13 @@ function* authenticate(action) {
 	}
 }
 
+function* rauthenticate(action) {
+	const isAuthenticated = yield call(authenticationApi.reauthenticate);
+	if (!isAuthenticated) {
+		yield put({ type: 'SET_IS_AUTHENTICATED', payload: { isAuthenticated } });
+	}
+}
+
 function* deauthenticate(action) {
 	yield put({ type: 'SET_IS_AUTHENTICATED', payload: { isAuthenticated: false } });
 	window.historyReplace('/login');
@@ -21,6 +28,10 @@ function* deauthenticate(action) {
 
 export function* watchAuthenticate() {
 	yield takeLatest(types.AUTHENTICATE_USER, authenticate);
+}
+
+export function* watchReauthenticate() {
+	yield takeLatest(types.REAUTHENTICATE_USER, rauthenticate);
 }
 
 export function* watchDeauthenticate() {
