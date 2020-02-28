@@ -15,9 +15,13 @@ function* authenticate(action) {
 }
 
 function* rauthenticate(action) {
-	const isAuthenticated = yield call(authenticationApi.reauthenticate);
-	if (!isAuthenticated) {
-		yield put({ type: 'SET_IS_AUTHENTICATED', payload: { isAuthenticated } });
+	const path = window.location.pathname;
+	if (path !== '/login') {
+		const isAuthenticated = yield call(authenticationApi.reauthenticate);
+		if (!isAuthenticated) {
+			yield put({ type: 'SET_IS_AUTHENTICATED', payload: { isAuthenticated } });
+			window.location = '/login';
+		}
 	}
 }
 
