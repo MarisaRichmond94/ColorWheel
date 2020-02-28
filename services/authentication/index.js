@@ -21,7 +21,8 @@ app.post('/authentication/check_session', (req, res) => {
 	if (sessionToken) {
 		isAuthenticated = controller.checkSession(sessionToken);
 	}
-	res.status((isAuthenticated) ? 200 : 401).end();
+	res.status((isAuthenticated) ? 200 : 401);
+	res.send(isAuthenticated);
 });
 
 app.post('/authentication', async (req, res) => {
