@@ -2,6 +2,8 @@ import { bool } from 'prop-types';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 
+import Footer from '~/components/footer';
+import Header from '~/components/header';
 import Login from '~/routes/login';
 import SmartRouter from '~/router';
 
@@ -27,7 +29,13 @@ function App(props) {
 
 
 	return (
-		(props.isAuthenticated) ? <SmartRouter /> : <Login />
+		(props.isAuthenticated)
+			? <>
+				<Header />
+				<SmartRouter />
+				<Footer />
+			</>
+			: <Login />
 	);
 }
 

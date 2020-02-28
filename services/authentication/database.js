@@ -32,13 +32,13 @@ function initializeDB() {
 	CONNECTION.query(createAuthTable, function (error) {
 		if (error) throw error;
 		console.log(`Initialized ${TABLE_NAME} table...`);
-	})
+	});
 }
 
 async function generateDefaults() {
-	const getCount = `SELECT COUNT(*) FROM ${TABLE_NAME}`;
+	const getCount = `SELECT COUNT(*) AS rowLength FROM ${TABLE_NAME}`;
 	const count = await CONNECTION.query(getCount);
-	if (count === 0) {
+	if (count && count[0] && count[0].rowLength === 0) {
 		const PASSWORD = 'hire me please';
 		bcrypt.genSalt(10, function (error, SALT) {
 			if (error) throw error;
