@@ -1,112 +1,39 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const mysql = require('mysql');
-const util = require('util');
+const dao = require('./dao');
 
-const jwtKey = 'temporary_secret_key';
-
-const DATABASE_NAME = 'colorwheel';
-const TABLES = [
-	{
-		name: 'authentication',
-		schema: `(
-			id int PRIMARY KEY auto_increment,
-			hash LONGTEXT NOT NULL,
-			salt LONGTEXT NOT NULL
-		)`
-	}
-];
-let CONNECTION;
+const jwtDuration = 300;
 
 function connectToDB() {
-	CONNECTION = mysql.createConnection({
-		host: 'localhost',
-		user: 'root',
-		password: 'password',
-		database: DATABASE_NAME,
-		insecureAuth: true,
-	});
-	CONNECTION.connect((error) => {
-		if (error) throw error;
-		console.log(`Connected to database ${DATABASE_NAME}...`);
-		initializeTables();
-		generateDefaults();
-	});
-	CONNECTION.query = util.promisify(CONNECTION.query);
+	dao.connectToDB();
 }
 
-function initializeTables() {
-	TABLES.forEach(TABLE => {
-		const createAuthTable = `CREATE TABLE IF NOT EXISTS ${TABLE.name}${TABLE.schema}`;
-		CONNECTION.query(createAuthTable, function (error) {
-			if (error) throw error;
-			console.log(`Initialized ${TABLE.name} table...`);
-		});
-	});
-}
-
-async function generateDefaults() {
-	const getCount = `SELECT COUNT(*) AS rowLength FROM ${TABLES[0].name}`;
-	const count = await CONNECTION.query(getCount);
-	if (count && count[0] && count[0].rowLength === 0) {
-		const PASSWORD = 'hire me please';
-		bcrypt.genSalt(10, function (error, SALT) {
-			if (error) throw error;
-			bcrypt.hash(PASSWORD, SALT, function (error, HASH) {
-				if (error) throw error;
-				const insertRow = `INSERT INTO ${TABLES[0].name}(hash, salt) VALUES ? `;
-				const values = [[HASH, SALT]];
-				CONNECTION.query(insertRow, [values], function (error) {
-					if (error) throw error;
-					console.log(`Populated ${TABLES[0].name} with data...`);
-				});
-			});
-		});
-	} else {
-		console.log(`${TABLES[0].name} already populated with data...`);
+async function authenticate(req, res) {
+	const passcode = (req.body) ? req.body.passcode : undefined;
+	const sessionToken = await dao.getSessionToken(passcode);
+	res.status((sessionToken) ? 200 : 401);
+	if (sessionToken) {
+		res.cookie(
+			'token',
+			sessionToken,
+			{ maxAge: jwtDuration * 1000, httpOnly: true, sameSite: true }
+		);
 	}
+	res.send(!!(sessionToken));
 }
 
-async function getSessionToken(passcode) {
-	let sessionToken = undefined;
-	const isValidPasscode = await validatePasscode(passcode);
-	if (isValidPasscode) {
-		sessionToken = jwt.sign({}, jwtKey, { algorithm: 'HS256', expiresIn: 300 });
+function refresh(req, res) {
+	const sessionToken = (req.cookies) ? req.cookies.token : undefined;
+	const newToken = dao.validateSession(sessionToken);
+	res.status((sessionToken || newToken) ? 200 : 401);
+	if (newToken) {
+		res.cookie(
+			'token',
+			newToken,
+			{ maxAge: jwtDuration * 1000, httpOnly: true, sameSite: true }
+		);
 	}
-	return sessionToken;
+	res.send((!!(newToken) || !!(sessionToken)));
 }
 
-async function validatePasscode(passcode) {
-	const getPasscode = `SELECT a.hash, a.salt FROM authentication a WHERE a.id = 1`;
-	let isValidPasscode = false;
-	const results = await CONNECTION.query(getPasscode);
-	if (results && results[0]) {
-		const result = await new Promise((resolve, reject) => {
-			bcrypt.compare(passcode, results[0].hash, function (error, result) {
-				resolve(result)
-			});
-		});
-		isValidPasscode = result;
-	}
-	return isValidPasscode;
-}
-
-function checkSession(sessionToken) {
-	let isAuthenticated = true;
-	let payload;
-	try {
-		payload = jwt.verify(sessionToken, jwtKey);
-	} catch (error) {
-		console.log(`Failed during checkSession with error ${error}`);
-		isAuthenticated = false;
-	}
-	const nowUnixSeconds = Math.round(Number(new Date()) / 1000);
-	if (payload.exp - nowUnixSeconds > 30) {
-		isAuthenticated = false;
-	}
-	return isAuthenticated;
-}
-
-exports.checkSession = checkSession;
+exports.authenticate = authenticate;
+exports.refresh = refresh;
 exports.connectToDB = connectToDB;
-exports.getSessionToken = getSessionToken;

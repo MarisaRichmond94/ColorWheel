@@ -68,6 +68,7 @@
       "git add"
     ]
   },
+  "proxy": "http://localhost:8080",
   "scripts": {
     "build": "webpack --mode production",
     "lint": "eslint src/",

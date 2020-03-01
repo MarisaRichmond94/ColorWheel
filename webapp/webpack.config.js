@@ -9,7 +9,19 @@ module.exports = {
 		contentBase: path.join(__dirname, 'dist'),
 		compress: true,
 		historyApiFallback: true,
-		port: 3000
+		port: 3000,
+		proxy: {
+			'/api': {
+				target: {
+					host: '0.0.0.0',
+					protocol: 'http:',
+					port: '8080',
+				},
+				pathRewrite: {
+					'^/api': '',
+				},
+			},
+		}
 	},
 	entry: {
 		index: './src/index.js',

@@ -6,30 +6,19 @@ const express = require('express');
 const controller = require('./controller');
 
 const app = express();
+const ORIGIN = 'http://localhost:3000';
 const PORT = 8080;
-const jwtDuration = 300;
 
 controller.connectToDB();
-
-app.use(cors());
+app.use(cors({ credentials: true, origin: ORIGIN }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-app.post('/authentication/check_session', (req, res) => {
-	let isAuthenticated = false;
-	const sessionToken = (req.cookies) ? req.cookies.token : undefined;
-	if (sessionToken) {
-		isAuthenticated = controller.checkSession(sessionToken);
-	}
-	res.status((isAuthenticated) ? 200 : 401);
-	res.send(isAuthenticated);
-});
-
 app.post('/authentication', async (req, res) => {
-	const sessionToken = await controller.getSessionToken(req.body.passcode);
-	res.status((sessionToken) ? 200 : 401);
-	if (sessionToken) res.cookie('token', sessionToken, { maxAge: jwtDuration * 1000 });
-	res.send(!!(sessionToken));
+	await controller.authenticate(req, res);
+});
+app.post('/refresh', async (req, res) => {
+	await controller.refresh(req, res);
 });
 
 app.listen(PORT, function () {

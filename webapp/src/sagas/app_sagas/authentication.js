@@ -18,9 +18,9 @@ function* rauthenticate(action) {
 	const path = window.location.pathname;
 	if (path !== '/login') {
 		const isAuthenticated = yield call(authenticationApi.reauthenticate);
+		yield put({ type: 'SET_IS_AUTHENTICATED', payload: { isAuthenticated } });
 		if (!isAuthenticated) {
-			yield put({ type: 'SET_IS_AUTHENTICATED', payload: { isAuthenticated } });
-			window.location = '/login';
+			window.historyReplace('/login');
 		}
 	}
 }

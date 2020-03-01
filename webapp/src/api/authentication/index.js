@@ -1,16 +1,18 @@
 class Authentication {
 	constructor() {
-		this.url = 'http://localhost:8080/authentication';
+		this.url = 'http://localhost:8080/';
 	}
 
 	authenticate = async (passcode) => {
 		try {
 			const res = await fetch(
-				this.url,
+				this.url + 'authentication',
 				{
+					credentials: 'include',
 					method: 'POST',
 					mode: 'cors',
 					headers: {
+						'Access-Control-Allow-Origin': '*',
 						'Content-Type': 'application/json',
 					},
 					body: JSON.stringify({ passcode })
@@ -25,11 +27,14 @@ class Authentication {
 	reauthenticate = async () => {
 		try {
 			const res = await fetch(
-				this.url + '/check_session',
+				this.url + 'refresh',
 				{
 					credentials: 'include',
 					method: 'POST',
 					mode: 'cors',
+					headers: {
+						'Access-Control-Allow-Origin': '*',
+					},
 				}
 			);
 			return res.json();
