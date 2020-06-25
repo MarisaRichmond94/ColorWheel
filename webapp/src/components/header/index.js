@@ -21,6 +21,7 @@ function Header(props) {
 				{logo()}
 			</Col>
 			<Col xs={9}>
+				{/* insert project links here */}
 			</Col>
 		</Row>
 	);

@@ -29,7 +29,9 @@ function App(props) {
 		(props.isAuthenticated)
 			? <>
 				<Header />
-				<SmartRouter />
+				<div id='body-container'>
+					<SmartRouter />
+				</div>
 				<Footer />
 			</>
 			: <Login />
