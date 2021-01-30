@@ -26,7 +26,6 @@ module.exports = {
 	},
 	entry: [
 		'./src/index.js',
-		'@babel/polyfill',
 	],
 	module: {
 		rules: [

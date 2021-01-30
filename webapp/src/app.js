@@ -4,44 +4,40 @@ import { connect } from 'react-redux';
 
 import Footer from '~/components/footer';
 import Header from '~/components/header';
-import Login from '~/routes/login';
-import SmartRouter from '~/router';
+import LoginPage from '~/routes/login';
+import SmartRouter from '~/routes/router';
+import types from '~/redux/types';
 
 function App(props) {
 	App.propTypes = {
-		isAuthenticated: bool.isRequired,
+		isUserAuthenticated: bool.isRequired,
 	}
 
 	useEffect(() => {
-		authenticateUser();
-	}, []);
-
-	const authenticateUser = () => {
-		try {
-			window.dispatchAction('REAUTHENTICATE_USER');
-		} catch (error) {
-			console.log(error); // eventually route to error page
+		if (!props.isUserAuthenticated) {
+			try {
+				window.dispatchAction(types.AUTHENTICATE_USER);
+			} catch (error) {
+				console.log(error); // eventually route to error page
+			}
 		}
-	}
+	}, [props.isUserAuthenticated]);
 
-
-	return (
-		(props.isAuthenticated)
-			? <>
+	return props.isUserAuthenticated
+		? (
+			<>
 				<Header />
 				<div id='body-container'>
 					<SmartRouter />
 				</div>
 				<Footer />
 			</>
-			: <Login />
-	);
+		)
+		: <LoginPage />;
 }
 
 export function mapStateToProps(state) {
-	return {
-		isAuthenticated: state.appState.isAuthenticated,
-	}
+	return { isUserAuthenticated: state.appState.isUserAuthenticated }
 };
 
 export default connect(mapStateToProps)(App);
