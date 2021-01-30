@@ -9,9 +9,6 @@
 				"rootPathSuffix": "src",
 				"rootPathPrefix": "~"
 			}
-		],
-		[
-			"babel-plugin-idx"
 		]
 	],
 	"presets": [

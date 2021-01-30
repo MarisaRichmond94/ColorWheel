@@ -1,7 +1,6 @@
 import 'babel-polyfill';
 import './global';
 
-import idx from 'idx';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -29,7 +28,6 @@ const action = (type, payload) => store.dispatch({ type, payload });
 window.dispatchAction = action;
 window.historyPush = history.push;
 window.historyReplace = history.replace;
-window.idx = idx;
 
 // root component
 ReactDOM.render(
