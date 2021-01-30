@@ -21,11 +21,13 @@ module.exports = {
 					'^/api': '',
 				},
 			},
-		}
+		},
+		public: 'http://localhost:3000'
 	},
-	entry: {
-		index: './src/index.js',
-	},
+	entry: [
+		'./src/index.js',
+		'@babel/polyfill',
+	],
 	module: {
 		rules: [
 			{
@@ -106,9 +108,10 @@ module.exports = {
 	plugins: [
 		new HtmlWebPackPlugin(
 			{
-				template: './public/index.html',
+				template: path.resolve(__dirname, 'public/index.html'),
 				favicon: "./public/favicon.ico",
 				filename: './index.html',
+				inject: true,
 			}
 		),
 		new MiniCssExtractPlugin(
