@@ -1,0 +1,20 @@
+version: '3.7'
+services:
+  api:
+    environment:
+      # add secrets here
+      - AWS_ACCESS_KEY_ID=
+      - AWS_SECRET_ACCESS_KEY=
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=user
+      # non-secrets below
+      - AWS_REGION=us-west-2
+      - AUTHORIZER_ARN=
+    volumes:
+      - ./api/.chalice/config.json:/code/api/.chalice/config.json
+      - ./api/app.py:/code/api/app.py
+      - ./api/chalicelib:/code/api/chalicelib
+    command: bash -c "alembic -c chalicelib/alembic.ini upgrade head && chalice local --host 0.0.0.0 --stage docker"
+  postgres:
+    ports:
+      - 5432:5432

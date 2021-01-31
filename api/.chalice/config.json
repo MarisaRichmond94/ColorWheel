@@ -1,9 +1,24 @@
 {
   "version": "2.0",
-  "app_name": "api",
+  "app_name": "colorwheel",
+  "environment_variables": {
+    "CORS_WHITELIST": "http://localhost http://localhost:3000",
+    "POSTGRES_PASSWORD": "${POSTGRES_PASSWORD}",
+    "POSTGRES_USER": "${POSTGRES_USER}"
+  },
   "stages": {
-    "dev": {
-      "api_gateway_stage": "api"
+    "local": {
+      "api_gateway_stage": "local",
+      "environment_variables": {
+        "DOMAIN": "http://localhost",
+        "ENVIRONMENT": "local"
+      }
+    },
+    "docker": {
+      "api_gateway_stage": "docker",
+      "environment_variables": {
+        "ENVIRONMENT": "docker"
+      }
     }
   }
 }
