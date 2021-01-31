@@ -9,7 +9,6 @@ services:
       - POSTGRES_USER=user
       # non-secrets below
       - AWS_REGION=us-west-2
-      - AUTHORIZER_ARN=
     volumes:
       - ./api/.chalice/config.json:/code/api/.chalice/config.json
       - ./api/app.py:/code/api/app.py

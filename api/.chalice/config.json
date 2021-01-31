@@ -7,13 +7,6 @@
     "POSTGRES_USER": "${POSTGRES_USER}"
   },
   "stages": {
-    "local": {
-      "api_gateway_stage": "local",
-      "environment_variables": {
-        "DOMAIN": "http://localhost",
-        "ENVIRONMENT": "local"
-      }
-    },
     "docker": {
       "api_gateway_stage": "docker",
       "environment_variables": {

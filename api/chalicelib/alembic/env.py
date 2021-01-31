@@ -12,6 +12,9 @@ parent_dir = os.path.abspath(os.path.join(os.getcwd()))
 sys.path.append(parent_dir)
 sys.path.insert(0, os.path.abspath("chalicelib"))
 
+from db_models.base_model import Base, BaseModel
+from db_models.dim_users import DimUsers
+
 from settings import db
 
 # this is the Alembic Config object, which provides
@@ -26,7 +29,10 @@ fileConfig(config.config_file_name)
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = []
+target_metadata = [
+    Base.metadata,
+    BaseModel.metadata,
+]
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
