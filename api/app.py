@@ -4,19 +4,37 @@ import os
 import sys
 
 import alembic.config
-from chalice import Chalice
+from chalice import Chalice, AuthResponse
 
 sys.path.insert(0, os.path.abspath("chalicelib"))
+from authorizer import authorizer
 from utils.response import Response
-from restful_services.users.api_layer.api import api as users_api
+from restless_services.authentication.api_layer.api import api as authentication_api
+from restless_services.authentication.business_layer.business import authenticate_user
 
 
 app = Chalice(app_name="colorwheel")
 app.register_blueprint(users_api)
 
+@app.authorizer()
+def authorizer(auth_request) -> AuthResponse:
+    """Authorizes the JSON web token on an auth_request.
 
-@app.route("/users", methods=["OPTIONS"])
-@app.route("/users/{user_id}", methods=["OPTIONS"])
+    Args:
+        auth_request - The request to chalice
+
+    Returns:
+        AuthResponse object containing authorized routes and principal_id
+    """
+    is_authenticated = authenticate_user(json_web_token=auth_request.token)
+    return (
+        AuthResponse(routes=['/'], principal_id='user')
+        if is_authenticated else AuthResponse(routes=[], principal_id='user')
+    )
+
+
+
+@app.route("/authentication", methods=["OPTIONS"])
 def set_cors_access_control(*args, **kwargs) -> Response:
     """Sets the CORS access for the OPTIONS endpoint
 
@@ -27,14 +45,14 @@ def set_cors_access_control(*args, **kwargs) -> Response:
     Returns:
         Response object
     """
-    log.info("OPTIONS...")
-    headers = {
-        "Access-Control-Allow-Methods": "*",
-        "Access-Control-Allow-Headers": "*",
-    }
-    origin = app.current_request.headers.get("origin", "")
-    log.debug(f"OPTIONS headers: {headers}, origin: {origin}")
-    return Response(data=None, headers=headers, origin=origin)
+    return Response(
+        data=None,
+        headers={
+            "Access-Control-Allow-Methods": "*",
+            "Access-Control-Allow-Headers": "*",
+        },
+        origin=app.current_request.headers.get("origin", "")
+    )
 
 @app.route('/health')
 def check_health():
@@ -43,9 +61,7 @@ def check_health():
     Returns:
         Response containing message 'Service is healthy!'
     """
-    return Response(
-        message='Service is healthy!', origin=app.current_request.headers.get('origin', '')
-    )
+    return Response(message='healthy', origin=app.current_request.headers.get('origin', ''))
 
 
 @app.lambda_function()
@@ -56,11 +72,5 @@ def migrate_db(event, context) -> None:
         event: AWS lambda event object
         context: AWS lambda context object
     """
-    alembic_args = [
-        "--raiseerr",
-        "--config",
-        "chalicelib/alembic.ini",
-        "upgrade",
-        "head",
-    ]
+    alembic_args = [ "--raiseerr", "--config", "chalicelib/alembic.ini", "upgrade", "head" ]
     alembic.config.main(argv=alembic_args)

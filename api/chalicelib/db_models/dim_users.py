@@ -9,7 +9,6 @@ from settings.db import DB_STRING_MAX_LENGTH
 
 class DimUsers(Base):
     """SQLAlchemy object for dim_users"""
-
     __tablename__ = "dim_users"
     name = Column(String(DB_STRING_MAX_LENGTH), nullable=False)
     email = Column(String(DB_STRING_MAX_LENGTH), unique=True, nullable=False)

@@ -2,7 +2,7 @@
 from exceptions.app import InvalidParamException
 
 
-def validate_params(params: dict) -> None:
+def validate_params(func: str, params: dict) -> None:
     """Validates that all passed params are not None
 
     Args:
@@ -13,6 +13,8 @@ def validate_params(params: dict) -> None:
         TypeError: If params is not a dictionary
         ValueError: If params is None
     """
+    if not func:
+        raise ValueError('Missing required parameter "func".')
     if not params:
         raise ValueError('Missing required parameter "params".')
 
@@ -22,4 +24,4 @@ def validate_params(params: dict) -> None:
 
     missing_params = [key for key, value in params.items() if value is None]
     if missing_params:
-        raise InvalidParamException(keys=missing_params)
+        raise InvalidParamException(func=func, keys=missing_params)

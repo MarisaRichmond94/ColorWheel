@@ -20,7 +20,10 @@ def create_user(name: str, email: str, password: str) -> Optional[Dict]:
     Raises:
         InvalidParamException - when any of the given params are None
     """
-    validate_params(params={ "name": name, "email": email, "password": password })
+    validate_params(
+        func="create_user",
+        params={ "name": name, "email": email, "password": password }
+    )
 
     hashed_password = generate_hashed_password(password=password)
     return data.create_user(name=name, email=email, password=hashed_password)
@@ -38,6 +41,6 @@ def get_user_by_email(email: str) -> Optional[Dict]:
     Raises:
         InvalidParamException - when a email is not provided
     """
-    validate_params(params={ "email": email })
+    validate_params(func="get_user_by_email", params={ "email": email })
 
     return data.get_user_by_email(email=email)
