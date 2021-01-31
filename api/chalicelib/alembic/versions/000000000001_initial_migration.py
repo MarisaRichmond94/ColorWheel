@@ -25,11 +25,11 @@ def upgrade():
     op.create_table(
         'dim_users',
         sa.Column('id', postgresql.UUID(as_uuid=True), server_default=sa.text('uuid_generate_v4()'), nullable=False),
-        sa.Column('user_id', postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column('name', sa.String(length=2048), nullable=False),
-        sa.Column('email', sa.String(length=2048), nullable=False),
+        sa.Column('email', sa.String(length=2048), unique=True, nullable=False),
         sa.Column('password', sa.String(length=2048), nullable=False),
         sa.PrimaryKeyConstraint('id')
+        sa.UniqueConstraint('name')
     )
 
 

@@ -1,5 +1,5 @@
 """Business layer for the users service"""
-from typing import Dict, Optional, Union
+from typing import Dict, Optional
 from uuid import uuid4
 
 import bcrypt
@@ -33,18 +33,18 @@ def create_user(name: str, email: str, password: str) -> Optional[Dict]:
     return data.create_user(name=name, email=email, password=hashed_password)
 
 
-def get_user_by_id(user_id: Union[str, uuid4]) -> Optional[Dict]:
-    """Gets user from the dim_users table by id
+def get_user_by_email(email: str) -> Optional[Dict]:
+    """Gets user from the dim_users table by email
 
     Args:
-        user_id: The primary key for a user in the dim_users table
+        email: The email to associate with the new user
 
     Returns:
-        JSON representation of a user from the database with matching user_id or None
+        JSON representation of a user from the database with matching email or None
 
     Raises:
-        InvalidParamException - when a user_id is not provided
+        InvalidParamException - when a email is not provided
     """
-    validate_params(params={ "user_id": user_id })
+    validate_params(params={ "email": email })
 
-    return data.get_user_by_id(user_id=user_id)
+    return data.get_user_by_email(email=email)

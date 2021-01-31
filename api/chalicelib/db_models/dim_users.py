@@ -11,9 +11,8 @@ class DimUsers(Base):
     """SQLAlchemy object for dim_users"""
 
     __tablename__ = "dim_users"
-    user_id = Column(UUID(as_uuid=True), nullable=False)
     name = Column(String(DB_STRING_MAX_LENGTH), nullable=False)
-    email = Column(String(DB_STRING_MAX_LENGTH), nullable=False)
+    email = Column(String(DB_STRING_MAX_LENGTH), unique=True, nullable=False)
     password = Column(String(DB_STRING_MAX_LENGTH), nullable=False)
 
     @classmethod

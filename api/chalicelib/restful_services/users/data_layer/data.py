@@ -1,5 +1,5 @@
 """Data layer for the users service"""
-from typing import Dict, Optional, Union
+from typing import Dict, Optional
 from uuid import uuid4
 
 from db_models.dim_users import DimUsers
@@ -33,15 +33,15 @@ def create_user(name: str, email: str, password: str) -> Optional[Dict]:
         return None
 
 
-def get_user_by_id(user_id: Union[str, uuid4]) -> Optional[Dict]:
-    """Gets user from the dim_users table by id
+def get_user_by_email(email: str) -> Optional[Dict]:
+    """Gets user from the dim_users table by email
 
     Args:
-        user_id: The primary key for a user in the dim_users table
+        email: The email to associate with the new user
 
     Returns:
-        JSON representation of a user from the database with matching user_id or None
+        JSON representation of a user from the database with matching email or None
     """
     with db.session_scope() as session:
-        user = session.query(DimUsers).filter_by(id=user_id).one_or_none()
+        user = session.query(DimUsers).filter_by(email=email).one_or_none()
         return UserSchema().dump(user) if user else None
