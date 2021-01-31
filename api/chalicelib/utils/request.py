@@ -1,7 +1,7 @@
 """Chalice request helpers"""
 import marshmallow
 
-from libs.response import Response
+from utils.response import Response
 
 
 class Request:

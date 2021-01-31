@@ -7,7 +7,7 @@ import alembic.config
 from chalice import Chalice
 
 sys.path.insert(0, os.path.abspath("chalicelib"))
-from libs.response import Response
+from utils.response import Response
 from restful_services.users.api_layer.api import api as users_api
 
 

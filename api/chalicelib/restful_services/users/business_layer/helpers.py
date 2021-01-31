@@ -1,8 +1,6 @@
 """Helper functions for the users service"""
 import bcrypt
 
-from libs.validation import validate_params
-
 
 def generate_hashed_password(password: str) -> str:
     """Generates a salt using bcrypt and then hashes the given password using the generated salt
@@ -17,7 +15,7 @@ def generate_hashed_password(password: str) -> str:
     return bcrypt.hashpw(password, salt), salt
 
 
-def validate_password(password: str, hash: str) -> bool:
+def validate_password(password: str, hashed: str) -> bool:
     """Validates a given password against a hashed password
 
     Args:
@@ -26,4 +24,4 @@ def validate_password(password: str, hash: str) -> bool:
     Returns:
         True or False
     """
-    return bcrypt.checkpw(password, hash)
+    return bcrypt.checkpw(password, hashed)

@@ -2,8 +2,8 @@
 from chalice import Blueprint
 from loguru import logger as log
 
-from libs.request import validate_request
-from libs.response import Response
+from utils.request import validate_request
+from utils.response import Response
 from restful_services.users.business_layer import business
 from restful_services.users.model_layer.api_schemas import (
     CreateUserBodySchema,

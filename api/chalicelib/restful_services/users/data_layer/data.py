@@ -1,9 +1,8 @@
 """Data layer for the users service"""
 from typing import Dict, Optional
-from uuid import uuid4
 
 from db_models.dim_users import DimUsers
-from libs import db
+from utils import db
 from restful_services.users.model_layer.data_schemas import UserSchema
 
 

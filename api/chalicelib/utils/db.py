@@ -1,4 +1,4 @@
-"""Libs for db functionality"""
+"""utils for db functionality"""
 from contextlib import contextmanager
 
 from sqlalchemy import create_engine

@@ -1,16 +1,9 @@
 """Business layer for the users service"""
 from typing import Dict, Optional
-from uuid import uuid4
 
-import bcrypt
-from loguru import logger as log
-
-from libs.validation import validate_params
+from utils.validation import validate_params
 from restful_services.users.data_layer import data
-from restful_services.users.business_layer.helpers import (
-    generate_hashed_password,
-    validate_password
-)
+from restful_services.users.business_layer.helpers import generate_hashed_password
 
 
 def create_user(name: str, email: str, password: str) -> Optional[Dict]:
