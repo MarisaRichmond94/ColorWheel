@@ -1,5 +1,5 @@
 """Helper functions for the authentication service"""
-import BytesIO
+from io import BytesIO
 from typing import Dict
 
 import jwt

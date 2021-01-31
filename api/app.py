@@ -7,14 +7,13 @@ import alembic.config
 from chalice import Chalice, AuthResponse
 
 sys.path.insert(0, os.path.abspath("chalicelib"))
-from authorizer import authorizer
 from utils.response import Response
 from restless_services.authentication.api_layer.api import api as authentication_api
 from restless_services.authentication.business_layer.business import authenticate_user
 
 
 app = Chalice(app_name="colorwheel")
-app.register_blueprint(users_api)
+# app.register_blueprint(users_api)
 
 @app.authorizer()
 def authorizer(auth_request) -> AuthResponse:

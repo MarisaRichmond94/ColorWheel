@@ -16,8 +16,3 @@ try:
 except KeyError as exp:
     log.error(f'Environment variable "{exp.args[0]}" is not set.')
     sys.exit(1)
-
-if ENVIRONMENT in ["local"] and not (AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY):
-    log.warning(
-        'One or both variables ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY"] are not set.'
-    )

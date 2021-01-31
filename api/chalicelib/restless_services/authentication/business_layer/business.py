@@ -1,5 +1,5 @@
 """Business layer for the authentication service"""
-from typing import Optional
+from typing import Dict, Optional
 
 from loguru import logger as log
 
@@ -22,7 +22,7 @@ def authorize_user(
     email: str,
     password: str,
     name: Optional[str] = None
-) -> tuple[Optional[str], Optional[Dict]]:
+) -> tuple:
     """Authenticates a new user by creating the new user in the Users Service and generating a
         signed jwt
 
@@ -38,7 +38,7 @@ def authorize_user(
         InvalidParamException - when any of the given params are None
     """
     validate_params(
-        func="authorize_user"
+        func="authorize_user",
         params={ "email": email, "password": password }
     )
 

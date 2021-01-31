@@ -4,7 +4,6 @@ import json
 from uuid import uuid4
 
 import boto3
-from Crypto.PublicKey import RSA
 from loguru import logger as log
 
 from settings import app
@@ -114,28 +113,28 @@ def download_s3_json_object(uri: str = None) -> Dict:
     return json.loads(file_content)
 
 
-def create_new_public_private_key_pair() -> tuple:
-    """Creates a new public and private key using RSA
+# def create_new_public_private_key_pair() -> tuple:
+#     """Creates a new public and private key using RSA
 
-    Returns:
-        The tuple containing the object keys for the newly created private and public keys in S3
-    """
-    log.debug('Generating new public private key pair and storing in S3.')
-    private_key = RSA.generate(1024)
-    with open("private.pem", "wb") as tmp_private_pem_file:
-        tmp_private_pem_file.write(private_key.exportKey('PEM'))
-        private_pem_object_key = upload_file_to_s3(
-            data=tmp_private_pem_file,
-            bucket_name=aws.AUTHENTICATION_BUCKET_NAME,
-        )
+#     Returns:
+#         The tuple containing the object keys for the newly created private and public keys in S3
+#     """
+#     log.debug('Generating new public private key pair and storing in S3.')
+#     private_key = RSA.generate(1024)
+#     with open("private.pem", "wb") as tmp_private_pem_file:
+#         tmp_private_pem_file.write(private_key.exportKey('PEM'))
+#         private_pem_object_key = upload_file_to_s3(
+#             data=tmp_private_pem_file,
+#             bucket_name=aws.AUTHENTICATION_BUCKET_NAME,
+#         )
 
-    pubkey = private_key.publickey()
-    with open("public.pem", "wb") as tmp_public_pem_file:
-        tmp_public_pem_file.write(pubkey.exportKey('OpenSSH'))
-        public_pem_object_key = upload_file_to_s3(
-            data=tmp_public_pem_file,
-            bucket_name=aws.AUTHENTICATION_BUCKET_NAME,
-        )
+#     pubkey = private_key.publickey()
+#     with open("public.pem", "wb") as tmp_public_pem_file:
+#         tmp_public_pem_file.write(pubkey.exportKey('OpenSSH'))
+#         public_pem_object_key = upload_file_to_s3(
+#             data=tmp_public_pem_file,
+#             bucket_name=aws.AUTHENTICATION_BUCKET_NAME,
+#         )
 
-    log.debug('Successfully created new public private key pair in S3.')
-    return private_pem_object_key, public_pem_object_key
+#     log.debug('Successfully created new public private key pair in S3.')
+#     return private_pem_object_key, public_pem_object_key
