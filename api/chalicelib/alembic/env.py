@@ -13,7 +13,6 @@ sys.path.append(parent_dir)
 sys.path.insert(0, os.path.abspath("chalicelib"))
 
 from db_models.base_model import Base, BaseModel
-from db_models.dim_private_public_keys import DimPrivatePublicKeys
 from db_models.dim_users import DimUsers
 
 from settings import db

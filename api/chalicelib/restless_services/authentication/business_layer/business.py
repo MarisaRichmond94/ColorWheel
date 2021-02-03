@@ -53,25 +53,7 @@ def authorize_user(
         )
         return None, None
 
-    private_public_key = get_private_public_key()
-    if not private_public_key:
-        log.debug('Failed to GET private_public_key from PrivatePublicKeys Service.')
-        return None, None
-
-    private_key = download_s3_object(
-        bucket_name=AUTHENTICATION_BUCKET_NAME,
-        object_key=private_public_key.get("private_pem_object_key"),
-    )
-    if not private_key:
-        log.debug('Failed to GET private key from S3.')
-        return None, None
-
-    json_web_token = encode_json_web_token(
-        user=user,
-        private_key=private_key,
-    )
-
-    return json_web_token, user
+    return encode_json_web_token(user=user), user
 
 
 def refresh_authorization(email: str) -> Optional[str]:
@@ -89,47 +71,36 @@ def refresh_authorization(email: str) -> Optional[str]:
     validate_params(func="refresh_authorization", params={ "email": email })
 
     user = get_user_by_email(email=email)
-    log.debug(f'Failed to GET user by email "{email}" from Users Service.')
     if not user:
+        log.debug(f'Failed to GET user by email "{email}" from Users Service.')
         return None
 
-    private_public_key = get_private_public_key()
-    if not private_public_key:
-        log.debug('Failed to GET private_public_key from PrivatePublicKeys Service.')
-        return None
-
-    private_key = download_s3_object(
-        bucket_name=AUTHENTICATION_BUCKET_NAME,
-        object_key=private_public_key.get("private_pem_object_key"),
-    )
-    if not private_key:
-        log.debug('Failed to GET private key from S3.')
-        return None
-
-    return encode_json_web_token(user=user, private_key=private_key)
+    return encode_json_web_token(user=user)
 
 
-def authenticate_user(json_web_token: str) -> bool:
+def authenticate_user(user_email: str, json_web_token: str) -> bool:
     """Authenticates a user's JSON web token
 
     Args:
+        user_email: The email address of the user making the request
         json_web_token: A signed JSON web token
 
     Returns:
         True or False
     """
-    private_public_key = get_private_public_key()
-    if not private_public_key:
-        log.debug('Failed to GET private_public_key from PrivatePublicKeys Service.')
-        return False
-
-    public_key = download_s3_object(
-        bucket_name=AUTHENTICATION_BUCKET_NAME,
-        object_key=private_public_key.get("public_pem_object_key"),
+    validate_params(
+        func="authenticate_user",
+        params={ "email": email, "json_web_token": json_web_token }
     )
-    if not public_key:
-        log.debug('Failed to GET public key from S3.')
-        return False
 
-    decoded_payload = decode_json_web_token(json_web_token=json_web_token, public_key=public_key)
+    user = get_user_by_email(email=email)
+    if not user:
+        log.debug(f'Failed to GET user by email "{email}" from Users Service.')
+        return None
+
+    decoded_payload = decode_json_web_token(
+        json_web_token=json_web_token,
+        secret=user.get('password'),
+    )
+
     return True if decoded_payload else False

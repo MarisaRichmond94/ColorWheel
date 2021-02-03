@@ -12,7 +12,10 @@ def authorizer(auth_request) -> AuthResponse:
     Returns:
         AuthResponse object containing authorized routes and principal_id
     """
-    is_authenticated = authenticate_user(json_web_token=auth_request.token)
+    is_authenticated = authenticate_user(
+        user_email=auth_request.headers.get('email'),
+        json_web_token=auth_request.token,
+    )
     return (
         AuthResponse(routes=['/'], principal_id='user')
         if is_authenticated else AuthResponse(routes=[], principal_id='user')

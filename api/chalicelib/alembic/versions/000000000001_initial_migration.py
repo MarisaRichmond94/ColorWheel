@@ -22,13 +22,6 @@ def upgrade():
     bind = op.get_bind()
     session = Session(bind=bind)
     session.execute('create extension if not exists "uuid-ossp";')
-    private_public_keys_table = op.create_table(
-        'dim_private_public_keys',
-        sa.Column('id', postgresql.UUID(as_uuid=True), server_default=sa.text('uuid_generate_v4()'), nullable=False),
-        sa.Column('private_pem_object_key', sa.String(length=2048), unique=True, nullable=False),
-        sa.Column('public_pem_object_key', sa.String(length=2048), unique=True, nullable=False),
-        sa.PrimaryKeyConstraint('id')
-    )
     op.create_table(
         'dim_users',
         sa.Column('id', postgresql.UUID(as_uuid=True), server_default=sa.text('uuid_generate_v4()'), nullable=False),
@@ -41,4 +34,3 @@ def upgrade():
 
 def downgrade():
     op.drop_table('dim_users')
-    op.drop_table('dim_private_public_keys')
