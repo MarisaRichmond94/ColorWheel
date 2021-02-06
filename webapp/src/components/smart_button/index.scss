@@ -1,0 +1,29 @@
+.smart-button {
+  padding: 5px 15px;
+}
+
+.smart-button:disabled {
+  background: #D3D3D3;
+}
+
+.smart-button.text-button {
+  background: transparent;
+}
+
+.smart-button.text-button:hover {
+  background: transparent;
+  color: lightgrey;
+}
+
+.smart-button.text-button:active,
+.smart-button.text-button:active:focus {
+  background: transparent;
+  color: grey;
+}
+
+.smart-button.outline-button {
+  background: transparent;
+  color: white;
+  outline: 1px solid white;
+}
+

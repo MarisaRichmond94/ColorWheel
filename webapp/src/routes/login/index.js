@@ -1,14 +1,22 @@
-import React from 'react';
+import './index.scss';
 
-import Footer from '~/components/footer';
-import CenterPanel from '~/routes/login/center_panel';
+import React, { useState } from 'react';
+
+import Footer from './footer';
+import Form from './form';
+import Prompt from './prompt';
+import Title from './title';
 
 const LoginPage = () => {
+  const [isSignUpPage, setIsSignUpPage] = useState(true);
+
   return (
-    <>
-      <CenterPanel />
+    <div id='login-page'>
+      <Title />
+      <Form isSignUpPage={isSignUpPage} />
+      <Prompt isSignUpPage={isSignUpPage} setIsSignUpPage={setIsSignUpPage} />
       <Footer />
-    </>
+    </div>
   );
 }
 

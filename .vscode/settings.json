@@ -1,0 +1,12 @@
+{
+	"editor.formatOnSave": true,
+	"editor.wordWrapColumn": 100,
+	"editor.fontFamily": "Fira Code",
+	"editor.fontLigatures": true,
+	"editor.tabSize": 2,
+	"editor.formatOnPaste": true,
+	"editor.minimap.enabled": false,
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": true
+	}
+}
