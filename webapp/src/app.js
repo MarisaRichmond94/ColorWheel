@@ -18,20 +18,20 @@ function App(props) {
 			try {
 				window.dispatchAction(types.AUTHENTICATE_USER);
 			} catch (error) {
-				console.log(error); // eventually route to error page
+				// eventually route to error page
 			}
 		}
 	}, [props.isUserAuthenticated]);
 
 	return props.isUserAuthenticated
 		? (
-			<>
-				<Header />
-				<div id='body-container'>
-					<SmartRouter />
-				</div>
-				<Footer />
-			</>
+  <>
+    <Header />
+    <div id='body-container'>
+      <SmartRouter />
+    </div>
+    <Footer />
+  </>
 		)
 		: <LoginPage />;
 }

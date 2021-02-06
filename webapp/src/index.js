@@ -34,10 +34,10 @@ window.historyReplace = history.replace;
 
 // root component
 ReactDOM.render(
-	<Provider store={store}>
-		<Router history={history}>
-			<App />
-		</Router>
-	</Provider>,
+  <Provider store={store}>
+    <Router history={history}>
+      <App />
+    </Router>
+  </Provider>,
 	document.getElementById('app')
 );

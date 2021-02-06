@@ -5,7 +5,7 @@ import { HiOutlineMail, HiOutlineMailOpen } from 'react-icons/hi';
 
 import SmartFormInput from '~/components/smart_form_input';
 
-const valid_endings = ['.com', '.org', '.edu', '.gov'];
+const validEndings = ['.com', '.org', '.edu', '.gov'];
 
 const EmailInput = props => {
   EmailInput.propTypes = {
@@ -20,7 +20,7 @@ const EmailInput = props => {
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(input)
     );
     const hasAtSymbol = input.includes('@');
-    const hasValidEnding = valid_endings.includes(input.slice(-4));
+    const hasValidEnding = validEndings.includes(input.slice(-4));
     props.setIsValidInput(hasOnlyValidCharacters && hasAtSymbol && hasValidEnding);
   }
 
