@@ -1,4 +1,3 @@
-"""API layer for the authentication service"""
 from chalice import Blueprint
 from loguru import logger as log
 
@@ -18,11 +17,6 @@ api = Blueprint(__name__)
     methods=["POST"]
 )
 def authorize_user() -> Response:
-    """Authenticates a user.
-
-    Returns:
-        Response object containing a user and JSON web token
-    """
     log.debug("Authentication Service recieved a POST request to create a new user.")
     request, error_response = validate_request(
         current_request=api.current_request,
@@ -65,11 +59,6 @@ def authorize_user() -> Response:
     methods=["GET"]
 )
 def refresh_authorization() -> Response:
-    """Gets a refreshed JSON web token.
-
-    Returns:
-        Response object containing a JSON web token
-    """
     log.debug("Authentication Service recieved a POST request to create a new user.")
     request, error_response = validate_request(
         current_request=api.current_request,

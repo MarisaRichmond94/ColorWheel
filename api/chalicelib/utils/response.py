@@ -1,4 +1,3 @@
-"""Chalice Response helpers"""
 # pylint: disable=too-many-arguments,super-init-not-called
 import json
 from typing import Dict
@@ -11,17 +10,6 @@ from settings import app as app_settings
 
 
 class Response(ChaliceResponse):
-    """Creates custom Chalice Response object using the given ChaliceResponse, which could contain
-        any of the following args listed below
-
-    Args:
-        data: The dictionary to embed in the data parameter in the response body
-        headers: The dictionary of header keys to values
-        message: The string to put as the message parameter in the response body
-        origin: The origin header
-        status_code: The integer status code
-    """
-
     def __init__(
         self,
         data: Dict = None,

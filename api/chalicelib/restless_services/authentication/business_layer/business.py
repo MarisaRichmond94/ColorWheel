@@ -1,4 +1,3 @@
-"""Business layer for the authentication service"""
 from typing import Dict, Optional
 
 from loguru import logger as log
@@ -22,20 +21,6 @@ def authorize_user(
     password: str,
     name: Optional[str] = None
 ) -> tuple:
-    """Authenticates a new user by creating the new user in the Users Service and generating a
-        signed jwt
-
-    Args:
-        name: The full name of the new user
-        email: The email to associate with the user
-        password: The secret string used to validate the user's identity
-
-    Returns:
-        A JSON web token and user or None if the user is not authenticated with the users service
-
-    Raises:
-        InvalidParamException - when any of the given params are None
-    """
     validate_params(
         func="authorize_user",
         params={ "email": email, "password": password }
@@ -56,17 +41,6 @@ def authorize_user(
 
 
 def refresh_authorization(email: str) -> Optional[str]:
-    """Reauthenticates a user by generating a new signed jwt
-
-    Args:
-        email: The email to associate with the user
-
-    Returns:
-        A JSON web token
-
-    Raises:
-        InvalidParamException - when email is None
-    """
     validate_params(func="refresh_authorization", params={ "email": email })
 
     user = get_user_by_email(email=email)
@@ -78,15 +52,6 @@ def refresh_authorization(email: str) -> Optional[str]:
 
 
 def authenticate_user(user_email: str, json_web_token: str) -> bool:
-    """Authenticates a user's JSON web token
-
-    Args:
-        user_email: The email address of the user making the request
-        json_web_token: A signed JSON web token
-
-    Returns:
-        True or False
-    """
     validate_params(
         func="authenticate_user",
         params={ "email": email, "json_web_token": json_web_token }

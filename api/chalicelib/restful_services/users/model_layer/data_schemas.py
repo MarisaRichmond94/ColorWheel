@@ -1,4 +1,3 @@
-"""Data schemas for the users service"""
 from marshmallow import fields, Schema, EXCLUDE
 
 class UserSchema(Schema):
@@ -9,5 +8,4 @@ class UserSchema(Schema):
     password = fields.String(required=True)
 
     class Meta:
-        """Meta class for user schema"""
         unknown = EXCLUDE

@@ -1,4 +1,3 @@
-"""Main application for Chalice APIs"""
 # pylint: disable=wrong-import-position
 import os
 import sys
@@ -10,23 +9,13 @@ sys.path.insert(0, os.path.abspath("chalicelib"))
 from utils.app import create_chalice_app
 from utils.response import Response
 from restless_services.authentication.api_layer.api import api as authentication_api
-from restless_services.authentication.business_layer.business import authenticate_user
 
 
 app = create_chalice_app()
 app.register_blueprint(authentication_api)
 
 @app.route("/authentication", methods=["OPTIONS"])
-def set_cors_access_control(*args, **kwargs) -> Response:
-    """Sets the CORS access for the OPTIONS endpoint
-
-    Args:
-        *args: Arguments passed in to the endpoint
-        **kwargs: Keyword arguments passed in to the endpoint
-
-    Returns:
-        Response object
-    """
+def set_cors_headers(*args, **kwargs) -> Response:
     return Response(
         data=None,
         headers={
@@ -37,22 +26,10 @@ def set_cors_access_control(*args, **kwargs) -> Response:
     )
 
 @app.route('/health')
-def check_health():
-    """Endpoint for checking the health of the chalice services
-
-    Returns:
-        Response containing message 'Service is healthy!'
-    """
+def check_health() -> Response:
     return Response(message='healthy', origin=app.current_request.headers.get('origin', ''))
 
 
 @app.lambda_function()
 def migrate_db(event, context) -> None:
-    """Lambda function to run the alembic migration
-
-    Args:
-        event: AWS lambda event object
-        context: AWS lambda context object
-    """
-    alembic_args = [ "--raiseerr", "--config", "chalicelib/alembic.ini", "upgrade", "head" ]
-    alembic.config.main(argv=alembic_args)
+    alembic.config.main(argv=[ "--config", "chalicelib/alembic.ini", "upgrade", "head" ])
