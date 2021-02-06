@@ -21,4 +21,4 @@ COPY --from=builder /usr/local /usr/local
 WORKDIR /code/api
 COPY . .
 CMD alembic -c chalicelib/alembic.ini upgrade head \
-  && chalice local --host 0.0.0.0 --stage docker --no-autoreload
+  && chalice local --host=0.0.0.0 --port=8000

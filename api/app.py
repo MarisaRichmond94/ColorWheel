@@ -14,25 +14,7 @@ from restless_services.authentication.business_layer.business import authenticat
 
 
 app = create_chalice_app()
-# app.register_blueprint(users_api)
-
-@app.authorizer()
-def authorizer(auth_request) -> AuthResponse:
-    """Authorizes the JSON web token on an auth_request.
-
-    Args:
-        auth_request - The request to chalice
-
-    Returns:
-        AuthResponse object containing authorized routes and principal_id
-    """
-    is_authenticated = authenticate_user(json_web_token=auth_request.token)
-    return (
-        AuthResponse(routes=['/'], principal_id='user')
-        if is_authenticated else AuthResponse(routes=[], principal_id='user')
-    )
-
-
+app.register_blueprint(authentication_api)
 
 @app.route("/authentication", methods=["OPTIONS"])
 def set_cors_access_control(*args, **kwargs) -> Response:

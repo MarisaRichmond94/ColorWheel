@@ -3,7 +3,6 @@ from typing import Dict, Optional
 
 from loguru import logger as log
 
-from restful_services.private_public_keys.business_layer.business import get_private_public_key
 from restful_services.users.business_layer.business import (
     create_user,
     get_user_by_email

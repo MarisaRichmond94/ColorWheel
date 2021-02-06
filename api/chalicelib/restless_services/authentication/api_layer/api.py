@@ -14,7 +14,7 @@ api = Blueprint(__name__)
 
 
 @api.route(
-    "/authenticate",
+    "/authentication",
     methods=["POST"]
 )
 def authorize_user() -> Response:
@@ -61,7 +61,7 @@ def authorize_user() -> Response:
 
 
 @api.route(
-    "/authenticate",
+    "/authentication",
     methods=["GET"]
 )
 def refresh_authorization() -> Response:

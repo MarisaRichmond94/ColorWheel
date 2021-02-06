@@ -76,9 +76,11 @@
   },
   "proxy": "http://localhost:8080",
   "scripts": {
-    "build": "webpack --mode production",
+    "build": "bash ./devops/webpack/build.sh",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
-    "start": "webpack-dev-server --open --mode development"
+    "setup": "cp ./config/config-${BUILD_ENV:-local}.js ./public/config.js",
+    "start": "sh ./devops/run.sh",
+    "webpack": "npm run setup && npm run build && npm run start"
   }
 }
