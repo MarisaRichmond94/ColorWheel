@@ -25,10 +25,10 @@ def validate_request(
     if body_schema:
         try:
             json_body = current_request.json_body or {}
-            request.body = (
-                body_schema(many=True).load(json_body or {})
-                if isinstance(json_body, list) body_schema().load(json_body or {})
-            )
+            if isinstance(json_body, list):
+                request.body = body_schema(many=True).load(json_body or {})
+            else:
+                request.body = body_schema().load(json_body or {})
         except marshmallow.exceptions.ValidationError as schema_exception:
             error_info['body'] = schema_exception.messages
 

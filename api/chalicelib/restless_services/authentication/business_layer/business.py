@@ -11,8 +11,6 @@ from restless_services.authentication.business_layer.helpers import (
     decode_json_web_token,
     encode_json_web_token
 )
-from settings.aws import AUTHENTICATION_BUCKET_NAME
-from utils.s3 import download_s3_object
 from utils.validation import validate_params
 
 
