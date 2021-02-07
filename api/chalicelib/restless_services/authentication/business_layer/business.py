@@ -18,7 +18,7 @@ def authorize_user(
     email: str,
     password: str,
     name: Optional[str] = None
-) -> tuple:
+) -> Dict:
     validate_params(
         func="authorize_user",
         params={ "email": email, "password": password }
@@ -33,9 +33,14 @@ def authorize_user(
             'Failed to create new user: NoneType returned from Users Service.'
             if name else f'Failed to GET user by email "{email}" from Users Service.'
         )
-        return None, None
+        return None
 
-    return encode_json_web_token(user=user), user
+    access_token, auth_results = encode_json_web_token(user=user)
+
+    return {
+        'access_token': access_token,
+        'auth_results': auth_results
+    }
 
 
 def refresh_authorization(email: str) -> Optional[str]:
@@ -46,7 +51,12 @@ def refresh_authorization(email: str) -> Optional[str]:
         log.debug(f'Failed to GET user by email "{email}" from Users Service.')
         return None
 
-    return encode_json_web_token(user=user)
+    access_token, auth_results = encode_json_web_token(user=user)
+
+    return {
+        'access_token': access_token,
+        'auth_results': auth_results
+    }
 
 
 def authenticate_user(user_email: str, json_web_token: str) -> bool:

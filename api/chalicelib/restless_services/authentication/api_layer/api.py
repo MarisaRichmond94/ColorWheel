@@ -27,7 +27,7 @@ def authorize_user() -> Response:
         return error_response
 
     try:
-        json_web_token, user = business.authorize_user(
+        auth_results = business.authorize_user(
             email=request.body.get("email"),
             password=request.body.get("password"),
             name=request.body.get("name"),
@@ -40,7 +40,7 @@ def authorize_user() -> Response:
             origin=api.current_request.headers.get("origin", ""),
         )
 
-    if not json_web_token or not user:
+    if not auth_results:
         log.error("POST to Authentication Service failed to authorize user.")
         return Response(
             status_code=403,
@@ -49,7 +49,7 @@ def authorize_user() -> Response:
         )
 
     return Response(
-        data={ "access_token": json_web_token, "user": user },
+        data=auth_results,
         origin=api.current_request.headers.get("origin", ""),
     )
 
@@ -69,7 +69,7 @@ def refresh_authorization() -> Response:
         return error_response
 
     try:
-        json_web_token = business.refresh_authorization(email=request.query.get("email"))
+        auth_results = business.refresh_authorization(email=request.query.get("email"))
     except Exception as refresh_authorization_exception:
         log.exception(refresh_authorization_exception)
         return Response(
@@ -78,7 +78,7 @@ def refresh_authorization() -> Response:
             origin=api.current_request.headers.get("origin", ""),
         )
 
-    if not json_web_token:
+    if not auth_results:
         log.error("GET to Authentication Service failed to get refreshed JSON web token.")
         return Response(
             status_code=403,
@@ -87,6 +87,6 @@ def refresh_authorization() -> Response:
         )
 
     return Response(
-        data={ "access_token": json_web_token },
+        data=auth_results,
         origin=api.current_request.headers.get("origin", ""),
     )
