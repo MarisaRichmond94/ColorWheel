@@ -7,10 +7,8 @@ export const keysToCamel = value => {
     });
 
     return object;
-  } else if (Array.isArray(value)) {
-    return value.map(object => {
-      return keysToCamel(object);
-    });
+  } if (Array.isArray(value)) {
+    return value.map(object => keysToCamel(object));
   }
 
   return value;
@@ -26,30 +24,26 @@ export const keysToSnake = value => {
       });
 
     return object;
-  } else if (Array.isArray(value)) {
-    return value.map(object => {
-      return keysToSnake(object);
-    });
+  } if (Array.isArray(value)) {
+    return value.map(object => keysToSnake(object));
   }
 
   return value;
 };
 
-const isObject = value => {
+function isObject(value) {
   return value === Object(value) && !Array.isArray(value) && typeof value !== 'function';
-};
+}
 
-const toCamel = string => {
+function toCamel(string) {
   return string.replace(/([-_][a-z])/ig, ($1) =>
     $1.toUpperCase().replace('-', '').replace('_', '')
   );
-};
+}
 
-
-
-const toSnake = string => {
+function toSnake(string) {
   return string
-    .replace(/\.?([A-Z]+)/g, (x, y) => '_' + y.toLowerCase())
+    .replace(/\.?([A-Z]+)/g, (x, y) => `_${y.toLowerCase()}`)
     .replace(/^_/, '')
     .replace(' ', '');
-};
+}

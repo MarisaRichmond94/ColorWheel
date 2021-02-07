@@ -3,6 +3,12 @@ import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
 import AuthenticationApi from '~/api/authentication';
 import types from '~/redux/types';
 
+function* storeResult(type, payload) {
+  yield put({ type, payload });
+  const key = Object.keys(payload)[0];
+  document.cookie = `${key}=${payload[key]}; max-age=36000;`;
+}
+
 export function* storeAuthResultsInSession(authResult) {
   const { email, name, sub: id } = authResult;
   yield all([
@@ -48,12 +54,6 @@ export function* refreshSession(email) {
       payload: { accessToken: authResults.accessToken },
     });
   }
-}
-
-function* storeResult(type, payload) {
-  yield put({ type, payload });
-  const key = Object.keys(payload)[0];
-  document.cookie = `${key}=${payload[key]}; max-age=36000;`;
 }
 
 export function* watchAuthenticateSession() {

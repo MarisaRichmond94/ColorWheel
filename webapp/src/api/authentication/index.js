@@ -32,7 +32,7 @@ class Authentication {
           headers: {
             Accept: 'application/json',
           },
-          body: json.stringify(body),
+          body: JSON.stringify(body),
         },
       );
     } catch (error) {
