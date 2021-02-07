@@ -27,6 +27,7 @@ const SmartFormInput = props => {
       autoComplete="none"
       className={`remove-focus-highlight smart-form-input ${props.classNames}`}
       id={props.id}
+      name={Math.random().toString()}
       onChange={e => onChange(e.target.value)}
       placeholder={props.placeholder}
       spellCheck="false"
