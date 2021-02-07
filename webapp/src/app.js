@@ -25,13 +25,13 @@ function App(props) {
 
   return props.accessToken
     ? (
-  <>
-    <Header />
-    <div id='body-container'>
-      <SmartRouter />
-    </div>
-    <Footer />
-  </>
+        <>
+          <Header />
+          <div id='body-container'>
+            <SmartRouter />
+          </div>
+          <Footer />
+        </>
       )
     : <LoginPage />;
 }

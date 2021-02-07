@@ -24,6 +24,21 @@ export function * authenticateUser(action) {
   }
 }
 
+export function * deauthenticateUser() {
+  const cookieKeys = ['email', 'name', 'id'];
+  cookieKeys.forEach(key => { document.cookie = `${key}=;max-age=0`; });
+  localStorage.clear();
+  yield put({
+    type: types.SET_ACCESS_TOKEN,
+    payload: { accessToken: undefined },
+  });
+  yield call(window.historyReplace, '/');
+}
+
 export function * watchAuthenticateUser() {
   yield takeLatest(types.AUTHENTICATE_USER, authenticateUser);
+}
+
+export function * watchDeauthenticateUser() {
+  yield takeLatest(types.DEAUTHENTICATE_USER, deauthenticateUser);
 }
