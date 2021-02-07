@@ -69,11 +69,7 @@ def refresh_authorization() -> Response:
         return error_response
 
     try:
-        json_web_token = business.refresh_authorization(
-            name=request.body.get("name"),
-            email=request.body.get("email"),
-            password=request.body.get("password"),
-        )
+        json_web_token = business.refresh_authorization(email=request.query.get("email"))
     except Exception as refresh_authorization_exception:
         log.exception(refresh_authorization_exception)
         return Response(
