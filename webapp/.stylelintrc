@@ -1,0 +1,19 @@
+ {
+  "extends": "stylelint-config-recommended",
+  "rules": {
+    "declaration-colon-space-after": "always",
+    "indentation": 2,
+    "max-empty-lines": 1,
+    "rule-empty-line-before": [
+      "always",
+      {
+        "except": [
+          "inside-block"
+        ],
+        "ignore": [
+          "after-comment"
+        ]
+      }
+    ]
+  }
+}

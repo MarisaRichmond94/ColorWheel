@@ -7,7 +7,7 @@ const Prompt = props => {
   Prompt.propTypes = {
     isSignUpPage: bool.isRequired,
     setIsSignUpPage: func.isRequired,
-  }
+  };
 
   return props.isSignUpPage
     ? (
@@ -25,7 +25,7 @@ const Prompt = props => {
           />
         </span>
       </div>
-    )
+      )
     : (
       <div className='text-center' style={{ fontSize: '20px' }}>
         <span className='inline-span'>
@@ -41,7 +41,7 @@ const Prompt = props => {
           />
         </span>
       </div>
-    );
-}
+      );
+};
 
 export default Prompt;

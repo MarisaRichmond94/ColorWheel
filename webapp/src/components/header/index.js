@@ -1,7 +1,7 @@
 import './index.scss';
 
-import { Col, Row } from 'react-bootstrap';
 import React from 'react';
+import { Col, Row } from 'react-bootstrap';
 
 import icon from '~/assets/icons/colorwheel_icon.png';
 
@@ -11,7 +11,7 @@ const Header = () => {
       <img alt='' id='main-header-icon' src={icon} />
       <p id='main-header-text'>ColorWheel</p>
     </span>
-  )
+  );
 
   return (
     <Row id='main-header'>
@@ -23,6 +23,6 @@ const Header = () => {
       </Col>
     </Row>
   );
-}
+};
 
 export default Header;

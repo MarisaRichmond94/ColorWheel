@@ -1,8 +1,8 @@
 import './index.scss';
 
 import { bool, func, object, string } from 'prop-types';
-import { Button } from 'react-bootstrap';
 import React from 'react';
+import { Button } from 'react-bootstrap';
 
 const SmartButton = props => {
   SmartButton.propTypes = {
@@ -14,7 +14,7 @@ const SmartButton = props => {
     style: object,
     text: string,
     textBlock: object,
-  }
+  };
 
   return (
     <Button
@@ -28,6 +28,6 @@ const SmartButton = props => {
       {props.text || props.textBlock || ''}
     </Button>
   );
-}
+};
 
 export default SmartButton;

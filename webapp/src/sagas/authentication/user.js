@@ -4,7 +4,7 @@ import AuthenticationApi from '~/api/authentication';
 import types from '~/redux/types';
 import { storeAuthResultsInSession } from '~/sagas/authentication/session';
 
-export function* authenticateUser(action) {
+export function * authenticateUser(action) {
   try {
     const { accessToken, authResults } = yield call(AuthenticationApi.post, action.payload);
     yield put({
@@ -18,6 +18,6 @@ export function* authenticateUser(action) {
   }
 }
 
-export function* watchAuthenticateUser() {
+export function * watchAuthenticateUser() {
   yield takeLatest(types.AUTHENTICATE_USER, authenticateUser);
 }

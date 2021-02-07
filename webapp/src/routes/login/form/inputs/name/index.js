@@ -1,6 +1,6 @@
 import { bool, func, string } from 'prop-types';
-import { Col, Row } from 'react-bootstrap';
 import React from 'react';
+import { Col, Row } from 'react-bootstrap';
 import { FiUserCheck, FiUserX } from 'react-icons/fi';
 
 import SmartFormInput from '~/components/smart_form_input';
@@ -11,13 +11,13 @@ const NameInput = props => {
     name: string.isRequired,
     setIsValidInput: func.isRequired,
     setName: func.isRequired,
-  }
+  };
 
   const validateInput = input => {
     const names = input.split(' ');
     const validNames = names.filter(name => name.length > 1);
     props.setIsValidInput(names.length === 2 && validNames.length === 2);
-  }
+  };
 
   return (
     <Row className='text-center input-row-wrapper'>
@@ -38,6 +38,6 @@ const NameInput = props => {
       </Col>
     </Row>
   );
-}
+};
 
 export default NameInput;

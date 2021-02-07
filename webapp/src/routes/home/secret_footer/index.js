@@ -1,9 +1,9 @@
 import './index.scss';
 
-import { Col, Row } from 'react-bootstrap';
 import React from 'react';
+import { Col, Row } from 'react-bootstrap';
 import {
-  FaCode, FaGithub, FaHackerrank, FaLinkedin, FaStackOverflow
+  FaCode, FaGithub, FaHackerrank, FaLinkedin, FaStackOverflow,
 } from 'react-icons/fa';
 
 const SecretFooter = () => (
@@ -31,6 +31,6 @@ const SecretFooter = () => (
       />
     </Col>
   </Row>
-  )
+);
 
 export default SecretFooter;

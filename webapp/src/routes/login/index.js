@@ -18,6 +18,6 @@ const LoginPage = () => {
       <Footer />
     </div>
   );
-}
+};
 
 export default LoginPage;

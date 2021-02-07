@@ -4,27 +4,27 @@ import { connect } from 'react-redux';
 
 import Footer from '~/components/footer';
 import Header from '~/components/header';
+import types from '~/redux/types';
 import LoginPage from '~/routes/login';
 import SmartRouter from '~/routes/router';
-import types from '~/redux/types';
 
 function App(props) {
-	App.propTypes = {
-		accessToken: string,
-	}
+  App.propTypes = {
+    accessToken: string,
+  };
 
-	useEffect(() => {
-		if (!props.accessToken) {
-			try {
-				window.dispatchAction(types.AUTHENTICATE_SESSION);
-			} catch (error) {
-				// eventually route to error page
-			}
-		}
-	}, [props.accessToken]);
+  useEffect(() => {
+    if (!props.accessToken) {
+      try {
+        window.dispatchAction(types.AUTHENTICATE_SESSION);
+      } catch (error) {
+        // eventually route to error page
+      }
+    }
+  }, [props.accessToken]);
 
-	return props.accessToken
-		? (
+  return props.accessToken
+    ? (
   <>
     <Header />
     <div id='body-container'>
@@ -32,12 +32,12 @@ function App(props) {
     </div>
     <Footer />
   </>
-		)
-		: <LoginPage />;
+      )
+    : <LoginPage />;
 }
 
 export function mapStateToProps(state) {
-	return { accessToken: state.appState.accessToken }
+  return { accessToken: state.appState.accessToken };
 };
 
 export default connect(mapStateToProps)(App);

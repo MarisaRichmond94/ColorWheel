@@ -1,6 +1,6 @@
 import { bool, func, string } from 'prop-types';
-import { Col, Row } from 'react-bootstrap';
 import React from 'react';
+import { Col, Row } from 'react-bootstrap';
 import { HiOutlineMail, HiOutlineMailOpen } from 'react-icons/hi';
 
 import SmartFormInput from '~/components/smart_form_input';
@@ -13,7 +13,7 @@ const EmailInput = props => {
     isValidInput: bool.isRequired,
     setEmail: func.isRequired,
     setIsValidInput: func.isRequired,
-  }
+  };
 
   const validateInput = input => {
     const hasOnlyValidCharacters = (
@@ -22,7 +22,7 @@ const EmailInput = props => {
     const hasAtSymbol = input.includes('@');
     const hasValidEnding = validEndings.includes(input.slice(-4));
     props.setIsValidInput(hasOnlyValidCharacters && hasAtSymbol && hasValidEnding);
-  }
+  };
 
   return (
     <Row className='text-center input-row-wrapper'>
@@ -43,6 +43,6 @@ const EmailInput = props => {
       </Col>
     </Row>
   );
-}
+};
 
 export default EmailInput;

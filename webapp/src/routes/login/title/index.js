@@ -8,6 +8,6 @@ const Title = () => (
   <div id='login-title'>
     <img alt='' src={source} />
   </div>
-)
+);
 
 export default Title;

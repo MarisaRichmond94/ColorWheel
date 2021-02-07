@@ -1,8 +1,8 @@
 import './index.scss';
 
 import { bool, func, string } from 'prop-types';
-import { Col, Row } from 'react-bootstrap';
 import React, { useState } from 'react';
+import { Col, Row } from 'react-bootstrap';
 import { AiOutlineLock, AiOutlineUnlock } from 'react-icons/ai';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
@@ -14,15 +14,15 @@ const PasswordInput = props => {
     password: string.isRequired,
     setPassword: func.isRequired,
     setIsValidInput: func.isRequired,
-  }
+  };
 
   const [isHidden, setIsHidden] = useState(true);
 
   const validateInput = input => {
     props.setIsValidInput(
-      /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{10,}$/.test(input)
+      /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{10,}$/.test(input),
     );
-  }
+  };
 
   return (
     <Row className='text-center input-row-wrapper'>
@@ -53,6 +53,6 @@ const PasswordInput = props => {
       </Col>
     </Row>
   );
-}
+};
 
 export default PasswordInput;

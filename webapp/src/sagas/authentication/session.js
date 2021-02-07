@@ -3,13 +3,13 @@ import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
 import AuthenticationApi from '~/api/authentication';
 import types from '~/redux/types';
 
-function* storeResult(type, payload) {
+function * storeResult(type, payload) {
   yield put({ type, payload });
   const key = Object.keys(payload)[0];
   document.cookie = `${key}=${payload[key]}; max-age=36000;`;
 }
 
-export function* storeAuthResultsInSession(authResult) {
+export function * storeAuthResultsInSession(authResult) {
   const { email, name, sub: id } = authResult;
   yield all([
     call(storeResult, types.SET_USER_EMAIL, { email }),
@@ -18,14 +18,14 @@ export function* storeAuthResultsInSession(authResult) {
   ]);
 }
 
-export function* authenticateSession() {
+export function * authenticateSession() {
   if (document.cookie !== '') {
     const authResults = {};
 
     const keys = ['email', 'id', 'name'];
     keys.forEach(key => {
       authResults[key] = document.cookie.split(';').filter(
-        item => keys.includes(item.split('=')[0])
+        item => keys.includes(item.split('=')[0]),
       )[0].split('=')[1];
     });
 
@@ -46,7 +46,7 @@ export function* authenticateSession() {
   }
 }
 
-export function* refreshSession(email) {
+export function * refreshSession(email) {
   const authResults = yield call(AuthenticationApi.get, email);
   if (authResults.accessToken) {
     yield put({
@@ -56,6 +56,6 @@ export function* refreshSession(email) {
   }
 }
 
-export function* watchAuthenticateSession() {
+export function * watchAuthenticateSession() {
   yield takeLatest(types.AUTHENTICATE_SESSION, authenticateSession);
 }

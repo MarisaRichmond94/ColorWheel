@@ -1,7 +1,7 @@
 import './index.scss';
 
-import { Col, Row } from 'react-bootstrap';
 import React from 'react';
+import { Col, Row } from 'react-bootstrap';
 
 const Footer = () => (
   <Row id='login-footer'>
@@ -11,6 +11,6 @@ const Footer = () => (
       </p>
     </Col>
   </Row>
-  )
+);
 
 export default Footer;

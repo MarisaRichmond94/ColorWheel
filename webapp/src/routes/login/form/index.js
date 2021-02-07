@@ -1,8 +1,8 @@
 import './index.scss';
 
 import { bool } from 'prop-types';
-import { Col, Row } from 'react-bootstrap';
 import React, { useState } from 'react';
+import { Col, Row } from 'react-bootstrap';
 
 import SmartButton from '~/components/smart_button';
 import types from '~/redux/types';
@@ -14,7 +14,7 @@ import PasswordInput from './inputs/password';
 const Form = props => {
   Form.propTypes = {
     isSignUpPage: bool.isRequired,
-  }
+  };
 
   const [name, setName] = useState('');
   const [isValidName, setIsValidName] = useState(false);
@@ -74,6 +74,6 @@ const Form = props => {
       </Col>
     </Row>
   );
-}
+};
 
 export default Form;

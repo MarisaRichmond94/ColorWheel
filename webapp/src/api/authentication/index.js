@@ -18,7 +18,7 @@ class Authentication {
           sub: '0ea4b105-5627-49ad-a517-87c4e3925534',
           name: body.name,
           email: body.email,
-        }
+        },
       };
     }
 
@@ -57,7 +57,7 @@ class Authentication {
           sub: '0ea4b105-5627-49ad-a517-87c4e3925534',
           name: 'Drake Stryker',
           email,
-        }
+        },
       };
     }
 

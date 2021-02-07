@@ -37,7 +37,7 @@ function isObject(value) {
 
 function toCamel(string) {
   return string.replace(/([-_][a-z])/ig, ($1) =>
-    $1.toUpperCase().replace('-', '').replace('_', '')
+    $1.toUpperCase().replace('-', '').replace('_', ''),
   );
 }
 

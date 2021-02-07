@@ -8,5 +8,6 @@
 	"editor.minimap.enabled": false,
 	"editor.codeActionsOnSave": {
 		"source.fixAll.eslint": true
-	}
+	},
+	"python.linting.enabled": false
 }

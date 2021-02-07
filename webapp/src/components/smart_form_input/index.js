@@ -1,8 +1,8 @@
 import './index.scss';
 
 import { func, string } from 'prop-types';
-import { FormControl } from 'react-bootstrap';
 import React from 'react';
+import { FormControl } from 'react-bootstrap';
 
 const SmartFormInput = props => {
   SmartFormInput.propTypes = {
@@ -13,14 +13,14 @@ const SmartFormInput = props => {
     setFormValue: func.isRequired,
     type: string,
     validateFormValue: func,
-  }
+  };
 
   const onChange = input => {
     props.setFormValue(input);
     if (props.validateFormValue) {
       props.validateFormValue(input);
     }
-  }
+  };
 
   return (
     <FormControl
@@ -34,6 +34,6 @@ const SmartFormInput = props => {
       value={props.formValue}
     />
   );
-}
+};
 
 export default SmartFormInput;
