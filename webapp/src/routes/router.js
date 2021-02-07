@@ -16,7 +16,7 @@ function SmartRouter() {
 	return (
   <>
     <Route exact path='/login' component={LoginRoute} />
-    <Route exact path='/' component={HomeRoute} />
+    <Route exact path='/home' component={HomeRoute} />
   </>
 	)
 }

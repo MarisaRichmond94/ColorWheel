@@ -37,7 +37,7 @@ function App(props) {
 }
 
 export function mapStateToProps(state) {
-	return { accessToken: state.userState.accessToken }
+	return { accessToken: state.appState.accessToken }
 };
 
 export default connect(mapStateToProps)(App);
