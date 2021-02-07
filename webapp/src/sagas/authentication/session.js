@@ -37,11 +37,11 @@ export function* authenticateSession() {
       ]);
       yield fork(refreshSession, authResults.email);
     } else {
-      const path = `/login${window.location.search.includes('MOCK_BE') ? '?MOCK_BE' : ''}`;
+      const path = `/${window.location.search.includes('MOCK_BE') ? '?MOCK_BE' : ''}`;
       yield call(window.historyReplace, path);
     }
-  } else if (window.location.pathname !== '/login') {
-    const path = `/login${window.location.search.includes('MOCK_BE') ? '?MOCK_BE' : ''}`;
+  } else if (window.location.pathname !== '/') {
+    const path = `/${window.location.search.includes('MOCK_BE') ? '?MOCK_BE' : ''}`;
     yield call(window.historyReplace, path);
   }
 }
