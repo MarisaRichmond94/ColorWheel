@@ -14,7 +14,13 @@ export function * authenticateUser(action) {
     yield call(storeAuthResultsInSession, authResults);
     yield call(window.historyReplace, '/home');
   } catch (error) {
-    // user already exists; handle this
+    const authenticationErrorMessage = (action.payload.name)
+      ? 'Account creation failed: There is already an account associated with this email.'
+      : 'Login failed: Incorrect email or password.';
+    yield put({
+      type: types.SET_AUTHENTICATION_ERROR_MESSAGE,
+      payload: { authenticationErrorMessage },
+    });
   }
 }
 

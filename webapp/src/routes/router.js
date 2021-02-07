@@ -3,12 +3,12 @@ import loadable from 'react-loadable';
 import { Route } from 'react-router-dom';
 
 const LoginRoute = loadable({
-  loader: () => import('~/routes/login'),
+  loader: () => import('./login'),
   loading: () => <></>,
 });
 
 const HomeRoute = loadable({
-  loader: () => import('~/routes/home'),
+  loader: () => import('./home'),
   loading: () => <></>,
 });
 

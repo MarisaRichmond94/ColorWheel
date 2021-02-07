@@ -1,8 +1,9 @@
 import './index.scss';
 
-import { bool } from 'prop-types';
+import { bool, string } from 'prop-types';
 import React, { useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
+import { connect } from 'react-redux';
 
 import SmartButton from '~/components/smart_button';
 import types from '~/redux/types';
@@ -13,6 +14,7 @@ import PasswordInput from './inputs/password';
 
 const Form = props => {
   Form.propTypes = {
+    authenticationErrorMessage: string,
     isSignUpPage: bool.isRequired,
   };
 
@@ -66,6 +68,9 @@ const Form = props => {
           setIsValidInput={setIsValidPassword}
           setPassword={setPassword}
         />
+        {props.authenticationErrorMessage &&
+          <p className='text-center' style={{ color: 'red' }}>{props.authenticationErrorMessage}</p>
+        }
         <Row className='text-center' style={{ marginTop: '20px' }}>
           <Col>
             {props.isSignUpPage ? signUpButton : loginButton}
@@ -76,4 +81,8 @@ const Form = props => {
   );
 };
 
-export default Form;
+export function mapStateToProps(state) {
+  return { authenticationErrorMessage: state.appState.authenticationErrorMessage };
+};
+
+export default connect(mapStateToProps)(Form);

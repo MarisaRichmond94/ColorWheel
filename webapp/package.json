@@ -10,6 +10,7 @@
     "url": "git+https://github.com/MarisaRichmond94/ColorWheel.git"
   },
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "history": "^4.10.1",
     "isomorphic-fetch": "^2.2.1",
     "prop-types": "^15.7.2",
@@ -41,7 +42,6 @@
     "babel-jest": "^26.6.3",
     "babel-loader": "^8.0.6",
     "babel-plugin-root-import": "^5.1.0",
-    "babel-polyfill": "^6.26.0",
     "css-loader": "^3.2.0",
     "eslint": "7.19.0",
     "eslint-config-react-app": "^6.0.0",
