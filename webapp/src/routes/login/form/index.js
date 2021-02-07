@@ -27,7 +27,7 @@ const Form = props => {
     <SmartButton
       isDisabled={!isValidName || !isValidEmail || !isValidPassword}
       id='signup-submit-button'
-      onClick={() => window.dispatchAction(types.AUTHENTICATE_NEW_USER, { name, email, password })}
+      onClick={() => window.dispatchAction(types.AUTHENTICATE_USER, { name, email, password })}
       text='Sign Up'
     />
   );

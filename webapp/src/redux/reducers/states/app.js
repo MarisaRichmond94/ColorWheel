@@ -1,13 +1,13 @@
 import types from '~/redux/types';
 
 const initialAppState = {
-  isUserAuthenticated: false,
+  accessToken: undefined,
 };
 
 const appState = (state = initialAppState, action) => {
   switch (action.type) {
-    case types.SET_IS_USER_AUTHENTICATED:
-      return { ...state, isUserAuthenticated: action.payload.isUserAuthenticated };
+    case types.SET_ACCESS_TOKEN:
+      return { ...state, accessToken: action.payload.accessToken };
     default:
       return state;
   }

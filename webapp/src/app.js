@@ -1,4 +1,4 @@
-import { bool } from 'prop-types';
+import { string } from 'prop-types';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 
@@ -10,34 +10,34 @@ import types from '~/redux/types';
 
 function App(props) {
 	App.propTypes = {
-		isUserAuthenticated: bool.isRequired,
+		accessToken: string,
 	}
 
 	useEffect(() => {
-		if (!props.isUserAuthenticated) {
+		if (!props.accessToken) {
 			try {
-				window.dispatchAction(types.AUTHENTICATE_USER);
+				window.dispatchAction(types.AUTHENTICATE_SESSION);
 			} catch (error) {
 				// eventually route to error page
 			}
 		}
-	}, [props.isUserAuthenticated]);
+	}, [props.accessToken]);
 
-	return props.isUserAuthenticated
+	return props.accessToken
 		? (
-  <>
-    <Header />
-    <div id='body-container'>
-      <SmartRouter />
-    </div>
-    <Footer />
-  </>
+			<>
+				<Header />
+				<div id='body-container'>
+					<SmartRouter />
+				</div>
+				<Footer />
+			</>
 		)
 		: <LoginPage />;
 }
 
 export function mapStateToProps(state) {
-	return { isUserAuthenticated: state.appState.isUserAuthenticated }
+	return { accessToken: state.userState.accessToken }
 };
 
 export default connect(mapStateToProps)(App);
