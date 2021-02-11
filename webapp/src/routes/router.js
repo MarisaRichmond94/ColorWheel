@@ -7,8 +7,8 @@ const LoginRoute = loadable({
   loading: () => <></>,
 });
 
-const HomeRoute = loadable({
-  loader: () => import('./home'),
+const WorkspaceRoute = loadable({
+  loader: () => import('./workspace'),
   loading: () => <></>,
 });
 
@@ -16,7 +16,7 @@ function SmartRouter() {
   return (
   <>
     <Route exact path='/' component={LoginRoute} />
-    <Route exact path='/home' component={HomeRoute} />
+    <Route exact path='/workspace' component={WorkspaceRoute} />
   </>
   );
 }

@@ -12,7 +12,7 @@ export function * authenticateUser(action) {
       payload: { accessToken },
     });
     yield call(storeAuthResultsInSession, authResults);
-    yield call(window.historyReplace, '/home');
+    yield call(window.historyReplace, '/workspace');
   } catch (error) {
     const authenticationErrorMessage = (action.payload.name)
       ? 'Account creation failed: There is already an account associated with this email.'
