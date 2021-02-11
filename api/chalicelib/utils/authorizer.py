@@ -1,4 +1,6 @@
-from libs.app import APP
+from chalice import AuthResponse
+
+from utils.app import APP
 
 
 @APP.authorizer()

@@ -1,4 +1,4 @@
-from typing import Dict, Optional
+from typing import Optional
 
 from loguru import logger as log
 
@@ -14,14 +14,10 @@ from restless_services.authentication.business_layer.helpers import (
 from utils.validation import validate_params
 
 
-def authorize_user(
-    email: str,
-    password: str,
-    name: Optional[str] = None
-) -> Dict:
+def authorize_user(email: str, password: str, name: Optional[str] = None) -> dict:
     validate_params(
         func="authorize_user",
-        params={ "email": email, "password": password }
+        params={"email": email, "password": password}
     )
 
     user = (
@@ -44,7 +40,7 @@ def authorize_user(
 
 
 def refresh_authorization(email: str) -> Optional[str]:
-    validate_params(func="refresh_authorization", params={ "email": email })
+    validate_params(func="refresh_authorization", params={"email": email})
 
     user = get_user_by_email(email=email)
     if not user:
@@ -62,7 +58,7 @@ def refresh_authorization(email: str) -> Optional[str]:
 def authenticate_user(user_email: str, json_web_token: str) -> bool:
     validate_params(
         func="authenticate_user",
-        params={ "email": email, "json_web_token": json_web_token }
+        params={"email": email, "json_web_token": json_web_token}
     )
 
     user = get_user_by_email(email=email)

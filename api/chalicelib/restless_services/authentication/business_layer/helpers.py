@@ -1,10 +1,9 @@
 from io import BytesIO
-from typing import Dict
 
 import jwt
 
 
-def encode_json_web_token(user: Dict) -> tuple:
+def encode_json_web_token(user: dict) -> tuple:
     payload = {
         "iss": "colorwheel",
         "exp": 1200,
@@ -15,5 +14,5 @@ def encode_json_web_token(user: Dict) -> tuple:
     return jwt.encode(payload, user.get("password"), algorithm="HS256"), payload
 
 
-def decode_json_web_token(json_web_token: str, secret: str) -> Dict:
+def decode_json_web_token(json_web_token: str, secret: str) -> dict:
     return jwt.decode(json_web_token, secret, algorithms=["HS256"])
