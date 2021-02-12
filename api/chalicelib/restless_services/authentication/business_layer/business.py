@@ -6,7 +6,6 @@ from restful_services.users.business_layer.business import (
     create_user,
     get_user_by_email
 )
-from restful_services.users.business_layer.helpers import validate_password
 from restless_services.authentication.business_layer.helpers import (
     decode_json_web_token,
     encode_json_web_token
@@ -55,7 +54,7 @@ def refresh_authorization(email: str) -> Optional[str]:
     }
 
 
-def authenticate_user(user_email: str, json_web_token: str) -> bool:
+def authenticate_user(email: str, json_web_token: str) -> bool:
     validate_params(
         func="authenticate_user",
         params={"email": email, "json_web_token": json_web_token}
@@ -71,4 +70,4 @@ def authenticate_user(user_email: str, json_web_token: str) -> bool:
         secret=user.get('password'),
     )
 
-    return True if decoded_payload else False
+    return decoded_payload

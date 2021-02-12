@@ -1,7 +1,7 @@
+# pylint: disable=no-member
 from typing import Optional
 
 from chalice import Blueprint
-from loguru import logger as log
 
 from restless_services.authentication.business_layer import business
 from restless_services.authentication.model_layer.api_schemas import (
@@ -9,8 +9,6 @@ from restless_services.authentication.model_layer.api_schemas import (
     PostAuthenticationBodySchema,
 )
 from utils.api_handler import api_handler
-from utils.request import validate_request
-from utils.response import Response
 
 api = Blueprint(__name__)
 
