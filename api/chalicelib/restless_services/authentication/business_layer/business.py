@@ -2,10 +2,7 @@ from typing import Optional
 
 from loguru import logger as log
 
-from restful_services.sessions.business_layer.business import (
-    create_session,
-    update_session,
-)
+from restful_services.sessions.business_layer.business import create_session
 from restful_services.users.business_layer.business import (
     create_user,
     get_user_by_email

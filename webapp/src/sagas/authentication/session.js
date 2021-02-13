@@ -48,7 +48,8 @@ export function * authenticateSession() {
 
 export function * refreshSession(email) {
   const authResults = yield call(AuthenticationApi.get, email);
-  if (authResults.accessToken) {
+
+  if (authResults?.accessToken) {
     yield put({
       type: types.SET_ACCESS_TOKEN,
       payload: { accessToken: authResults.accessToken },

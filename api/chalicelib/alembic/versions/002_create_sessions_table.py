@@ -33,7 +33,7 @@ def upgrade():
             server_default=sa.text('now()'),
             nullable=True
         ),
-        sa.Column('dim_user_id', postgresql.UUID(as_uuid=True), unique=True, nullable=False),
+        sa.Column('dim_user_id', postgresql.UUID(as_uuid=True), nullable=False),
         sa.ForeignKeyConstraint(['dim_user_id'], ['dim_users.id'], ),
         sa.PrimaryKeyConstraint('id')
     )

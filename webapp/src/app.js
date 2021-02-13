@@ -21,7 +21,8 @@ function App(props) {
         // eventually route to error page
       }
     }
-  }, [props.accessToken]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return props.accessToken
     ? (
@@ -37,7 +38,7 @@ function App(props) {
 }
 
 export function mapStateToProps(state) {
-  return { accessToken: state.appState.accessToken };
+  return { accessToken: state.userState.accessToken };
 };
 
 export default connect(mapStateToProps)(App);
