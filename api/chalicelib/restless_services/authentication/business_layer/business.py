@@ -2,6 +2,10 @@ from typing import Optional
 
 from loguru import logger as log
 
+from restful_services.sessions.business_layer.business import (
+    create_session,
+    update_session,
+)
 from restful_services.users.business_layer.business import (
     create_user,
     get_user_by_email
@@ -31,6 +35,10 @@ def authorize_user(email: str, password: str, name: Optional[str] = None) -> dic
         return None
 
     access_token, auth_results = encode_json_web_token(user=user)
+    if name:
+        create_session(user_id=user.get('id'), token=access_token)
+    else:
+        update_session(user_id=user.get('id'), token=access_token)
 
     return {
         'access_token': access_token,
@@ -47,6 +55,7 @@ def refresh_authorization(email: str) -> Optional[str]:
         return None
 
     access_token, auth_results = encode_json_web_token(user=user)
+    update_session(user_id=user.get('id'), token=access_token)
 
     return {
         'access_token': access_token,

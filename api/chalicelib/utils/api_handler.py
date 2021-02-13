@@ -59,13 +59,16 @@ def api_handler(
                 )
 
             log.debug(f'{func.__name__} {methods[0]} request result: {data}.')
-            auth = refresh_authorization(email=api.current_request.headers.get('email'))
-            return Response(
-                data=data,
-                headers={
+            headers = {}
+            if api_key_required:
+                auth = refresh_authorization(email=api.current_request.headers.get('email'))
+                headers = {
                     'access_token': auth.get('access_token'),
                     'auth_results': auth.get('auth_results'),
-                },
+                }
+            return Response(
+                data=data,
+                headers=headers,
                 origin=api.current_request.headers.get('origin', ''),
             )
 
