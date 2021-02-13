@@ -11,20 +11,7 @@ def create_session(user_id: UUIDType, token: str) -> Optional[dict]:
         params={"user_id": user_id, "token": token}
     )
 
-    session = get_session_by_user(user_id=user_id)
-    if session:
-        return update_session(user_id=user_id, token=token)
-
     return data.create_session(user_id=user_id, token=token)
-
-
-def update_session(user_id: UUIDType, token: str) -> Optional[dict]:
-    validate_params(
-        func="update_session",
-        params={"user_id": user_id, "token": token}
-    )
-
-    return data.update_session(user_id=user_id, token=token)
 
 
 def get_session_by_token(token: str) -> Optional[dict]:
