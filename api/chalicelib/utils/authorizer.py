@@ -14,6 +14,7 @@ def authorizer(auth_request) -> AuthResponse:
         if session:
             decoded_payload = authenticate_user(
                 email=session.get('user', {}).get('email'),
+                password=session.get('user', {}).get('password'),
                 json_web_token=json_web_token,
             )
 

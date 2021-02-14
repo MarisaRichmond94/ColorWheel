@@ -62,7 +62,7 @@ def refresh_authorization(email: str) -> Optional[str]:
     }
 
 
-def authenticate_user(email: str, json_web_token: str) -> bool:
+def authenticate_user(email: str, password: str, json_web_token: str) -> bool:
     validate_params(
         func="authenticate_user",
         params={"email": email, "json_web_token": json_web_token}
