@@ -1,3 +1,4 @@
+import { deauthenticateUser, handleAuthResults } from '~/redux/reducers/helpers/user';
 import types from '~/redux/types';
 
 const initialUserState = {
@@ -9,14 +10,10 @@ const initialUserState = {
 
 const userState = (state = initialUserState, action) => {
   switch (action.type) {
-    case types.SET_ACCESS_TOKEN:
-      return { ...state, accessToken: action.payload.accessToken };
-    case types.SET_USER_EMAIL:
-      return { ...state, email: action.payload.email };
-    case types.SET_USER_ID:
-      return { ...state, id: action.payload.id };
-    case types.SET_USER_NAME:
-      return { ...state, name: action.payload.name };
+    case types.HANDLE_AUTH_RESULTS:
+      return handleAuthResults(state, action.payload.authResults);
+    case types.DEAUTHENTICATE_USER:
+      return deauthenticateUser(state);
     default:
       return state;
   }

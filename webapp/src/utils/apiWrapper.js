@@ -1,5 +1,6 @@
 import 'isomorphic-fetch';
 
+import types from '~/redux/types';
 import store from '~/store';
 import { keysToCamel, keysToSnake } from '~/utils/convertCasing';
 
@@ -117,10 +118,16 @@ class ApiWrapper {
 
   handleResponse = async response => {
     if (response && response.ok && response.status === 200) {
+      if (this.isAuthenticatedRoute) {
+        const headers = keysToCamel(response.headers);
+        const authResults = {
+          accessToken: headers.accessToken,
+          authResults: headers.authResults,
+        };
+        window.dispatchAction(types.HANDLE_AUTH_RESULTS, { authResults });
+      }
       const res = await response.json();
-      const data = keysToCamel(res.data);
-      const headers = (this.isAuthenticatedRoute) ? keysToCamel(res.headers) : {};
-      return { ...data, ...headers };
+      return keysToCamel(res.data);
     }
   }
 }
