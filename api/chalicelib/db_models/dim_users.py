@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, ForeignKey
+from sqlalchemy import Column, LargeBinary, String, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
 
@@ -10,7 +10,7 @@ class DimUsers(Base):
     __tablename__ = "dim_users"
     name = Column(String(DB_STRING_MAX_LENGTH), nullable=False)
     email = Column(String(DB_STRING_MAX_LENGTH), unique=True, nullable=False)
-    password = Column(String(DB_STRING_MAX_LENGTH), nullable=False)
+    password = Column(LargeBinary(), nullable=False)
 
     @classmethod
     def dimension(cls, target):

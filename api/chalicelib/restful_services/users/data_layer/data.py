@@ -5,7 +5,7 @@ from utils import db
 from restful_services.users.model_layer.data_schemas import UserSchema
 
 
-def create_user(name: str, email: str, password: str) -> Optional[dict]:
+def create_user(name: str, email: str, password: bytes) -> Optional[dict]:
     with db.session_scope() as session:
         user = DimUsers(
             name=name,
