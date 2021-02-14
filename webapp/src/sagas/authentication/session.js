@@ -17,13 +17,20 @@ export function * authenticateSession() {
     if (Object.keys(authResults).length === keys.length) {
       yield fork(refreshSession, authResults.email);
     } else {
-      const path = `/${window.location.search.includes('MOCK_BE') ? '?MOCK_BE' : ''}`;
-      yield call(window.historyReplace, path);
+      yield call(routeBackToLogin);
     }
-  } else if (window.location.pathname !== '/') {
-    const path = `/${window.location.search.includes('MOCK_BE') ? '?MOCK_BE' : ''}`;
-    yield call(window.historyReplace, path);
+  } else {
+    yield call(routeBackToLogin);
   }
+}
+
+function * routeBackToLogin() {
+  yield put({
+    type: types.SET_IS_AUTHENTICATING_USER,
+    payload: { isAuthenticatingUser: false },
+  });
+  const path = `/${window.location.search.includes('MOCK_BE') ? '?MOCK_BE' : ''}`;
+  yield call(window.historyReplace, path);
 }
 
 export function * refreshSession(email) {
@@ -31,6 +38,10 @@ export function * refreshSession(email) {
   yield put({
     type: types.HANDLE_AUTH_RESULTS,
     payload: { authResults },
+  });
+  yield put({
+    type: types.SET_IS_AUTHENTICATING_USER,
+    payload: { isAuthenticatingUser: false },
   });
 }
 
