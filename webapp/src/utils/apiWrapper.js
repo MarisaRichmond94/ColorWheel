@@ -6,13 +6,15 @@ import { keysToCamel, keysToSnake } from '~/utils/convertCasing';
 
 class ApiWrapper {
   constructor(route, isAuthenticatedRoute = true) {
-    this.accessToken = store?.getState()?.userState?.accessToken;
+    this.accessToken = undefined;
+    this.email = undefined;
     this.isAuthenticatedRoute = isAuthenticatedRoute;
     this.url = `${window?.CONFIG?.API_URL}/${route}`;
     this.useMock = window.location.search.includes('MOCK_BE');
   }
 
   makeDeleteRequest = async(id, query = {}) => {
+    this.updateWrapperState();
     let response;
 
     try {
@@ -32,6 +34,7 @@ class ApiWrapper {
   }
 
   makeGetRequest = async({ id, query = {} }) => {
+    this.updateWrapperState();
     let response;
 
     try {
@@ -51,6 +54,7 @@ class ApiWrapper {
   }
 
   makePatchRequest = async(id, body) => {
+    this.updateWrapperState();
     let response;
 
     try {
@@ -71,6 +75,7 @@ class ApiWrapper {
   }
 
   makePostRequest = async({ body }) => {
+    this.updateWrapperState();
     let response;
 
     try {
@@ -90,6 +95,13 @@ class ApiWrapper {
     return this.handleResponse(response);
   }
 
+  updateWrapperState = () => {
+    if (this.isAuthenticatedRoute && (!this.accessToken || !this.email)) {
+      this.accessToken = store?.getState()?.userState?.accessToken;
+      this.email = store?.getState()?.userState?.email;
+    }
+  }
+
   buildQueryString = query => {
     let url = `${this.url}?`;
     Object.keys(query).forEach(key => {
@@ -103,6 +115,7 @@ class ApiWrapper {
       ? {
           Accept: 'application/json',
           'Content-Type': 'application/json',
+          email: this.email,
           Authorization: `Bearer ${this.accessToken}`,
         }
       : {
@@ -118,15 +131,14 @@ class ApiWrapper {
 
   handleResponse = async response => {
     if (response && response.ok && response.status === 200) {
-      if (this.isAuthenticatedRoute) {
-        const headers = keysToCamel(response.headers);
-        const authResults = {
-          accessToken: headers.accessToken,
-          authResults: headers.authResults,
-        };
-        window.dispatchAction(types.HANDLE_AUTH_RESULTS, { authResults });
-      }
       const res = await response.json();
+
+      if (this.isAuthenticatedRoute) {
+        const { authResults, data } = keysToCamel(res.data);
+        window.dispatchAction(types.HANDLE_AUTH_RESULTS, { authResults });
+        return data;
+      }
+
       return keysToCamel(res.data);
     }
   }

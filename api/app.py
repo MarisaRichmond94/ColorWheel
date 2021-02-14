@@ -23,6 +23,7 @@ def set_cors_headers(*args, **kwargs) -> Response:
         headers={
             "Access-Control-Allow-Methods": "*",
             "Access-Control-Allow-Headers": "*",
+            "Access-Control-Expose-Headers": "*",
         },
         origin=app.current_request.headers.get("origin", "")
     )
