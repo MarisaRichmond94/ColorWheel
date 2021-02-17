@@ -8,7 +8,7 @@ import Prompt from './prompt';
 import Title from './title';
 
 const LoginPage = () => {
-  const [isSignUpPage, setIsSignUpPage] = useState(true);
+  const [isSignUpPage, setIsSignUpPage] = useState(false);
 
   return (
     <div id='login-page'>

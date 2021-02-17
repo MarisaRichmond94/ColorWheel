@@ -6,6 +6,7 @@ import { Col, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import ClipLoader from 'react-spinners/ClipLoader';
 
+import AutoLogoutModal from '~/components/auto_logout_modal';
 import Footer from '~/components/footer';
 import Header from '~/components/header';
 import types from '~/redux/types';
@@ -47,6 +48,7 @@ function App(props) {
     : props.accessToken
       ? (
           <>
+            <AutoLogoutModal />
             <Header />
             <div id='body-container'>
               <SmartRouter />
@@ -60,7 +62,7 @@ function App(props) {
 export function mapStateToProps(state) {
   return {
     accessToken: state.userState.accessToken,
-    isAuthenticatingUser: state.appState.isAuthenticatingUser,
+    isAuthenticatingUser: state.userState.isAuthenticatingUser,
   };
 };
 

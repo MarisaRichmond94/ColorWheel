@@ -1,4 +1,5 @@
 import datetime
+from math import floor
 
 import jwt
 
@@ -6,7 +7,7 @@ import jwt
 def encode_json_web_token(user: dict) -> tuple:
     payload = {
         "iss": "colorwheel",
-        "exp": (datetime.datetime.utcnow() + datetime.timedelta(minutes=20)).timestamp() * 1000,
+        "exp": floor((datetime.datetime.utcnow() + datetime.timedelta(minutes=20)).timestamp()),
         "sub": user.get("id"),
         "name": user.get("name"),
         "email": user.get("email"),
