@@ -1,21 +1,15 @@
 #main-header {
   background-color: #1E1E1E;
   height: 40px;
+  padding: 0px 10px;
   position: fixed;
   text-align: center;
   top: 0;
-  width: 105%;
+  width: 100vw;
+  user-select: none;
 }
 
-#main-header-icon {
-  float: left;
-  height: 40px;
-}
-
-#main-header-text {
+.header-icon {
   color: white;
-  float: left;
-  font-family: 'Affectionately Yours';
-  font-size: 35px;
-  line-height: 40px;
+  font-size: 23px;
 }

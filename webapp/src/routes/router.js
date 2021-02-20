@@ -14,6 +14,11 @@ const WorkspaceRoute = loadable({
   loading: () => <></>,
 });
 
+const ExploreRoute = loadable({
+  loader: () => import('./explore'),
+  loading: () => <></>,
+});
+
 const DefaultRedirect = props => {
   DefaultRedirect.propTypes = {
     redirectPath: string,
@@ -27,7 +32,8 @@ function SmartRouter() {
   return (
   <>
     <Route exact path='/' component={LoginRoute} />
-    <Route exact path='/workspace' component={WorkspaceRoute} />
+    <Route path='/explore' component={ExploreRoute} />
+    <Route path='/workspace' component={WorkspaceRoute} />
     <Route render={() => <DefaultRedirect redirectPath={'/workspace'} />} />
   </>
   );

@@ -5,10 +5,9 @@ body {
 }
 
 #body-container {
-  height: calc(100vh - 75px);
+  height: calc(100vh - 35px);
   overflow-y: auto;
-  position: relative;
-  top: 40px;
+  padding-top: 40px;
   width: 100%;
 }
 

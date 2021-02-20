@@ -1,0 +1,27 @@
+.smart-dropdown {
+  height: 40px;
+  line-height: 30px;
+}
+
+.smart-dropdown > button {
+  background-color: transparent !important;
+  font-size: 23px;
+  padding: 0;
+}
+
+.smart-dropdown > button::after {
+  display: none;
+}
+
+.smart-dropdown > .dropdown-menu.show {
+  font-family: 'Nunito';
+  line-height: 15px;
+}
+
+.smart-dropdown-item {
+  background-color: transparent !important;
+}
+
+.smart-dropdown-item:hover {
+  color: lightslategrey;
+}

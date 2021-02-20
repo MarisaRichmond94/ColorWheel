@@ -31,8 +31,3 @@ def set_cors_headers(*args, **kwargs) -> Response:
 @app.route('/health')
 def check_health() -> Response:
     return Response(message='healthy', origin=app.current_request.headers.get('origin', ''))
-
-
-@app.lambda_function()
-def migrate_db(event, context) -> None:
-    alembic.config.main(argv=[ "--config", "chalicelib/alembic.ini", "upgrade", "head" ])
