@@ -4,15 +4,15 @@ export const handleAuthResults = (state, { accessToken, authResults }) => {
   const newState = { ...state, accessToken };
   authResults.id = authResults.sub;
   delete authResults.sub;
+  const minutesUntilTimeout = getMinutesUntilTimeout(authResults.exp);
 
   const keys = ['email', 'name', 'id'];
   keys.forEach(key => {
     newState[key] = authResults[key];
-    storeResultsInCookie({ [key]: authResults[key] });
+    storeResultsInCookie({ [key]: authResults[key] }, minutesUntilTimeout * 60);
   });
 
   if (!newState.autoLogoutScheduler) {
-    const minutesUntilTimeout = getMinutesUntilTimeout(authResults.exp);
     newState.autoLogoutScheduler = new AutoLogoutScheduler(minutesUntilTimeout);
     newState.autoLogoutScheduler.initializeAutoLogoutInterval();
     newState.autoLogoutScheduler.initializeAutoLogoutModalInterval();
@@ -24,9 +24,9 @@ export const handleAuthResults = (state, { accessToken, authResults }) => {
   return newState;
 };
 
-const storeResultsInCookie = payload => {
+const storeResultsInCookie = (payload, maxAgeInSeconds) => {
   const key = Object.keys(payload)[0];
-  document.cookie = `${key}=${payload[key]}; max-age=36000;`;
+  document.cookie = `${key}=${payload[key]}; max-age=${maxAgeInSeconds};`;
 };
 
 export const getMinutesUntilTimeout = exp => {
