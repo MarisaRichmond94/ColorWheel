@@ -1,11 +1,13 @@
 #main-header-icon {
+  cursor: pointer;
   float: left;
   height: 30px;
-  margin: 5px;
+  margin: 5px 10px 5px 0px;
 }
 
 #main-header-text {
   color: white;
+  cursor: pointer;
   float: left;
   font-family: 'Affectionately Yours';
   font-size: 35px;

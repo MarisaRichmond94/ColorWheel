@@ -1,0 +1,53 @@
+.left-sidebar-icon {
+  cursor: pointer;
+  font-size: 30px;
+  transition: .4s;
+}
+
+.left-sidebar-text {
+  cursor: pointer;
+  font-size: 12px;
+  padding-bottom: 10px;
+  transition: .4s;
+}
+
+.section-icon:hover > div > div > .left-sidebar-icon {
+  font-size: 32px;
+}
+
+.section-icon:hover > div > div > .left-sidebar-text {
+  font-size: 14px;
+  padding-bottom: 8px;
+}
+
+.white {
+  color: white;
+}
+
+.red {
+  color: #B7150D;
+}
+
+.orange {
+  color: #F18C22;
+}
+
+.yellow {
+  color: #DFB91F;
+}
+
+.green {
+  color: #AFD735;
+}
+
+.teal {
+  color: #37BE76;
+}
+
+.blue {
+  color: #5B76ED;
+}
+
+.purple {
+  color: #A837C2;
+}
