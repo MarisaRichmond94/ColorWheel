@@ -1,13 +1,11 @@
-import 'isomorphic-fetch';
+import { BaseApiClass } from '~/api/base';
 
-import ApiWrapper from '~/utils/apiWrapper';
-
-class Authentication extends ApiWrapper {
+const AuthenticationClass = class Authentication extends BaseApiClass {
   constructor() {
     super('authentication', false);
   }
 
-  get = async email => {
+  get(email) {
     if (this.useMock) {
       return {
         accessToken: 'aBcD.eFgH.iJkL',
@@ -21,10 +19,10 @@ class Authentication extends ApiWrapper {
       };
     }
 
-    return this.makeGetRequest({ query: { email } });
+    return super.get({ email });
   }
 
-  post = async body => {
+  post(body) {
     if (this.useMock) {
       return {
         accessToken: 'aBcD.eFgH.iJkL',
@@ -38,9 +36,14 @@ class Authentication extends ApiWrapper {
       };
     }
 
-    return this.makePostRequest({ body });
+    return super.post(body);
   }
-}
+};
 
-const AuthenticationApi = new Authentication();
+const Singleton = new AuthenticationClass();
+const AuthenticationApi = {
+  post: (...params) => Singleton.post(...params),
+  get: (...params) => Singleton.get(...params),
+};
 export default AuthenticationApi;
+export { AuthenticationClass };
