@@ -40,7 +40,8 @@ export const deauthenticateUser = state => {
   const cookieKeys = ['email', 'name', 'id'];
   cookieKeys.forEach(key => { document.cookie = `${key}=;max-age=0`; });
   localStorage.clear();
-  window.historyReplace('/');
+  const path = `/${window.location.search.includes('MOCK_BE') ? '?MOCK_BE' : ''}`;
+  window.historyReplace(path);
   state.autoLogoutScheduler = null;
 
   return {

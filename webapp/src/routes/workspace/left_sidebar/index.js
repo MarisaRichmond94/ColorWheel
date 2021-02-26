@@ -19,7 +19,7 @@ const LeftSidebar = () => {
 
   const handleViewChange = view => {
     const isMock = window.location.search.includes('MOCK_BE');
-    window.historyPush(`/workspace?view=${view}${isMock ? 'MOCK_BE' : ''}`);
+    window.historyPush(`/workspace?view=${view}${isMock ? '&MOCK_BE' : ''}`);
   };
 
   return (

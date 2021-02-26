@@ -1,4 +1,5 @@
 import { BaseApiClass } from '~/api/base';
+import { getTimeInMilliseconds } from '~/utils/datetimeHelpers';
 
 const AuthenticationClass = class Authentication extends BaseApiClass {
   constructor() {
@@ -11,7 +12,7 @@ const AuthenticationClass = class Authentication extends BaseApiClass {
         accessToken: 'aBcD.eFgH.iJkL',
         authResults: {
           iss: 'colorwheel',
-          exp: 1200,
+          exp: getTimeInMilliseconds(20),
           sub: '0ea4b105-5627-49ad-a517-87c4e3925534',
           name: 'Drake Stryker',
           email,
@@ -28,7 +29,7 @@ const AuthenticationClass = class Authentication extends BaseApiClass {
         accessToken: 'aBcD.eFgH.iJkL',
         authResults: {
           iss: 'colorwheel',
-          exp: 1200,
+          exp: getTimeInMilliseconds(20),
           sub: '0ea4b105-5627-49ad-a517-87c4e3925534',
           name: body.name,
           email: body.email,

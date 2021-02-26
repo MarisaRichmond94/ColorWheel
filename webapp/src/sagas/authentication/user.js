@@ -10,7 +10,8 @@ export function * authenticateUser(action) {
       type: types.HANDLE_AUTH_RESULTS,
       payload: { authResults },
     });
-    yield call(window.historyReplace, '/workspace');
+    const path = `/workspace${window.location.search.includes('MOCK_BE') ? '?MOCK_BE' : ''}`;
+    yield call(window.historyReplace, path);
   } catch (error) {
     const authenticationErrorMessage = (action.payload.name)
       ? 'Account creation failed: There is already an account associated with this email.'
