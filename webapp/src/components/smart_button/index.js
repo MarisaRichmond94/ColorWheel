@@ -18,7 +18,7 @@ const SmartButton = props => {
 
   return (
     <Button
-      className={`smart-button${` ${props.className}` || ''}`}
+      className={`smart-button${props.className ? ` ${props.className}` : ''}`}
       disabled={props.isDisabled || false}
       id={props.id}
       onClick={props.onClick}

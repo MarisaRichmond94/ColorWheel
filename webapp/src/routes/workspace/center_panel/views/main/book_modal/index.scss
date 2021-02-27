@@ -1,0 +1,20 @@
+#book-modal-cancel-button {
+  background-color: #B7150D;
+}
+
+#book-modal-cancel-button:hover {
+  background-color: #8A100A;
+}
+
+#book-modal-submit-button {
+  background-color: #868686;
+}
+
+#book-modal-submit-button:hover {
+  background-color: #585858;
+}
+
+#book-modal-submit-button:disabled  {
+  background-color: #CBCBCB;
+  cursor: not-allowed;
+}
