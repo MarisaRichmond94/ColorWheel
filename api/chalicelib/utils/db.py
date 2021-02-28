@@ -15,7 +15,6 @@ def session_scope():
 
     try:
         yield session
-        session.commit()
     except:
         session.rollback()
         raise

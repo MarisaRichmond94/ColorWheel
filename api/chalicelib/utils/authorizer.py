@@ -1,3 +1,4 @@
+"""Custom authorizer used for authenticated endpoints."""
 from chalice import AuthResponse
 
 from restful_services.sessions.business_layer.business import get_session_by_token
@@ -7,6 +8,14 @@ from utils.app import APP
 
 @APP.authorizer()
 def authorizer(auth_request) -> AuthResponse:
+    """Authorizes the bearer token sent up in an authenticated request.
+
+    Args:
+        auth_request - The request sent to the chalice application.
+
+    Returns:
+        An auth response containing allowed routes and a principal id.
+    """
     if auth_request.token:
         json_web_token = auth_request.token.split('Bearer')[1].strip()
         session = get_session_by_token(token=json_web_token)
