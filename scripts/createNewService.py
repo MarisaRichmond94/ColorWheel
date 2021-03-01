@@ -691,7 +691,7 @@ BASE_API_SCHEMA_STRING = (
 
 API_SCHEMA_CREATE_STRING = (
     "\n"
-    f"class Create{CAMEL_CASE_DATA_TYPE}BodySchema:\n"
+    f"class Create{CAMEL_CASE_DATA_TYPE}BodySchema(Schema):\n"
     f'    """Schema for creating a new {PLAIN_DATA_TYPE}."""\n'
     "    pass # TODO - set expected values\n"
     "\n"
@@ -700,7 +700,7 @@ API_SCHEMA_CREATE_STRING = (
 
 API_SCHEMA_GET_STRING = (
     "\n"
-    f"class Get{CAMEL_CASE_SERVICE_NAME}QuerySchema:\n"
+    f"class Get{CAMEL_CASE_SERVICE_NAME}QuerySchema(Schema):\n"
     f'    """Schema for getting {PLAIN_SERVICE_NAME}."""\n'
     "    pass # TODO - set expected values\n"
     "\n"
@@ -709,7 +709,7 @@ API_SCHEMA_GET_STRING = (
 
 API_SCHEMA_UPDATE_STRING = (
     "\n"
-    f"class Update{CAMEL_CASE_DATA_TYPE}BodySchema:\n"
+    f"class Update{CAMEL_CASE_DATA_TYPE}BodySchema(Schema):\n"
     f'    """Schema for updating a {PLAIN_DATA_TYPE}."""\n'
     "    pass # TODO - set expected values\n"
     "\n"
@@ -718,7 +718,7 @@ API_SCHEMA_UPDATE_STRING = (
 
 API_SCHEMA_DELETE_STRING = (
     "\n"
-    f"class Delete{CAMEL_CASE_SERVICE_NAME}QuerySchema:\n"
+    f"class Delete{CAMEL_CASE_SERVICE_NAME}QuerySchema(Schema):\n"
     f'    """Schema for deleting {PLAIN_SERVICE_NAME}."""\n'
     "    pass # TODO - set expected values\n"
     "\n"
