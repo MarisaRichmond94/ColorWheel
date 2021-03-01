@@ -131,12 +131,7 @@ def authenticate_user(
     if not user:
         log.debug(f'Failed to GET user by email "{email}" from Users Service.')
         return None
-
-    is_user_validated = validate_password(
-        password=password,
-        hashed=user.get('password'),
-    )
-    if not is_user_validated:
+    if not password == user.get('password'):
         log.debug(
             f'Failed to validate given plain text password "{password}" with the entity '
             f'associated with the given email "{email}".'

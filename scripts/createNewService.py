@@ -188,8 +188,8 @@ BASE_API_STRING = (
     '\n'
     "from chalice import Blueprint\n"
     '\n'
-    f'from restless_services.{SERVICE_NAME}.business_layer import business\n'
-    f'from restless_services.{SERVICE_NAME}.model_layer.api_schemas import (\n'
+    f'from restful_services.{SERVICE_NAME}.business_layer import business\n'
+    f'from restful_services.{SERVICE_NAME}.model_layer.api_schemas import (\n'
     f'{SCHEMA_IMPORT_STRING}'
     ')\n'
     "from utils.api_handler import api_handler\n"
@@ -203,7 +203,7 @@ API_CREATE_STRING = (
     '\n'
     '@api_handler(\n'
     '    api=api,\n'
-    f'    path="/{SERVICE_NAME}",\n'
+    f'    path="/{SERVICE_NAME.replace("_", "-")}",\n'
     '    methods=["POST"],\n'
     f'    body_schema=Create{CAMEL_CASE_DATA_TYPE}BodySchema,\n'
     ")\n"
@@ -224,7 +224,7 @@ API_GET_STRING = (
     '\n'
     '@api_handler(\n'
     '    api=api,\n'
-    f'    path="/{SERVICE_NAME}",\n'
+    f'    path="/{SERVICE_NAME.replace("_", "-")}",\n'
     '    methods=["GET"],\n'
     f'    query_schema=Get{CAMEL_CASE_SERVICE_NAME}QuerySchema,\n'
     ")\n"
@@ -245,7 +245,7 @@ API_GET_BY_ID_STRING = (
     '\n'
     '@api_handler(\n'
     '    api=api,\n'
-    f'    path="/{SERVICE_NAME}/{{{DATA_TYPE}_id}}",\n'
+    f'    path="/{SERVICE_NAME.replace("_", "-")}/{{{DATA_TYPE}_id}}",\n'
     '    methods=["GET"],\n'
     ")\n"
     f'def get_{DATA_TYPE}_by_id({DATA_TYPE}_id: str) -> Optional[dict]:\n'
@@ -266,8 +266,7 @@ API_UPDATE_STRING = (
     '\n'
     '@api_handler(\n'
     '    api=api,\n'
-    f'    path="/{SERVICE_NAME}/'
-    f'{{{DATA_TYPE}_id}}",\n'
+    f'    path="/{SERVICE_NAME.replace("_", "-")}/{{{DATA_TYPE}_id}}",\n'
     '    methods=["PATCH"],\n'
     f'    body_schema=Update{CAMEL_CASE_DATA_TYPE}BodySchema,\n'
     ")\n"
@@ -292,7 +291,7 @@ API_DELETE_STRING = (
     '\n'
     '@api_handler(\n'
     '    api=api,\n'
-    f'    path="/{SERVICE_NAME}",\n'
+    f'    path="/{SERVICE_NAME.replace("_", "-")}",\n'
     '    methods=["DELETE"],\n'
     f'    query_schema=Delete{CAMEL_CASE_SERVICE_NAME}QuerySchema,\n'
     ")\n"
@@ -313,7 +312,7 @@ API_DELETE_BY_ID_STRING = (
     '\n'
     '@api_handler(\n'
     '    api=api,\n'
-    f'    path="/{SERVICE_NAME}/{{{DATA_TYPE}_id}}",\n'
+    f'    path="/{SERVICE_NAME.replace("_", "-")}/{{{DATA_TYPE}_id}}",\n'
     '    methods=["DELETE"],\n'
     ")\n"
     f'def delete_{DATA_TYPE}_by_id({DATA_TYPE}_id: str) -> Optional[dict]:\n'
@@ -573,7 +572,7 @@ DATA_GET_STRING = (
     '    """\n'
     "    with db.session_scope() as session:\n"
     f"        {SERVICE_NAME} = session.query({TABLE_TYPE.capitalize()}{CAMEL_CASE_SERVICE_NAME}).all()\n"
-    f"        return Populated{CAMEL_CASE_SERVICE_NAME}Schema().dump({SERVICE_NAME}) if {SERVICE_NAME} else []\n"
+    f"        return Populated{CAMEL_CASE_SERVICE_NAME}Schema(many=True).dump({SERVICE_NAME}) if {SERVICE_NAME} else []\n"
     "\n"
 )
 
@@ -643,7 +642,7 @@ DATA_DELETE_STRING = (
     f"            for {DATA_TYPE} in {SERVICE_NAME}:\n"
     f"                session.delete({DATA_TYPE})\n"
     "                session.commit()\n"
-    f"                return {CAMEL_CASE_SERVICE_NAME}Schema().dump({SERVICE_NAME})\n"
+    f"                return {CAMEL_CASE_SERVICE_NAME}Schema(many=True).dump({SERVICE_NAME})\n"
     "        return []\n"
     "\n"
 )
