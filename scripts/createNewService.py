@@ -96,6 +96,7 @@ def generate_api_layer() -> None:
         f.write(BASE_API_STRING)
         for endpoint in ENDPOINTS:
             f.write(API_DICT[endpoint])
+        f.truncate(f.tell()-1)
     os.chdir('..')
 
 
@@ -108,6 +109,7 @@ def generate_business_layer() -> None:
         f.write(BASE_BUSINESS_STRING)
         for endpoint in ENDPOINTS:
             f.write(BUSINESS_DICT[endpoint])
+        f.truncate(f.tell()-1)
     os.chdir('..')
 
 
@@ -120,6 +122,7 @@ def generate_data_layer() -> None:
         f.write(BASE_FCT_DATA_STRING) if TABLE_TYPE == 'fct' else f.write(BASE_DIM_DATA_STRING)
         for endpoint in ENDPOINTS:
             f.write(DATA_DICT[endpoint])
+        f.truncate(f.tell()-1)
     os.chdir('..')
 
 
@@ -134,6 +137,7 @@ def generate_model_layer() -> None:
         for endpoint in ENDPOINTS:
             if endpoint in VALID_SCHEMA_ENDPOINTS:
                 f.write(API_SCHEMA_DICT[endpoint])
+        f.truncate(f.tell()-1)
 
     with open(os.path.join(os.getcwd(), 'data_schemas.py'), 'w') as f:
         if TABLE_TYPE == 'fct':
@@ -177,6 +181,7 @@ def generate_model_layer() -> None:
             )
         else:
             print(f'Invalid table_type {TABLE_TYPE}. Failed to populate data schemas.')
+        f.truncate(f.tell()-1)
     os.chdir('..')
 
 
@@ -572,7 +577,7 @@ DATA_GET_STRING = (
     '    """\n'
     "    with db.session_scope() as session:\n"
     f"        {SERVICE_NAME} = session.query({TABLE_TYPE.capitalize()}{CAMEL_CASE_SERVICE_NAME}).all()\n"
-    f"        return Populated{CAMEL_CASE_SERVICE_NAME}Schema(many=True).dump({SERVICE_NAME}) if {SERVICE_NAME} else []\n"
+    f"        return {'Populated' if TABLE_TYPE is 'fct' else ''}{CAMEL_CASE_SERVICE_NAME}Schema(many=True).dump({SERVICE_NAME}) if {SERVICE_NAME} else []\n"
     "\n"
 )
 
@@ -590,7 +595,7 @@ DATA_GET_BY_ID_STRING = (
     '    """\n'
     "    with db.session_scope() as session:\n"
     f"        {DATA_TYPE} = session.query({TABLE_TYPE.capitalize()}{CAMEL_CASE_SERVICE_NAME}).filter_by(id={DATA_TYPE}_id).one_or_none()\n"
-    f"        return Populated{CAMEL_CASE_SERVICE_NAME}Schema().dump({DATA_TYPE}) if {DATA_TYPE} else None\n"
+    f"        return {'Populated' if TABLE_TYPE is 'fct' else ''}{CAMEL_CASE_SERVICE_NAME}Schema().dump({DATA_TYPE}) if {DATA_TYPE} else None\n"
     "\n"
 )
 
