@@ -28,15 +28,14 @@ def generate_api_schema_function(method: str) -> str:
         method - The base api_schema method used to determine which function to generate (e.g. 'GET').
 
     Returns:
-        A generated function associated with the given method else None.
+        A generated function associated with the given method else an empty string.
     """
     api_schema_generation_func = (
         api_schema_function_dict[method] if method in VALID_API_SCHEMA_METHODS else None
     )
     if api_schema_generation_func:
         return api_schema_generation_func()
-    print(f'No matching api_schema function for given method: "{method}".')
-    return None
+    return ''
 
 
 def generate_api_schema_create_function() -> str:
