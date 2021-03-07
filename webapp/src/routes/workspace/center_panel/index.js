@@ -5,9 +5,9 @@ import React, { useEffect, useState } from 'react';
 import { withRouter } from 'react-router';
 
 import EditPanel from '~/routes/workspace/center_panel/views/edit';
+import HomePanel from '~/routes/workspace/center_panel/views/home';
 import MainPanel from '~/routes/workspace/center_panel/views/main';
 import PlanPanel from '~/routes/workspace/center_panel/views/plan';
-import PlotPanel from '~/routes/workspace/center_panel/views/plot';
 import PublishPanel from '~/routes/workspace/center_panel/views/publish';
 import ReviewPanel from '~/routes/workspace/center_panel/views/review';
 import RevisePanel from '~/routes/workspace/center_panel/views/revise';
@@ -26,11 +26,11 @@ const CenterPanel = props => {
     stopCenterPanelListener = props.history.listen(location => {
       const search = new URLSearchParams(location.search);
       switch (search.get('view')) {
+        case 'home':
+          setView(<HomePanel />);
+          return;
         case 'plan':
           setView(<PlanPanel />);
-          return;
-        case 'plot':
-          setView(<PlotPanel />);
           return;
         case 'write':
           setView(<WritePanel />);
