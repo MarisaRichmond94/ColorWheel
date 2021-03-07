@@ -1,19 +1,10 @@
-def set_data_schema_constants(arg_dict: dict) -> None:
-    """Sets global constants needed to generate templates.
-
-    Args:
-        arg_dict: Dict containing constant values.
-    """
-    global DATA_TYPE
-    DATA_TYPE = arg_dict.get('data_type', '')
-    global SCHEMA_NAME
-    SCHEMA_NAME = arg_dict.get('schema_name', '')
-    global SERVICE_NAME
-    SERVICE_NAME = arg_dict.get('service_name', '')
-    global SINGULAR_PARAM_TYPE
-    SINGULAR_PARAM_TYPE = arg_dict.get('singular_param_type', '')
-    global TABLE_TYPE
-    TABLE_TYPE = arg_dict.get('table_type', '')
+from settings import (
+    DATA_TYPE,
+    SCHEMA_NAME,
+    SERVICE_NAME,
+    SINGULAR_PARAM_TYPE,
+    TABLE_TYPE,
+)
 
 
 def generate_data_schema_file() -> str:
