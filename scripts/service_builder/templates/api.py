@@ -1,14 +1,27 @@
-from settings import (
-    DATA_TYPE,
-    METHODS,
-    PLURAL_PARAM_TYPE,
-    SCHEMA_NAME,
-    SCHEMA_TYPE,
-    SERVICE_NAME,
-    SINGULAR_PARAM_TYPE,
-    TABLE_TYPE,
-    VALID_API_SCHEMA_METHODS,
-)
+def set_api_constants(arg_dict: dict) -> None:
+    """Sets global constants needed to generate templates.
+
+    Args:
+        arg_dict: Dict containing constant values.
+    """
+    global DATA_TYPE
+    DATA_TYPE = arg_dict.get('data_type', '')
+    global METHODS
+    METHODS = arg_dict.get('methods', '')
+    global PLURAL_PARAM_TYPE
+    PLURAL_PARAM_TYPE = arg_dict.get('plural_param_type', '')
+    global SCHEMA_NAME
+    SCHEMA_NAME = arg_dict.get('schema_name', '')
+    global SCHEMA_TYPE
+    SCHEMA_TYPE = arg_dict.get('schema_type', '')
+    global SERVICE_NAME
+    SERVICE_NAME = arg_dict.get('service_name', '')
+    global SINGULAR_PARAM_TYPE
+    SINGULAR_PARAM_TYPE = arg_dict.get('singular_param_type', '')
+    global TABLE_TYPE
+    TABLE_TYPE = arg_dict.get('table_type', '')
+    global VALID_API_SCHEMA_METHODS
+    VALID_API_SCHEMA_METHODS = arg_dict.get('valid_api_schema_methods', '')
 
 
 def generate_api_imports() -> str:

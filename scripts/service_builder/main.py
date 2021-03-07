@@ -3,12 +3,11 @@ import os
 import sys
 
 from helpers import convert_snake_to_camel, generate_init_file
-from settings import set_settings_variables
-from templates.api import generate_api_function, generate_api_imports
-from templates.api_schemas import generate_api_schema_function, generate_api_schema_imports
-from templates.business import generate_business_function, generate_business_imports
-from templates.data import generate_data_function, generate_data_imports
-from templates.data_schemas import generate_data_schema_file
+from templates.api import generate_api_function, generate_api_imports, set_api_constants
+from templates.api_schemas import generate_api_schema_function, generate_api_schema_imports, set_api_schema_constants
+from templates.business import generate_business_function, generate_business_imports, set_business_constants
+from templates.data import generate_data_function, generate_data_imports, set_data_constants
+from templates.data_schemas import generate_data_schema_file, set_data_schema_constants
 
 
 ### Constants ###
@@ -31,7 +30,6 @@ ARG_DICT = {
 ### Main Functions ###
 def main() -> None:
     """Generates a new service package using given sys.argv inputs."""
-    set_settings_variables(arg_dict=ARG_DICT)
     navigate_to_restful_services()
     create_folders_and_inits()
     generate_api_layer()
@@ -73,6 +71,7 @@ def generate_api_layer() -> None:
     print(f'Generating api layer...')
     os.chdir('./api_layer')
     generate_init_file()
+    set_api_constants(arg_dict=ARG_DICT)
     with open(os.path.join(os.getcwd(), 'api.py'), 'w') as f:
         f.write(generate_api_imports())
         for method in METHODS:
@@ -86,6 +85,7 @@ def generate_business_layer() -> None:
     print(f'Generating business layer...')
     os.chdir('./business_layer')
     generate_init_file()
+    set_business_constants(arg_dict=ARG_DICT)
     with open(os.path.join(os.getcwd(), 'business.py'), 'w') as f:
         f.write(generate_business_imports())
         for method in METHODS:
@@ -99,6 +99,7 @@ def generate_data_layer() -> None:
     print(f'Generating data layer...')
     os.chdir('./data_layer')
     generate_init_file()
+    set_data_constants(arg_dict=ARG_DICT)
     with open(os.path.join(os.getcwd(), 'data.py'), 'w') as f:
         f.write(generate_data_imports())
         for method in METHODS:
@@ -112,6 +113,8 @@ def generate_model_layer() -> None:
     print(f'Generating model layer...')
     os.chdir('./model_layer')
     generate_init_file()
+    set_api_schema_constants(arg_dict=ARG_DICT)
+    set_data_schema_constants(arg_dict=ARG_DICT)
     if any(method in ARG_DICT.get('valid_api_schema_methods') for method in METHODS):
         with open(os.path.join(os.getcwd(), 'api_schemas.py'), 'w') as f:
             f.write(generate_api_schema_imports())
