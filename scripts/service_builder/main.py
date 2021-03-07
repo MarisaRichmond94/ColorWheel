@@ -8,11 +8,13 @@ from templates.api_schemas import generate_api_schema_function, generate_api_sch
 from templates.business import generate_business_function, generate_business_imports, set_business_constants
 from templates.data import generate_data_function, generate_data_imports, set_data_constants
 from templates.data_schemas import generate_data_schema_file, set_data_schema_constants
+from templates.db_model import generate_db_model_file, set_db_model_constants
 
 
 ### Constants ###
 SERVICE_NAME = sys.argv[1]
 DATA_TYPE = sys.argv[2]
+TABLE_TYPE = sys.argv[3]
 METHODS = sys.argv[4:len(sys.argv)]
 ARG_DICT = {
     'data_type': DATA_TYPE,
@@ -22,7 +24,7 @@ ARG_DICT = {
     'schema_type': convert_snake_to_camel(DATA_TYPE),
     'service_name': SERVICE_NAME,
     'singular_param_type': ' '.join(DATA_TYPE.split('_')),
-    'table_type': sys.argv[3],
+    'table_type': TABLE_TYPE,
     'valid_api_schema_methods': ['POST', 'GET', 'PATCH', 'DELETE'],
 }
 
@@ -36,6 +38,7 @@ def main() -> None:
     generate_business_layer()
     generate_data_layer()
     generate_model_layer()
+    generate_database_model()
 
 
 def navigate_to_restful_services() -> None:
@@ -123,6 +126,18 @@ def generate_model_layer() -> None:
             f.truncate(f.tell()-1)
     with open(os.path.join(os.getcwd(), 'data_schemas.py'), 'w') as f:
         f.write(generate_data_schema_file())
+        f.truncate(f.tell()-1)
+    os.chdir('..')
+
+
+def generate_database_model() -> None:
+    """Generates the database model file needed for the new service."""
+    print(f'Generating database model...')
+    os.chdir('../../db_models')
+    set_db_model_constants(arg_dict=ARG_DICT)
+    db_model_file_name = f'{TABLE_TYPE}_{SERVICE_NAME}.py'
+    with open(os.path.join(os.getcwd(), db_model_file_name), 'w') as f:
+        f.write(generate_db_model_file())
         f.truncate(f.tell()-1)
     os.chdir('..')
 
