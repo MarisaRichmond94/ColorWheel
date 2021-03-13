@@ -16,5 +16,5 @@ def convert_snake_to_camel(snake_string: str) -> str:
 
 def generate_init_file() -> None:
     """Creates a blank __init__.py file."""
-    with open(os.path.join(os.getcwd(), '__init__.py'), 'w') as init:
+    with open(os.path.join(os.getcwd(), '__init__.py'), 'w'):
         pass
