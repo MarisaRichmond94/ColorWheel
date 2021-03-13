@@ -70,7 +70,7 @@ def generate_data_create_function() -> str:
         "\n"
         f'def create_{args.DATA_TYPE}(\n'
         "    # pass in variables\n"
-        f'    {args.DATA_TYPE}_id: Optional[UUIDType]\n'
+        f'    {args.DATA_TYPE}_id: Optional[UUIDType],\n'
         ') -> Optional[dict]:\n'
         f'    """Creates a new {args.SINGULAR_PARAM_TYPE} in the '
         f'{args.TABLE_TYPE}_{args.SERVICE_NAME} table.\n'
@@ -84,7 +84,7 @@ def generate_data_create_function() -> str:
         '    """\n'
         "    with db.session_scope() as session:\n"
         f"        new_{args.DATA_TYPE} = {args.TABLE_TYPE.capitalize()}{args.SCHEMA_NAME}(\n"
-        f'            id={args.DATA_TYPE}_id\n'
+        f'            id={args.DATA_TYPE}_id,\n'
         "            # pass in variables\n"
         "        )\n"
         "\n"
