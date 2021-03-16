@@ -1,9 +1,5 @@
-# pylint: disable=wrong-import-position
 import os
 import sys
-
-import alembic.config
-from chalice import Chalice
 
 sys.path.insert(0, os.path.abspath("chalicelib"))
 from utils.app import create_chalice_app
@@ -20,7 +16,7 @@ app.register_blueprint(book_statuses_api)
 
 @app.route("/authentication", methods=["OPTIONS"])
 @app.route("/book-statuses", methods=["OPTIONS"])
-def set_cors_headers(*args, **kwargs) -> Response:
+def set_cors_headers() -> Response:
     return Response(
         data=None,
         headers={

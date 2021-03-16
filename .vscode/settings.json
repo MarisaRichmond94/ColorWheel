@@ -9,5 +9,11 @@
 	"editor.codeActionsOnSave": {
 		"source.fixAll.eslint": true
 	},
-	"python.linting.enabled": false
+	"python.linting.enabled": true,
+	"python.pythonPath": "/Users/marisarichmond/.pyenv/versions/3.9.1/bin/python",
+	"python.analysis.extraPaths": [
+		"./api",
+		"./api/chalicelib"
+	],
+	"python.linting.pylintEnabled": true
 }
