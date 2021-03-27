@@ -1,25 +1,22 @@
 import '~/app.scss';
 
-import { bool, string } from 'prop-types';
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import AutoLogoutModal from '~/components/auto_logout_modal';
 import Footer from '~/components/footer';
 import Header from '~/components/header';
 import Loading from '~/components/loading';
-import types from '~/redux/types';
 import LoginPage from '~/routes/login';
 import SmartRouter from '~/routes/router';
+import types from '~/sagas/types';
 
-const App = props => {
-  App.propTypes = {
-    accessToken: string,
-    isAuthenticatingUser: bool.isRequired,
-  };
+const App = () => {
+  const accessToken = useSelector(state => state.user.accessToken);
+  const isAuthenticatingUser = useSelector(state => state.user.isAuthenticating);
 
   useEffect(() => {
-    if (!props.accessToken) {
+    if (!accessToken) {
       try {
         window.dispatchAction(types.AUTHENTICATE_SESSION);
       } catch (error) {
@@ -29,9 +26,9 @@ const App = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return props.isAuthenticatingUser
+  return isAuthenticatingUser
     ? <Loading />
-    : props.accessToken
+    : accessToken
       ? (
           <>
             <AutoLogoutModal />
@@ -45,11 +42,4 @@ const App = props => {
       : <LoginPage />;
 };
 
-export function mapStateToProps(state) {
-  return {
-    accessToken: state.userState.accessToken,
-    isAuthenticatingUser: state.userState.isAuthenticatingUser,
-  };
-};
-
-export default connect(mapStateToProps)(App);
+export default App;

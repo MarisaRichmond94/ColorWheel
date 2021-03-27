@@ -1,3 +1,4 @@
+"""Utility file for reusable database functionality."""
 from contextlib import contextmanager
 
 from sqlalchemy import create_engine
@@ -11,6 +12,7 @@ Session = sessionmaker(bind=engine)
 
 @contextmanager
 def session_scope():
+    """Context manager for a database session."""
     session = Session()
 
     try:

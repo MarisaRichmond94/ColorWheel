@@ -1,9 +1,11 @@
+"""Module for handling Chalice Requests."""
 import marshmallow
 
 from utils.response import Response
 
 
 class Request:
+    """Custom request class."""
     headers = {}
     query = {}
     body = {}
@@ -19,6 +21,7 @@ def validate_request(
     body_schema: marshmallow.Schema = None,
     query_schema: marshmallow.Schema = None,
 ) -> (object, dict):
+    """Validates a request using given request and optional schema."""
     request = Request()
     error_info = {}
 

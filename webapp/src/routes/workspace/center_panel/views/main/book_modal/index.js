@@ -6,7 +6,7 @@ import { GiOpenBook } from 'react-icons/gi';
 
 import SmartButton from '~/components/smart_button';
 import SmartModal from '~/components/smart_modal';
-import types from '~/redux/types';
+import types from '~/sagas/types';
 
 const BookModal = props => {
   BookModal.propTypes = {

@@ -1,3 +1,4 @@
+"""Chalice response functionality."""
 # pylint: disable=too-many-arguments,super-init-not-called
 import json
 from typing import Dict
@@ -10,6 +11,7 @@ from settings import app as app_settings
 
 
 class Response(ChaliceResponse):
+    """Builds a Chalice response from the given info."""
     def __init__(
         self,
         data: Dict = None,

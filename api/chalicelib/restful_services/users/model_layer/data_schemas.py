@@ -9,4 +9,5 @@ class UserSchema(Schema):
     password = fields.String(required=True)
 
     class Meta:
+        """Meta class."""
         unknown = EXCLUDE

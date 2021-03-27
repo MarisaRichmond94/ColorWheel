@@ -7,5 +7,6 @@ export default function authenticationWatchers() {
   return [
     session.watchAuthenticateSession,
     user.watchAuthenticateUser,
+    user.watchDeuthenticateUser,
   ].map(fork);
 }

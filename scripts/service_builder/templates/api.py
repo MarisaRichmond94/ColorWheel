@@ -14,6 +14,12 @@ def generate_api_imports() -> str:
         if any(method in ['POST', 'GET_BY_ID', 'PATCH', 'DELETE_BY_ID'] for method in methods)
         else ''
     )
+    api_imports += (
+        "\n"
+        "from chalice import Blueprint\n"
+        "\n"
+        f'from restful_services.{args.SERVICE_NAME}.business_layer import business\n'
+    )
     schema_import = determine_schema_import()
     api_imports += (
         (

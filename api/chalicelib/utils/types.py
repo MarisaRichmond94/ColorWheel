@@ -1,3 +1,4 @@
+"""Reusable types."""
 import typing
 from uuid import uuid4
 

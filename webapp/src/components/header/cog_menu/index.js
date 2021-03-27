@@ -5,7 +5,7 @@ import { FaUserCog } from 'react-icons/fa';
 import { IoLogOutOutline, IoSettingsOutline } from 'react-icons/io5';
 
 import SmartDropdown from '~/components/smart_dropdown';
-import types from '~/redux/types';
+import types from '~/sagas/types';
 
 const CogMenu = () => {
   const options = [

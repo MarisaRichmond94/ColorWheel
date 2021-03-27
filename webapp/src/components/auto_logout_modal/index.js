@@ -1,24 +1,20 @@
 import './index.scss';
 
-import { bool } from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { FiPhoneCall } from 'react-icons/fi';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import SmartModal from '~/components/smart_modal';
-import types from '~/redux/types';
+import types from '~/sagas/types';
 
 let logoutTimer;
 
-const AutoLogoutModal = props => {
-  AutoLogoutModal.propTypes = {
-    isLogoutWarningModalShowing: bool.isRequired,
-  };
-
+const AutoLogoutModal = () => {
+  const isLogoutWarningModalShowing = useSelector(state => state.user.isLogoutWarningModalShowing);
   const [timeRemaining, setTimeRemaining] = useState(60);
 
   useEffect(() => {
-    if (props.isLogoutWarningModalShowing) {
+    if (isLogoutWarningModalShowing) {
       logoutTimer = setInterval(() => {
         const seconds = timeRemaining - 1;
         setTimeRemaining(seconds);
@@ -29,7 +25,7 @@ const AutoLogoutModal = props => {
     }
 
     return () => clearInterval(logoutTimer);
-  }, [props.isLogoutWarningModalShowing, timeRemaining]);
+  }, [isLogoutWarningModalShowing, timeRemaining]);
 
   const bodyContent = (
     <>
@@ -45,16 +41,10 @@ const AutoLogoutModal = props => {
       headerIcon={<FiPhoneCall/>}
       headerText='Hey! Are you still there?'
       id='auto-logout-modal'
-      isModalShowing={props.isLogoutWarningModalShowing}
+      isModalShowing={isLogoutWarningModalShowing}
       onHideCallback={() => window.dispatchAction(types.AUTHENTICATE_SESSION)}
     />
   );
 };
 
-export function mapStateToProps(state) {
-  return {
-    isLogoutWarningModalShowing: state.userState.isLogoutWarningModalShowing,
-  };
-};
-
-export default connect(mapStateToProps)(AutoLogoutModal);
+export default AutoLogoutModal;

@@ -1,6 +1,4 @@
 """API layer for the book_statuses service."""
-from typing import Optional
-
 from chalice import Blueprint
 
 from restful_services.book_statuses.business_layer import business
@@ -21,4 +19,3 @@ def get_book_statuses() -> list:
         A list of book statuses.
     """
     return business.get_book_statuses()
-

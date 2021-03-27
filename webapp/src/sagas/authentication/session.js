@@ -1,7 +1,8 @@
 import { call, fork, put, takeLatest } from 'redux-saga/effects';
 
 import AuthenticationApi from '~/api/authentication';
-import types from '~/redux/types';
+import { setIsAuthenticating, update } from '~/reducers/user';
+import types from '~/sagas/types';
 
 export function * authenticateSession() {
   if (document.cookie !== '') {
@@ -25,24 +26,15 @@ export function * authenticateSession() {
 }
 
 function * routeBackToLogin() {
-  yield put({
-    type: types.SET_IS_AUTHENTICATING_USER,
-    payload: { isAuthenticatingUser: false },
-  });
+  yield put(setIsAuthenticating(false));
   const path = `/${window.location.search.includes('MOCK_BE') ? '?MOCK_BE' : ''}`;
   yield call(window.historyReplace, path);
 }
 
 export function * refreshSession(email) {
   const authResults = yield call(AuthenticationApi.get, email);
-  yield put({
-    type: types.HANDLE_AUTH_RESULTS,
-    payload: { authResults },
-  });
-  yield put({
-    type: types.SET_IS_AUTHENTICATING_USER,
-    payload: { isAuthenticatingUser: false },
-  });
+  yield put(update(authResults));
+  yield put(setIsAuthenticating(false));
 }
 
 export function * watchAuthenticateSession() {

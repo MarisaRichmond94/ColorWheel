@@ -1,3 +1,4 @@
+"""Settings file for constants related to aws."""
 import os
 import sys
 

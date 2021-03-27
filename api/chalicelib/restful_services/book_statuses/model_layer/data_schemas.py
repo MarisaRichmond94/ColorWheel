@@ -10,6 +10,6 @@ class BookStatusesSchema(Schema):
     order_index = fields.Integer(required=True)
 
     class Meta:
+        """Meta class."""
         ordered = True
         unknown = EXCLUDE
-

@@ -1,3 +1,4 @@
+"""Wrapper functionality for handling API requests/responses."""
 import functools
 
 from chalice import Blueprint
@@ -19,6 +20,7 @@ def api_handler(
     body_schema: marshmallow.Schema = None,
     query_schema: marshmallow.Schema = None,
 ) -> Response:
+    """Generates API response using given variables."""
     def wrapped_api(func):
         @api.route(
             path=path,

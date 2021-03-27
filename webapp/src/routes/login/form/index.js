@@ -1,12 +1,12 @@
 import './index.scss';
 
-import { bool, string } from 'prop-types';
+import { bool } from 'prop-types';
 import React, { useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import SmartButton from '~/components/smart_button';
-import types from '~/redux/types';
+import types from '~/sagas/types';
 
 import EmailInput from './inputs/email';
 import NameInput from './inputs/name';
@@ -14,10 +14,10 @@ import PasswordInput from './inputs/password';
 
 const Form = props => {
   Form.propTypes = {
-    authenticationErrorMessage: string,
     isSignUpPage: bool.isRequired,
   };
 
+  const authMessage = useSelector(state => state.user.authMessage);
   const [name, setName] = useState('');
   const [isValidName, setIsValidName] = useState(false);
   const [email, setEmail] = useState('');
@@ -68,8 +68,8 @@ const Form = props => {
           setIsValidInput={setIsValidPassword}
           setPassword={setPassword}
         />
-        {props.authenticationErrorMessage &&
-          <p className='text-center' style={{ color: 'red' }}>{props.authenticationErrorMessage}</p>
+        {authMessage &&
+          <p className='text-center' style={{ color: 'red' }}>{authMessage}</p>
         }
         <Row className='text-center' style={{ marginTop: '20px' }}>
           <Col>
@@ -81,8 +81,4 @@ const Form = props => {
   );
 };
 
-export function mapStateToProps(state) {
-  return { authenticationErrorMessage: state.appState.authenticationErrorMessage };
-};
-
-export default connect(mapStateToProps)(Form);
+export default Form;

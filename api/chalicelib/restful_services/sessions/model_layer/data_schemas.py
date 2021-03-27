@@ -11,6 +11,7 @@ class SessionSchema(Schema):
     datetime = fields.DateTime(required=True)
 
     class Meta:
+        """Meta class."""
         unknown = EXCLUDE
 
 
@@ -22,4 +23,5 @@ class PopulatedSessionSchema(Schema):
     datetime = fields.DateTime(required=True)
 
     class Meta:
+        """Meta class."""
         unknown = EXCLUDE

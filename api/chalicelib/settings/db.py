@@ -1,3 +1,4 @@
+"""Settings file for constants related to the database."""
 import os
 
 
