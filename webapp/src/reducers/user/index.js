@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { handleAuthResults } from '~/reducers/user/utils';
+import { deauthenticateUser, handleAuthResults } from '~/reducers/user/utils';
 
 const initialState = {
   accessToken: undefined,
@@ -16,7 +16,7 @@ const userState = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    deauthenticate: () => initialState,
+    deauthenticate: state => deauthenticateUser(state),
     update: (state, action) => handleAuthResults(state, action.payload),
     setAuthMessage: (state, action) => { state.authMessage = action.payload; },
     setIsAuthenticating: (state, action) => { state.isAuthenticating = action.payload; },

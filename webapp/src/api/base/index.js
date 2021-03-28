@@ -1,7 +1,5 @@
 import 'isomorphic-fetch';
 
-import { useDispatch } from 'react-redux';
-
 import { update } from '~/reducers/user';
 import { keysToCamel, keysToSnake } from '~/utils/convertCasing';
 import generateUUID from '~/utils/generateUUID';
@@ -189,8 +187,7 @@ const BaseApiClass = class BaseApi {
 
       if (this.isAuthenticatedRoute) {
         const { authResults, data } = keysToCamel(res.data);
-        const dispatch = useDispatch;
-        dispatch(update({ authResults }));
+        window.dispatch(update({ authResults }));
         return data;
       }
 

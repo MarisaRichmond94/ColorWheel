@@ -11,8 +11,8 @@ import history from '~/utils/history';
 import store from '~/utils/store';
 
 // set window acessible functions
-const action = (type, payload) => store.dispatch({ type, payload });
-window.dispatchAction = action;
+window.dispatch = store.dispatch;
+window.dispatchAction = (type, payload) => store.dispatch({ type, payload });
 window.historyPush = history.push;
 window.historyReplace = history.replace;
 

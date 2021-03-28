@@ -33,3 +33,13 @@ export const getMinutesUntilTimeout = exp => {
   const differenceInMilliseconds = (expirationInMilliseconds - now);
   return Math.round(((differenceInMilliseconds % 86400000) % 3600000) / 60000);
 };
+
+export const deauthenticateUser = state => {
+  state.accessToken = undefined;
+  state.authMessage = undefined;
+  state.email = undefined;
+  state.id = undefined;
+  state.isAuthenticating = false;
+  state.isLogoutWarningModalShowing = false;
+  state.name = undefined;
+};

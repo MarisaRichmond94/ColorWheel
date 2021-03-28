@@ -24,7 +24,7 @@ export function * deauthenticateUser() {
   localStorage.clear();
   const path = `/${window.location.search.includes('MOCK_BE') ? '?MOCK_BE' : ''}`;
   window.historyReplace(path);
-  yield put(deauthenticate);
+  yield put(deauthenticate());
 }
 
 export function * watchAuthenticateUser() {
