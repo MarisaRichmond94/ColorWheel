@@ -17,7 +17,7 @@ const Form = props => {
     isSignUpPage: bool.isRequired,
   };
 
-  const authMessage = useSelector(state => state.user.authMessage);
+  const { authMessage } = useSelector(state => state.user);
   const [name, setName] = useState('');
   const [isValidName, setIsValidName] = useState(false);
   const [email, setEmail] = useState('');

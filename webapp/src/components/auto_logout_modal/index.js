@@ -6,11 +6,10 @@ import { useSelector } from 'react-redux';
 
 import SmartModal from '~/components/smart_modal';
 import types from '~/sagas/types';
-
 let logoutTimer;
 
 const AutoLogoutModal = () => {
-  const isLogoutWarningModalShowing = useSelector(state => state.user.isLogoutWarningModalShowing);
+  const { isLogoutWarningModalShowing } = useSelector(state => state.user);
   const [timeRemaining, setTimeRemaining] = useState(60);
 
   useEffect(() => {
@@ -18,6 +17,14 @@ const AutoLogoutModal = () => {
       logoutTimer = setInterval(() => {
         const seconds = timeRemaining - 1;
         setTimeRemaining(seconds);
+        if (seconds === 0) {
+          setTimeRemaining(60);
+          window.dispatchAction(
+            types.SET_IS_LOGOUT_WARNING_MODAL_SHOWING,
+            { isLogoutWarningModalShowing: false },
+          );
+          clearInterval(logoutTimer);
+        }
       }, 1000);
     } else {
       clearInterval(logoutTimer);

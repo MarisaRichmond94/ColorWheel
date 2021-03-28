@@ -1,6 +1,4 @@
-import { setIsLogoutWarningModalShowing } from '~/reducers/user';
 import types from '~/sagas/types';
-import store from '~/utils/store';
 
 export default class AutoLogoutScheduler {
   constructor(timeInMinutes) {
@@ -32,7 +30,10 @@ export default class AutoLogoutScheduler {
 
   startAutoLogoutModalInterval = () => {
     return setInterval(() => {
-      store.dispatch(setIsLogoutWarningModalShowing(true));
+      window.dispatchAction(
+        types.SET_IS_LOGOUT_WARNING_MODAL_SHOWING,
+        { isLogoutWarningModalShowing: true },
+      );
     }, (this.timeInMinutes - 1) * 60 * 1000);
   }
 }
