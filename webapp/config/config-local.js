@@ -1,8 +1,7 @@
-(function () {
+(function() {
   window.CONFIG = {
-    'API_URL': 'http://localhost:8000',
-    'DEBUG': true,
-    'TITLE': 'Colorwheel - Local',
+    API_URL: 'http://localhost:8000',
+    TITLE: 'Colorwheel - Local',
   };
 })();
 

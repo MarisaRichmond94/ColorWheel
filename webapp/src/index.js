@@ -1,5 +1,5 @@
 import 'babel-polyfill';
-import './global.scss';
+import '~/global.scss';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -11,8 +11,8 @@ import history from '~/utils/history';
 import store from '~/utils/store';
 
 // set window acessible functions
-window.dispatch = store.dispatch;
-window.dispatchAction = (type, payload) => store.dispatch({ type, payload });
+window.dispatchReduxAction = store.dispatch;
+window.dispatchSagaAction = (type, payload) => store.dispatch({ type, payload });
 window.historyPush = history.push;
 window.historyReplace = history.replace;
 

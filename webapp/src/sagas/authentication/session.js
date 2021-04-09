@@ -32,7 +32,7 @@ function * routeBackToLogin() {
 }
 
 export function * refreshSession(email) {
-  const authResults = yield call(AuthenticationApi.get, email);
+  const authResults = yield call([AuthenticationApi, AuthenticationApi.get], email);
   yield put(update(authResults));
   yield put(setIsAuthenticating(false));
 }

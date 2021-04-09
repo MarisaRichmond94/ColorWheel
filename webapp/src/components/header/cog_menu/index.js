@@ -17,7 +17,7 @@ const CogMenu = () => {
     {
       displayName: 'Sign Out',
       icon: <IoLogOutOutline />,
-      onClick: () => window.dispatchAction(types.DEAUTHENTICATE_USER),
+      onClick: () => window.dispatchSagaAction(types.DEAUTHENTICATE_USER),
     },
   ];
 

@@ -24,7 +24,7 @@ const BookModal = props => {
   const handleSubmit = () => {
     const action = props.selectedBook ? types.UPDATE_BOOK_DETAILS : types.CREATE_NEW_BOOK;
     const payload = props.selectedBook ? {} : {};
-    window.dispatchAction(action, payload);
+    window.dispatchSagaAction(action, payload);
     props.setIsModalShowing(false);
   };
 

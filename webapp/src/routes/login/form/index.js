@@ -29,7 +29,7 @@ const Form = props => {
     <SmartButton
       isDisabled={!isValidName || !isValidEmail || !isValidPassword}
       id='signup-submit-button'
-      onClick={() => window.dispatchAction(types.AUTHENTICATE_USER, { name, email, password })}
+      onClick={() => window.dispatchSagaAction(types.AUTHENTICATE_USER, { name, email, password })}
       text='Sign Up'
     />
   );
@@ -38,7 +38,7 @@ const Form = props => {
     <SmartButton
       isDisabled={!isValidEmail || !isValidPassword}
       id='login-submit-button'
-      onClick={() => window.dispatchAction(types.AUTHENTICATE_USER, { email, password })}
+      onClick={() => window.dispatchSagaAction(types.AUTHENTICATE_USER, { email, password })}
       text='Login'
     />
   );

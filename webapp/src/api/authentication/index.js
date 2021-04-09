@@ -1,7 +1,7 @@
-import { BaseApiClass } from '~/api/base';
+import BaseApi from '~/api/base';
 import { getTimeInMilliseconds } from '~/utils/datetimeHelpers';
 
-const AuthenticationClass = class Authentication extends BaseApiClass {
+class Authentication extends BaseApi {
   constructor() {
     super('authentication', false);
   }
@@ -41,10 +41,5 @@ const AuthenticationClass = class Authentication extends BaseApiClass {
   }
 };
 
-const Singleton = new AuthenticationClass();
-const AuthenticationApi = {
-  post: (...params) => Singleton.post(...params),
-  get: (...params) => Singleton.get(...params),
-};
+const AuthenticationApi = new Authentication();
 export default AuthenticationApi;
-export { AuthenticationClass };

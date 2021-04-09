@@ -5,7 +5,7 @@ import { keysToCamel, keysToSnake } from '~/utils/convertCasing';
 import generateUUID from '~/utils/generateUUID';
 import store from '~/utils/store';
 
-const BaseApiClass = class BaseApi {
+class BaseApi {
   constructor(route, isAuthenticatedRoute = true) {
     this.accessToken = undefined;
     this.email = undefined;
@@ -187,7 +187,7 @@ const BaseApiClass = class BaseApi {
 
       if (this.isAuthenticatedRoute) {
         const { authResults, data } = keysToCamel(res.data);
-        window.dispatch(update({ authResults }));
+        window.dispatchReduxAction(update({ authResults }));
         return data;
       }
 
@@ -196,20 +196,4 @@ const BaseApiClass = class BaseApi {
   }
 };
 
-const Singleton = new BaseApiClass();
-const BaseApi = {
-  post: (...params) => Singleton.post(...params),
-  get: (...params) => Singleton.get(...params),
-  getById: (...params) => Singleton.getById(...params),
-  update: (...params) => Singleton.update(...params),
-  delete: (...params) => Singleton.delete(...params),
-  deleteById: (...params) => Singleton.deleteById(...params),
-  updateWrapperState: (...params) => Singleton.updateWrapperState(...params),
-  buildQueryString: (...params) => Singleton.buildQueryString(...params),
-  getHeaders: (...params) => Singleton.getHeaders(...params),
-  handleError: (...params) => Singleton.handleError(...params),
-  handleResponse: (...params) => Singleton.handleResponse(...params),
-};
-
 export default BaseApi;
-export { BaseApiClass };

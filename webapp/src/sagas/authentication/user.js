@@ -6,7 +6,7 @@ import types from '~/sagas/types';
 
 export function * authenticateUser(action) {
   try {
-    const authResults = yield call(AuthenticationApi.post, action.payload);
+    const authResults = yield call([AuthenticationApi, AuthenticationApi.post], action.payload);
     yield put(update(authResults));
     const path = `/workspace${window.location.search.includes('MOCK_BE') ? '?MOCK_BE' : ''}`;
     yield call(window.historyReplace, path);

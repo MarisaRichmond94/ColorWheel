@@ -18,7 +18,7 @@ const App = () => {
   useEffect(() => {
     if (!accessToken) {
       try {
-        window.dispatchAction(types.AUTHENTICATE_SESSION);
+        window.dispatchSagaAction(types.AUTHENTICATE_SESSION);
       } catch (error) {
         // eventually route to error page
       }

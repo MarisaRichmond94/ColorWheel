@@ -24,13 +24,13 @@ export default class AutoLogoutScheduler {
 
   startAutoLogoutInterval = () => {
     return setInterval(() => {
-      window.dispatchAction(types.DEAUTHENTICATE_USER);
+      window.dispatchSagaAction(types.DEAUTHENTICATE_USER);
     }, this.timeInMinutes * 60 * 1000);
   }
 
   startAutoLogoutModalInterval = () => {
     return setInterval(() => {
-      window.dispatchAction(
+      window.dispatchSagaAction(
         types.SET_IS_LOGOUT_WARNING_MODAL_SHOWING,
         { isLogoutWarningModalShowing: true },
       );

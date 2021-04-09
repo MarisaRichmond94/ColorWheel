@@ -19,7 +19,7 @@ const AutoLogoutModal = () => {
         setTimeRemaining(seconds);
         if (seconds === 0) {
           setTimeRemaining(60);
-          window.dispatchAction(
+          window.dispatchSagaAction(
             types.SET_IS_LOGOUT_WARNING_MODAL_SHOWING,
             { isLogoutWarningModalShowing: false },
           );
@@ -49,7 +49,7 @@ const AutoLogoutModal = () => {
       headerText='Hey! Are you still there?'
       id='auto-logout-modal'
       isModalShowing={isLogoutWarningModalShowing}
-      onHideCallback={() => window.dispatchAction(types.AUTHENTICATE_SESSION)}
+      onHideCallback={() => window.dispatchSagaAction(types.AUTHENTICATE_SESSION)}
     />
   );
 };
