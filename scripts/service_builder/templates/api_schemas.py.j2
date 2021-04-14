@@ -1,0 +1,67 @@
+
+"""API schemas for the {{args.plural_service_name}} service."""
+{% for file_import in imports %}
+{{file_import}}
+{% endfor %}
+{% if 'POST' in args.methods %}
+
+
+class Create{{args.singular_schema_name}}BodySchema(Schema):
+    """Schema for creating a new {{args.singular_service_name}}."""
+    id = fields.String(required=False)
+    {% if args.dimensions %}
+    {% for dimension in args.dimensions %}
+    {{dimension.key}} = fields.{{dimension.sqlalchemy_type}}(required={{dimension.is_required}})
+    {% endfor %}
+    {% endif %}
+    {% if args.foreign_dims and args.table_type == 'fct' %}
+    {% for foreign_dim in args.foreign_dims %}
+    {{foreign_dim.singular}}_id = fields.String(required=True)
+    {% endfor %}
+    {% endif %}
+{% endif %}
+{% if 'GET' in args.methods %}
+
+
+class Get{{args.plural_schema_name}}QuerySchema(Schema):
+    """Schema for getting {{args.plural_service_name}}."""
+    {% if args.method_args %}
+    {% for method_args in args.method_args %}
+    {% if method_args.method == 'GET' %}
+    {% for arg in method_args.args %}
+    {{arg.key}} = fields.{{arg.sqlalchemy_type}}(required=False)
+    {% endfor %}
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+{% endif %}
+{% if 'PATCH' in args.methods %}
+
+
+class Update{{args.singular_schema_name}}BodySchema(Schema):
+    """Schema for updating a {{args.singular_service_name}}."""
+    {% if args.method_args %}
+    {% for method_args in args.method_args %}
+    {% if method_args.method == 'PATCH' %}
+    {% for arg in method_args.args %}
+    {{arg.key}} = fields.{{arg.sqlalchemy_type}}(required=True)
+    {% endfor %}
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+{% endif %}
+{% if 'DELETE' in args.methods %}
+
+
+class Delete{{args.plural_schema_name}}QuerySchema(Schema):
+    """Schema for deleting {{args.plural_service_name}}."""
+    {% if args.method_args %}
+    {% for method_args in args.method_args %}
+    {% if method_args.method == 'DELETE' %}
+    {% for arg in method_args.args %}
+    {{arg.key}} = fields.{{arg.sqlalchemy_type}}(required=True)
+    {% endfor %}
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+{% endif %}

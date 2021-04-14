@@ -1,0 +1,273 @@
+"""Business layer for the {{args.plural_service_name}} service."""
+{% for file_import in imports %}
+{{file_import}}
+{% endfor %}
+{% if 'POST' in args.methods %}
+
+
+def create_{{args.singular_service_name}}(
+    {% if args.foreign_dims and args.table_type == 'fct' %}
+    {% for foreign_dim in args.foreign_dims %}
+    {{foreign_dim.singular}}_id: UUIDType,
+    {% endfor %}
+    {% endif %}
+    {% if args.dimensions %}
+    {% for dimension in args.dimensions %}
+    {% if dimension.is_required == True %}
+    {{dimension.key}}: {{dimension.type}},
+    {% else %}
+    {{dimension.key}}: Optional[{{dimension.type}}],
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    {{args.singular_service_name}}_id: Optional[UUIDType] = None
+) -> Optional[dict]:
+    """Creates a new {{args.singular_param_type}} in the {{args.table_type}}_{{args.plural_service_name}} table.
+
+    Args:
+        {% if args.foreign_dims and args.table_type == 'fct' %}
+        {% for foreign_dim in args.foreign_dims %}
+        {{foreign_dim.singular}}_id: The foreign key to the {{foreign_dim.plural}} table associated with the new {{args.singular_param_type}}.
+        {% endfor %}
+        {% endif %}
+        {% if args.dimensions %}
+        {% for dimension in args.dimensions %}
+        {{dimension.key}}: # add a description for the {{dimension.key}}.
+        {% endfor %}
+        {% endif %}
+        {{args.singular_service_name}}_id: The primary key to assign to the new {{args.singular_param_type}}.
+
+    Returns:
+        A newly created {{args.singular_param_type}} else None.
+    """
+    with session_scope() as session:
+        new_{{args.singular_service_name}} = {{args.table_type.capitalize()}}{{args.singular_schema_name}}(
+            {% if args.foreign_dims and args.table_type == 'fct' %}
+            {% for foreign_dim in args.foreign_dims %}
+            dim_{{foreign_dim.singular}}_id={{foreign_dim.singular}}_id,
+            {% endfor %}
+            {% endif %}
+            {% if args.dimensions %}
+            {% for dimension in args.dimensions %}
+            {{dimension.key}}={{dimension.key}},
+            {% endfor %}
+            {% endif %}
+            id={{args.singular_service_name}}_id
+        )
+
+        if new{{args.singular_service_name}}:
+            session.add(new_{{args.singular_service_name}})
+            session.commit()
+            return {{args.singular_schema_name}}Schema().dump(new_{{args.singular_service_name}})
+        return None
+{% endif %}
+{% if 'GET' in args.methods %}
+
+
+def get_{{args.plural_service_name}}() -> list:
+    """Gets {{args.plural_param_type}} from the {{args.table_type}}_{{args.plural_service_name}} table filtered by given params.
+
+    Returns:
+        A list of {{args.plural_param_type}} filtered by any given params.
+    """
+    with session_scope() as session:
+        {{args.plural_service_name}} = session.query({{args.table_type.capitalize()}}{{args.singular_schema_name}}.all()
+        return {% if args.table_type == 'fct' %}Populated{% endif %}{{args.singular_schema_name}}Schema(many=True).dump({{args.plural_service_name}}) if {{args.plural_service_name}} else []
+{% endif %}
+{% if args.method_args %}
+{% for method_args in args.method_args %}
+{% if method_args.method == 'GET' and method_args.args|length == 1 %}
+
+
+def get_{{args.plural_service_name}}_by_{{method_args.args[0].key}}({% if method_args.args[0].type == 'UUIDType' %}{{method_args.args[0].key}}_id{% else %}{{method_args.args[0].key}}{% endif %} : {{method_args.args[0].type}}) -> list:
+    """Gets {{args.plural_param_type}} from the {{args.table_type}}_{{args.plural_service_name}} table by a given {{method_args.args[0].key}}.
+
+    Args:
+        {{method_args.args[0].key}}: The {{method_args.args[0].key}} to filter {{args.plural_param_type}} by.
+
+    Returns:
+        A list of {{args.plural_param_type}} with the given {{method_args.args[0].key}} else [].
+    """
+    with session_scope() as session:
+        {{args.plural_service_name}} = (session.query({{args.table_type.capitalize()}}{{args.singular_schema_name}}.filter_by({% if method_args.args[0].type == 'UUIDType' %}dim_{{method_args.args[0].key}}_id={{method_args.args[0].key}}_id{% else %}{{method_args.args[0].key}}={{method_args.args[0].key}}{% endif %}).all()
+        return {% if args.table_type == 'fct' %}Populated{% endif %}{{args.singular_schema_name}}Schema(many=True).dump({{args.plural_service_name}}) if {{args.plural_service_name}} else []
+{% endif %}
+{% endfor %}
+{% endif %}
+{% if 'GET_BY_ID' in args.methods %}
+
+
+def get_{{args.singular_service_name}}_by_id({{args.singular_service_name}}_id: UUIDType) -> Optional[dict]:
+    """Gets a {{args.singular_param_type}} from the {{args.table_type}}_{{args.plural_service_name}} table by a given id.
+
+    Args:
+        {{args.singular_service_name}}_id: The primary key of a {{args.singular_param_type}} in the {{args.table_type}}_{{args.plural_service_name}} table.
+
+    Returns:
+        A {{args.singular_param_type}} from the {{args.table_type}}_{{args.plural_service_name}} table by a given id else None.
+    """
+    with session_scope() as session:
+        {{args.singular_service_name}} = (session.query({{args.table_type.capitalize()}}{{args.singular_schema_name}}.filter_by(id={{args.singular_service_name}}_id).one_or_none()
+        return {% if args.table_type == 'fct' %}Populated{% endif %}{{args.singular_schema_name}}Schema().dump({{args.singular_service_name}}) if {{args.singular_service_name}} else None
+{% endif %}
+{% if 'PATCH' in args.methods %}
+
+
+{% if args.method_args %}
+def update_{{args.singular_service_name}}(
+{% for method_args in args.method_args %}
+{% if method_args.method == 'PATCH' %}
+{% for arg in method_args.args %}
+{% if arg.type == 'UUIDType' %}
+    {{arg.key}}_id: {{arg.type}},
+{% else %}
+    {{arg.key}}: {{arg.type}},
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endfor %}
+    {{args.singular_service_name}}_id: UUIDType
+) -> Optional[dict]:
+{% else %}
+def update_{{args.singular_service_name}}(
+    # pass in variables needed to update a {{args.singular_param_type}}
+    {{args.singular_service_name}}_id: UUIDType
+) -> Optional[dict]:
+{% endif %}
+    """Updates a {{args.singular_param_type}} in the {{args.table_type}}_{{args.plural_service_name}} table by a given id.
+
+    Args:
+        {% if args.method_args %}
+        {% for method_args in args.method_args %}
+        {% if method_args.method == 'PATCH' %}
+        {% for arg in method_args.args %}
+        {% if arg.type == 'UUIDType' %}
+        {{arg.key}}_id: The foreign key to the {{arg.key}} table associated with the new {{args.singular_param_type}}.
+        {% else %}
+        {{arg.key}}: # add a description for the {{arg.key}}.
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+        {{args.singular_service_name}}_id: The primary key of a {{args.singular_param_type}} in the {{args.table_type}}_{{args.plural_service_name}} table.
+
+    Returns:
+        An updated {{args.singular_param_type}} with the given id else None.
+    """
+    with session_scope() as session:
+        {{args.singular_service_name}} = session.query({{args.table_type.capitalize()}}{{args.singular_schema_name}}.filter_by(id={{args.singular_service_name}}_id).one_or_none()
+
+        if {{args.singular_service_name}}:
+            {% if args.method_args %}
+            {% for method_args in args.method_args %}
+            {% if method_args.method == 'PATCH' %}
+            {% for arg in method_args.args %}
+            {% if arg.type == 'UUIDType' %}
+            {{args.singular_service_name}}.dim_{{arg.key}}_id = {{arg.key}}_id
+            {% else %}
+            {{args.singular_service_name}}.{{arg.key}} = {{arg.key}}
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+            {% endfor %}
+            {% else %}
+            # update entity
+            {% endif %}
+            session.commit()
+            return {{args.singular_schema_name}}Schema().dump({{args.singular_service_name}})
+        return None
+{% endif %}
+{% if 'DELETE' in args.methods %}
+
+
+{% if args.method_args %}
+def delete_{{args.plural_service_name}}(
+{% for method_args in args.method_args %}
+{% if method_args.method == 'DELETE' %}
+{% for arg in method_args.args %}
+{% if arg.type == 'UUIDType' %}
+    {{arg.key}}_id: {{arg.type}},
+{% else %}
+    {{arg.key}}: {{arg.type}},
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endfor %}
+    param_to_delete_by: str = 'placeholder' # update this
+) -> list:
+{% else %}
+def delete_{{args.plural_service_name}}(
+    param_to_delete_by: str = 'placeholder' # update this
+) -> list:
+{% endif %}
+    """Deletes {{args.plural_param_type}} from the {{args.table_type}}_{{args.plural_service_name}} table using the given params.
+
+    Args:
+        {% if args.method_args %}
+        {% for method_args in args.method_args %}
+        {% if method_args.method == 'DELETE' %}
+        {% for arg in method_args.args %}
+        {% if arg.type == 'UUIDType' %}
+        {{arg.key}}_id: The foreign key to the {{arg.key}} table associated with the new {{args.singular_param_type}}.
+        {% else %}
+        {{arg.key}}: # add a description for the {{arg.key}}.
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+
+    Returns:
+        A list of {{args.plural_param_type}} deleted using the given params.
+    """
+    with session_scope() as session:
+        {{args.plural_service_name}} = (
+            session.query({{args.table_type.capitalize()}}{{args.singular_schema_name}}
+                .filter_by(
+                    {% if args.method_args %}
+                    {% for method_args in args.method_args %}
+                    {% if method_args.method == 'DELETE' %}
+                    {% for arg in method_args.args %}
+                    {% if arg.type == 'UUIDType' %}
+                    dim_{{arg.key}}_id={{arg.key}}_id,
+                    {% else %}
+                    {{arg.key}}={{arg.key}},
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                    {% endfor %}
+                    {% else %}
+                    # pass filters here
+                    {% endif %}
+                ).all())
+        )
+
+        if {{args.plural_service_name}}:
+            for {{args.singular_service_name}} in {{args.plural_service_name}}:
+                session.delete({{args.singular_service_name}})
+                session.commit()
+            return {{args.singular_schema_name}}Schema(many=True).dump({{args.plural_service_name}})
+        return []
+{% endif %}
+{% if 'DELETE_BY_ID' in args.methods %}
+
+
+def delete_{{args.singular_service_name}}_by_id({{args.singular_service_name}}_id: UUIDType) -> Optional[dict]:
+    """Deletes a {{args.singular_param_type}} from the {{args.table_type}}_{{args.plural_service_name}} table by the given id.
+
+    Args:
+        {{args.singular_service_name}}_id: The primary key of a {{args.singular_param_type}} in the {{args.table_type}}_{{args.plural_service_name}} table.
+
+    Returns:
+        A deleted {{args.singular_param_type}} with the given id else None.
+    """
+    with session_scope() as session:
+        {{args.singular_service_name}} = session.query({{args.table_type.capitalize()}}{{args.singular_schema_name}}.filter_by(id={{args.singular_service_name}}_id).one_or_none()
+
+    if {{args.singular_service_name}}:
+        session.delete({{args.singular_service_name}})
+        session.commit()
+        return {{args.singular_schema_name}}Schema().dump({{args.singular_service_name}})
+    return None
+{% endif %}

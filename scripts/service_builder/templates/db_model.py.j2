@@ -1,0 +1,45 @@
+"""The database model for the {{args.table_type}}_{{args.plural_service_name}} table."""
+{% for file_import in imports %}
+{{file_import}}
+{% endfor %}
+{% if args.foreign_dims and args.table_type == 'fct' %}
+{% for foreign_dim in args.foreign_dims %}
+from db_models.dim_{{foreign_dim.plural}} import Dim{{foreign_dim.schema}}
+{% endfor %}
+{% endif %}
+
+
+{% if args.table_type == 'fct' %}
+{% if args.foreign_dims and args.table_type == 'fct' %}
+{% for foreign_dim in args.foreign_dims %}
+@Dim{{foreign_dim.schema}}.dimension
+{% endfor %}
+{% endif %}
+{% endif %}
+class {{args.table_type.capitalize()}}{{args.plural_schema_name}}(Base):
+    """SQLAlchemy object for the {{args.table_type}}{{args.plural_service_name}} table."""
+    __tablename__ = '{{args.table_type}}_{{args.plural_service_name}}'
+    {% if args.dimensions %}
+    {% for dimension in args.dimensions %}
+    {{dimension.key}} = Column({{dimension.sqlalchemy_type}}(), nullable={{dimension.is_required}})
+    {% endfor %}
+    {% endif %}
+{% if args.table_type == 'dim' %}
+
+@classmethod
+def dimension(cls, target):
+    """Class for creating a relationship to the {{args.table_type}}_{{args.plural_service_name}} table."""
+    target.{{args.table_type}}_{{args.singular_service_name}}_id = Column(
+        '{{args.table_type}}_{{args.singular_service_name}}_id',
+        UUID(as_uuid=True),
+        ForeignKey({{args.table_type.capitalize()}}{{args.plural_schema_name}}.id),
+        nullable=False,
+    )
+    target.{{args.table_type}}_{{args.singular_service_name}} = relationship(cls)
+    return target
+{% endif %}
+{% if args.table_type == 'fct' %}
+
+
+create_audit_shadow({{args.table_type.capitalize()}}{{args.plural_schema_name}})
+{% endif %}

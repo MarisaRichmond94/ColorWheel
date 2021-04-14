@@ -1,0 +1,190 @@
+"""API layer for the {{args.plural_service_name}} service."""
+{% for file_import in imports %}
+{{file_import}}
+{% endfor %}
+{% if api_schema_import_funcs|length %}
+from restful_services.{{args.plural_service_name}}.model_layer.api_schemas import (
+{% for api_schema_import_func in api_schema_import_funcs %}
+    {{api_schema_import_func}}
+{% endfor %}
+)
+{% endif %}
+from utils.api_handler import api_handler
+
+api = Blueprint(__name__)
+{% if 'POST' in args.methods %}
+
+
+@api_handler(
+    api=api,
+    path='/{{args.route}}',
+    methods=['POST'],
+    body_schema=Create{{args.singular_schema_name}}BodySchema,
+)
+def create_{{args.singular_service_name}}() -> Optional[dict]:
+    """Creates a new {{args.singular_param_type}} in the {{args.table_type}}_{{args.plural_service_name}} table.
+
+    Returns:
+        A newly created {{args.singular_param_type}} else None.
+    """
+    return business.create_{{args.singular_service_name}}(
+        {% if args.foreign_dims and args.table_type == 'fct' %}
+        {% for foreign_dim in args.foreign_dims %}
+        {{foreign_dim.singular}}_id=api.handled_request.body.get('{{foreign_dim.singular}}_id'),
+        {% endfor %}
+        {% endif %}
+        {% if args.dimensions %}
+        {% for dimension in args.dimensions %}
+        {{dimension.key}}=api.handled_request.body.get('{{dimension.key}}'),
+        {% endfor %}
+        {% endif %}
+        {{args.singular_service_name}}_id=api.handled_request.body.get('id')
+    )
+{% endif %}
+{% if 'GET' in args.methods %}
+
+
+@api_handler(
+    api=api,
+    path='/{{args.route}}',
+    methods=['GET'],
+    query_schema=Get{{args.plural_schema_name}}QuerySchema,
+)
+def get_{{args.plural_service_name}}() -> list:
+    """Gets {{args.plural_param_type}} from the {{args.table_type}}_{{args.plural_service_name}} table filtered by given params.
+
+    Returns:
+        A list of {{args.plural_param_type}} filtered by any given params.
+    """
+    {% if args.method_args %}
+    {% for method_args in args.method_args %}
+    {% if method_args.method == 'GET' %}
+    return business.get_{{args.plural_service_name}}(
+        {% for arg in method_args.args %}
+        {% if arg.sqlalchemy_type == 'UUID' %}
+        {{arg.key}}_id=api.handled_request.query.get('{{arg.key}}_id'),
+        {% else %}
+        {{arg.key}}=api.handled_request.query.get('{{arg.key}}'),
+        {% endif %}
+        {% endfor %}
+    )
+    {% endif %}
+    {% endfor %}
+    {% else %}
+    return business.get_{{args.plural_service_name}}()
+    {% endif %}
+
+{% endif %}
+{% if 'GET_BY_ID' in args.methods %}
+
+
+@api_handler(
+    api=api,
+    path='/{{args.route}}/{% raw %}{{% endraw %}{{args.singular_service_name}}_id{% raw %}}{% endraw %}',
+    methods=['GET'],
+)
+def get_{{args.singular_service_name}}_by_id({{args.singular_service_name}}_id: str) -> Optional[dict]:
+    """Gets a {{args.singular_param_type}} from the {{args.table_type}}_{{args.plural_service_name}} table by a given id.
+
+    Args:
+        {{args.singular_service_name}}_id: The primary key of a {{args.singular_param_type}} in the {{args.table_type}}_{{args.plural_service_name}} table.
+
+    Returns:
+        A {{args.singular_param_type}} from the {{args.table_type}}_{{args.plural_service_name}} table by a given id else None.
+    """
+    return business.get_{{args.singular_service_name}}_by_id({{args.singular_service_name}}_id)
+{% endif %}
+{% if 'PATCH' in args.methods %}
+
+
+@api_handler(
+    api=api,
+    path='/{{args.route}}/{% raw %}{{% endraw %}{{args.singular_service_name}}_id{% raw %}}{% endraw %}',
+    methods=['PATCH'],
+    body_schema=Update{{args.singular_schema_name}}BodySchema,
+)
+def update_{{args.singular_service_name}}({{args.singular_service_name}}_id: str) -> Optional[dict]:
+    """Updates a {{args.singular_param_type}} in the {{args.table_type}}_{{args.plural_service_name}} table by a given id.
+
+    Args:
+        {{args.singular_service_name}}_id: The primary key of a {{args.singular_param_type}} in the {{args.table_type}}_{{args.plural_service_name}} table.
+
+    Returns:
+        An updated {{args.singular_param_type}} with the given id else None.
+    """
+    {% if args.method_args %}
+    {% for method_args in args.method_args %}
+    {% if method_args.method == 'PATCH' %}
+    return business.update_{{args.singular_service_name}}(
+        {% for arg in method_args.args %}
+        {% if arg.sqlalchemy_type == 'UUID' %}
+        {{arg.key}}_id=api.handled_request.query.get('{{arg.key}}_id'),
+        {% else %}
+        {{arg.key}}=api.handled_request.query.get('{{arg.key}}'),
+        {% endif %}
+        {% endfor %}
+        {{args.singular_service_name}}_id={{args.singular_service_name}}_id
+    )
+    {% endif %}
+    {% endfor %}
+    {% else %}
+    return business.update_{{args.singular_service_name}}(
+        # pass in variables needed to update a {{args.singular_param_type}}
+        {{args.singular_service_name}}_id={{args.singular_service_name}}_id
+    )
+    {% endif %}
+{% endif %}
+{% if 'DELETE' in args.methods %}
+
+
+@api_handler(
+    api=api,
+    path='/{{args.route}}',
+    methods=['DELETE'],
+    query_schema=Delete{{args.plural_schema_name}}QuerySchema,
+)
+def delete_{{args.plural_service_name}}() -> list:
+    """Deletes {{args.plural_param_type}} from the {{args.table_type}}_{{args.plural_service_name}} table using the given params.
+
+    Returns:
+        A list of {{args.plural_param_type}} deleted using the given params.
+    """
+    {% if args.method_args %}
+    {% for method_args in args.method_args %}
+    {% if method_args.method == 'DELETE' %}
+    return business.update_{{args.singular_service_name}}(
+        {% for arg in method_args.args %}
+        {% if arg.sqlalchemy_type == 'UUID' %}
+        {{arg.key}}_id=api.handled_request.query.get('{{arg.key}}_id'),
+        {% else %}
+        {{arg.key}}=api.handled_request.query.get('{{arg.key}}'),
+        {% endif %}
+        {% endfor %}
+    )
+    {% endif %}
+    {% endfor %}
+    {% else %}
+    return business.delete_{{args.plural_service_name}}(
+        # pass in variables needed to delete {{args.plural_param_type}}
+    )
+    {% endif %}
+{% endif %}
+{% if 'DELETE_BY_ID' in args.methods %}
+
+
+@api_handler(
+    api=api,
+    path='/{{args.route}}/{% raw %}{{% endraw %}{{args.singular_service_name}}_id{% raw %}}{% endraw %}',
+    methods=['DELETE'],
+)
+def delete_{{args.singular_service_name}}_by_id({{args.singular_service_name}}_id: str) -> Optional[dict]:
+    """Deletes a {{args.singular_param_type}} from the {{args.table_type}}_{{args.plural_service_name}} table by the given id.
+
+    Args:
+        {{args.singular_service_name}}_id: The primary key of a {{args.singular_param_type}} in the {{args.table_type}}_{{args.plural_service_name}} table.
+
+    Returns:
+        A deleted {{args.singular_param_type}} with the given id else None.
+    """
+    return business.delete_{{args.singular_service_name}}_by_id({{args.singular_service_name}}_id)
+{% endif %}
