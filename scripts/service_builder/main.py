@@ -24,7 +24,7 @@ TEMPLATE_DICT = {
     'business': JINJA_ENV.get_template('business.py.j2'),
     'data': JINJA_ENV.get_template('data.py.j2'),
     'data_schemas': JINJA_ENV.get_template('data_schemas.py.j2'),
-    'db_model': JINJA_ENV.get_template('db_model.py.j2')
+    'db_model': JINJA_ENV.get_template('db_model.py.j2'),
 }
 
 
@@ -42,6 +42,11 @@ def main() -> None:
         args=args
     )
     generate_database_model(template=TEMPLATE_DICT['db_model'], args=args)
+    print(f'Successfully generated {args.plural_service_name} service! (っ＾▿＾)۶🍸🌟🍺٩(˘◡˘ )')
+    print(
+        "**DON'T FORGET TO ADD THE ROUTE TO APP.PY, IMPORT DB_MODEL INTO ENV.PY, "
+        "AND GENERATE YOUR SQL MIGRATION**"
+    )
 
 
 def navigate_to_restful_services() -> None:

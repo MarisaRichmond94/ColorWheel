@@ -16,13 +16,7 @@ def generate_api_layer(template, args: argparse.Namespace) -> None:
     os.chdir('./api_layer')
     generate_init_file()
     with open(os.path.join(os.getcwd(), 'api.py'), 'w') as file:
-        file.write(
-            template.render(
-                args=args,
-                api_schema_import_funcs=determine_api_schema_import_funcs(args),
-                imports=determine_file_imports(args),
-            )
-        )
+        file.write(template.render(args=args, imports=determine_file_imports(args)))
     os.chdir('..')
 
 
@@ -44,7 +38,10 @@ def determine_api_schema_import_funcs(args: argparse.Namespace) -> str:
     api_schema_import_funcs = []
     valid_api_schema_methods = args.valid_api_schema_methods.split(' ')
     for method in args.methods:
-        if method in valid_api_schema_methods:
+        if method == 'GET':
+            if args.method_args and args.method_args.get('GET'):
+                api_schema_import_funcs.append(f'{api_schema_import_dict[method]},')
+        elif method in valid_api_schema_methods:
             api_schema_import_funcs.append(f'{api_schema_import_dict[method]},')
     if len(api_schema_import_funcs) > 0:
         api_schema_import_funcs.sort()
@@ -63,12 +60,31 @@ def determine_file_imports(args: argparse.Namespace) -> list:
     """
     imports = []
 
-    if any(method in ['POST', 'GET_BY_ID', 'PATCH', 'DELETE_BY_ID'] for method in args.methods):
+    optional_methods = ['POST', 'GET_BY_ID', 'PATCH', 'DELETE', 'DELETE_BY_ID']
+    if any(method in optional_methods for method in args.methods):
         imports.append('from typing import Optional')
         imports.append('')
 
-    return imports + [
+    imports = imports + [
         'from chalice import Blueprint',
         '',
-        'from restful_services.{{args.plural_service_name}}.business_layer import business',
+        f'from restful_services.{args.plural_service_name}.business_layer import business',
     ]
+
+    api_schema_imports = determine_api_schema_import_funcs(args)
+    if api_schema_imports:
+        if len(api_schema_imports) == 1:
+            imports.append(
+                f'from restful_services.{args.plural_service_name}.model_layer.api_schemas import '
+                f'{api_schema_imports[0]}'
+            )
+        else:
+            imports.append(
+                f'from restful_services.{args.plural_service_name}.model_layer.api_schemas import ('
+            )
+            for api_schema_import in api_schema_imports:
+                imports.append(f'    {api_schema_import}')
+            imports.append(')')
+
+    imports.append('from utils.api_handler import api_handler')
+    return imports

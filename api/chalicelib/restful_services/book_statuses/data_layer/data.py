@@ -1,7 +1,7 @@
 """Data layer for the book_statuses service."""
 from db_models.dim_book_statuses import DimBookStatuses
-from utils import db
 from restful_services.book_statuses.model_layer.data_schemas import BookStatusesSchema
+from utils import db
 
 
 def get_book_statuses() -> list:

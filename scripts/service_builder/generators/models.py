@@ -21,8 +21,17 @@ def generate_model_layer(
     os.chdir('./model_layer')
     generate_init_file()
     if any(method in args.valid_api_schema_methods for method in args.methods):
-        with open(os.path.join(os.getcwd(), 'api_schemas.py'), 'w') as file:
-            file.write(api_schemas_template.render(args=args, imports=determine_file_imports(args)))
+        if (
+            len(args.methods) == 1 and args.methods[0] == 'GET' and
+            args.method_args and len(args.method_args) == 1 and
+            args.method_args.get('GET')
+        ):
+            print('Skipping api_schemas.py file generation...')
+        else:
+            with open(os.path.join(os.getcwd(), 'api_schemas.py'), 'w') as file:
+                file.write(api_schemas_template.render(
+                    args=args, imports=determine_file_imports(args))
+                )
     with open(os.path.join(os.getcwd(), 'data_schemas.py'), 'w') as file:
         file.write(data_schemas_template.render(args=args))
     os.chdir('..')
@@ -37,4 +46,13 @@ def determine_file_imports(args: argparse.Namespace) -> list:
     Returns:
         A list of imports needed for the given file.
     """
-    return ['from marshmallow import fields, Schema']
+    imports = []
+    (
+        imports.append('from marshmallow import fields')
+        if (
+            'POST' not in args.methods and args.method_args and args.method_args.get('GET') and
+            len(args.method_args.items()) == 1
+        )
+        else imports.append('from marshmallow import fields, Schema')
+    )
+    return imports

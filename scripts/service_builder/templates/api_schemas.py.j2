@@ -1,4 +1,3 @@
-
 """API schemas for the {{args.plural_service_name}} service."""
 {% for file_import in imports %}
 {{file_import}}
@@ -10,42 +9,42 @@ class Create{{args.singular_schema_name}}BodySchema(Schema):
     """Schema for creating a new {{args.singular_service_name}}."""
     id = fields.String(required=False)
     {% if args.dimensions %}
-    {% for dimension in args.dimensions %}
+    {% for _, dimension in args.dimensions.items() %}
     {{dimension.key}} = fields.{{dimension.sqlalchemy_type}}(required={{dimension.is_required}})
     {% endfor %}
     {% endif %}
     {% if args.foreign_dims and args.table_type == 'fct' %}
-    {% for foreign_dim in args.foreign_dims %}
+    {% for _, foreign_dim in args.foreign_dims.items() %}
     {{foreign_dim.singular}}_id = fields.String(required=True)
     {% endfor %}
     {% endif %}
 {% endif %}
 {% if 'GET' in args.methods %}
+{% if args.method_args and args.method_args.get('GET') %}
 
 
 class Get{{args.plural_schema_name}}QuerySchema(Schema):
     """Schema for getting {{args.plural_service_name}}."""
-    {% if args.method_args %}
-    {% for method_args in args.method_args %}
-    {% if method_args.method == 'GET' %}
-    {% for arg in method_args.args %}
+    {% for arg in args.method_args.get('GET') %}
+    {% if arg.sqlalchemy_type == 'UUID' %}
+    {{arg.key}}_id = fields.{{arg.sqlalchemy_type}}(required=False)
+    {% else %}
     {{arg.key}} = fields.{{arg.sqlalchemy_type}}(required=False)
-    {% endfor %}
     {% endif %}
     {% endfor %}
-    {% endif %}
+{% endif %}
 {% endif %}
 {% if 'PATCH' in args.methods %}
 
 
 class Update{{args.singular_schema_name}}BodySchema(Schema):
     """Schema for updating a {{args.singular_service_name}}."""
-    {% if args.method_args %}
-    {% for method_args in args.method_args %}
-    {% if method_args.method == 'PATCH' %}
-    {% for arg in method_args.args %}
+    {% if args.method_args and args.method_args.get('PATCH') %}
+    {% for arg in args.method_args.get('PATCH') %}
+    {% if arg.sqlalchemy_type == 'UUID' %}
+    {{arg.key}}_id = fields.{{arg.sqlalchemy_type}}(required=True)
+    {% else %}
     {{arg.key}} = fields.{{arg.sqlalchemy_type}}(required=True)
-    {% endfor %}
     {% endif %}
     {% endfor %}
     {% endif %}
@@ -55,12 +54,12 @@ class Update{{args.singular_schema_name}}BodySchema(Schema):
 
 class Delete{{args.plural_schema_name}}QuerySchema(Schema):
     """Schema for deleting {{args.plural_service_name}}."""
-    {% if args.method_args %}
-    {% for method_args in args.method_args %}
-    {% if method_args.method == 'DELETE' %}
-    {% for arg in method_args.args %}
+    {% if args.method_args and args.method_args.get('DELETE') %}
+    {% for arg in args.method_args.get('DELETE') %}
+    {% if arg.sqlalchemy_type == 'UUID' %}
+    {{arg.key}}_id = fields.{{arg.sqlalchemy_type}}(required=True)
+    {% else %}
     {{arg.key}} = fields.{{arg.sqlalchemy_type}}(required=True)
-    {% endfor %}
     {% endif %}
     {% endfor %}
     {% endif %}

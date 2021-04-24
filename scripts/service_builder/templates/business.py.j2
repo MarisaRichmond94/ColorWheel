@@ -6,13 +6,13 @@
 
 
 def create_{{args.singular_service_name}}(
-    {% if args.foreign_dims and args.table_type == 'fct' %}
-    {% for foreign_dim in args.foreign_dims %}
+    {% if args.table_type == 'fct' and args.foreign_dims %}
+    {% for _, foreign_dim in args.foreign_dims.items() %}
     {{foreign_dim.singular}}_id: UUIDType,
     {% endfor %}
     {% endif %}
     {% if args.dimensions %}
-    {% for dimension in args.dimensions %}
+    {% for _, dimension in args.dimensions.items() %}
     {% if dimension.is_required == True %}
     {{dimension.key}}: {{dimension.type}},
     {% else %}
@@ -22,16 +22,16 @@ def create_{{args.singular_service_name}}(
     {% endif %}
     {{args.singular_service_name}}_id: Optional[UUIDType] = None,
 ) -> Optional[dict]:
-    """Creates a new {{args.singular_param_type}} in the {{args.table_type}}_{{args.plural_service_name}} table.
+    """Creates a new {{args.singular_param_type}}.
 
     Args:
-        {% if args.foreign_dims and args.table_type == 'fct' %}
-        {% for foreign_dim in args.foreign_dims %}
-        {{foreign_dim.singular}}_id: The foreign key to the {{foreign_dim.plural}} table associated with the new {{args.singular_param_type}}.
+        {% if args.table_type == 'fct' and args.foreign_dims %}
+        {% for _, foreign_dim in args.foreign_dims.items() %}
+        {{foreign_dim.singular}}_id: The foreign key to the {{foreign_dim.plural}} table.
         {% endfor %}
         {% endif %}
         {% if args.dimensions %}
-        {% for dimension in args.dimensions %}
+        {% for _, dimension in args.dimensions.items() %}
         {{dimension.key}}: The {{dimension.key}} to associate with the new {{args.singular_param_type}}.
         {% endfor %}
         {% endif %}
@@ -41,36 +41,34 @@ def create_{{args.singular_service_name}}(
         A newly created {{args.singular_param_type}} else None.
 
     Raises:
-        ValidationException: If any of the given params needed to create a {{args.singular_param_type}} are None.
+        InvalidParamException: If any of the given params are None.
     """
     validate_params(
         func='create_{{args.singular_service_name}}',
         params={
-            {% if args.foreign_dims and args.table_type == 'fct' %}
-            {% for foreign_dim in args.foreign_dims %}
+            {% if args.table_type == 'fct' and args.foreign_dims %}
+            {% for _, foreign_dim in args.foreign_dims.items() %}
             '{{foreign_dim.singular}}_id': {{foreign_dim.singular}}_id,
             {% endfor %}
             {% endif %}
             {% if args.dimensions %}
-            {% for dimension in args.dimensions %}
+            {% for _, dimension in args.dimensions.items() %}
             {% if dimension.is_required == True %}
             '{{dimension.key}}': {{dimension.key}},
             {% endif %}
             {% endfor %}
-            {% else %}
-            # pass in required params
             {% endif %}
         },
     )
 
     return data.create_{{args.singular_service_name}}(
-        {% if args.foreign_dims and args.table_type == 'fct' %}
-        {% for foreign_dim in args.foreign_dims %}
+        {% if args.table_type == 'fct' and args.foreign_dims %}
+        {% for _, foreign_dim in args.foreign_dims.items() %}
         {{foreign_dim.singular}}_id={{foreign_dim.singular}}_id,
         {% endfor %}
         {% endif %}
         {% if args.dimensions %}
-        {% for dimension in args.dimensions %}
+        {% for _, dimension in args.dimensions.items() %}
         {{dimension.key}}={{dimension.key}},
         {% endfor %}
         {% endif %}
@@ -80,53 +78,47 @@ def create_{{args.singular_service_name}}(
 {% if 'GET' in args.methods %}
 
 
-{% if args.method_args %}
+{% if args.method_args and args.method_args.get('GET') %}
 def get_{{args.plural_service_name}}(
-{% for method_args in args.method_args %}
-{% if method_args.method == 'GET' %}
-{% for arg in method_args.args %}
-{% if arg.type == 'UUIDType' %}
+    {% for arg in args.method_args.get('GET') %}
+    {% if arg.type == 'UUIDType' %}
     {{arg.key}}_id: Optional[{{arg.type}}],
-{% else %}
+    {% else %}
     {{arg.key}}: Optional[{{arg.type}}],
-{% endif %}
-{% endfor %}
-{% endif %}
-{% endfor %}
+    {% endif %}
+    {% endfor %}
 ) -> list:
 {% else %}
 def get_{{args.plural_service_name}}() -> list:
 {% endif %}
-    """Gets {{args.plural_param_type}} from the {{args.table_type}}_{{args.plural_service_name}} table filtered by given params.
+    """Gets {{args.plural_param_type}} from the table filtered by given params.
 
-    {% if args.method_args %}
-    {% for method_args in args.method_args %}
-    {% if method_args.method == 'GET' %}
+    {% if args.method_args and args.method_args.get('GET') %}
     Args:
-        {% for arg in method_args.args %}
+        {% for arg in args.method_args.get('GET') %}
         {% if arg.type == 'UUIDType' %}
-        {{arg.key}}_id: The foreign key to the {{arg.key}} table associated with the new {{args.singular_param_type}}.
+        {{arg.key}}_id: The foreign key to the {{arg.key}} table.
         {% else %}
         {{arg.key}}: The {{arg.key}} to filter {{args.plural_param_type}} by.
         {% endif %}
         {% endfor %}
 
-    {% endif %}
-    {% endfor %}
+    {% else %}
     {% endif %}
     Returns:
         A list of {{args.plural_param_type}} filtered by any given params.
     """
-    {% if args.method_args %}
-    {% for method_args in args.method_args %}
-    {% if method_args.method == 'GET' %}
-    {% if method_args.args|length == 1 %}
-    return data.get_{{args.plural_service_name}}_by_{{method_args.args[0].key}}({{method_args.args[0].key}}={{method_args.args[0].key}}) if {{method_args.args[0].key}} else data.get_{{args.plural_service_name}}()
+    {% if args.method_args and args.method_args.get('GET') %}
+    {% for arg in args.method_args.get('GET') %}
+    {% if arg.type == 'UUIDType' %}
+    if {{arg.key}}_id:
+        return data.get_{{args.plural_service_name}}_by_{{arg.key}}_id({{arg.key}}_id)
     {% else %}
-    return data.get_{{args.plural_service_name}}()
-    {% endif %}
+    if {{arg.key}}:
+        return data.get_{{args.plural_service_name}}_by_{{arg.key}}({{arg.key}})
     {% endif %}
     {% endfor %}
+    return data.get_{{args.plural_service_name}}()
     {% else %}
     return data.get_{{args.plural_service_name}}()
     {% endif %}
@@ -135,16 +127,16 @@ def get_{{args.plural_service_name}}() -> list:
 
 
 def get_{{args.singular_service_name}}_by_id({{args.singular_service_name}}_id: UUIDType) -> Optional[dict]:
-    """Gets a {{args.singular_param_type}} from the {{args.table_type}}_{{args.plural_service_name}} table by a given id.
+    """Gets a {{args.singular_param_type}} from the table by a given id.
 
     Args:
-        {{args.singular_service_name}}_id: The primary key of a {{args.singular_param_type}} in the {{args.table_type}}_{{args.plural_service_name}} table.
+        {{args.singular_service_name}}_id: The primary key of a {{args.singular_param_type}}.
 
     Returns:
-        A {{args.singular_param_type}} from the {{args.table_type}}_{{args.plural_service_name}} table by a given id else None.
+        A {{args.singular_param_type}} from the table by a given id else None.
 
     Raises:
-        ValidationException: If the given {{args.singular_service_name}}_id is None.
+        InvalidParamException: If the given {{args.singular_service_name}}_id is None.
     """
     validate_params(
         func='get_{{args.singular_service_name}}_by_id',
@@ -155,17 +147,13 @@ def get_{{args.singular_service_name}}_by_id({{args.singular_service_name}}_id: 
 {% if 'PATCH' in args.methods %}
 
 
-{% if args.method_args %}
+{% if args.method_args and args.method_args.get('PATCH') %}
 def update_{{args.singular_service_name}}(
-    {% for method_args in args.method_args %}
-    {% if method_args.method == 'PATCH' %}
-    {% for arg in method_args.args %}
+    {% for arg in args.method_args.get('PATCH') %}
     {% if arg.type == 'UUIDType' %}
     {{arg.key}}_id: {{arg.type}},
     {% else %}
     {{arg.key}}: {{arg.type}},
-    {% endif %}
-    {% endfor %}
     {% endif %}
     {% endfor %}
     {{args.singular_service_name}}_id: UUIDType,
@@ -176,43 +164,35 @@ def update_{{args.singular_service_name}}(
     {{args.singular_service_name}}_id: UUIDType,
 ) -> Optional[dict]:
 {% endif %}
-    """Updates a {{args.singular_param_type}} in the {{args.table_type}}_{{args.plural_service_name}} table by a given id.
+    """Updates a {{args.singular_param_type}} by a given id.
 
     Args:
-        {% if args.method_args %}
-        {% for method_args in args.method_args %}
-        {% if method_args.method == 'PATCH' %}
-        {% for arg in method_args.args %}
+        {% if args.method_args and args.method_args.get('PATCH') %}
+        {% for arg in args.method_args.get('PATCH') %}
         {% if arg.type == 'UUIDType' %}
-        {{arg.key}}_id: The foreign key to the {{arg.key}} table associated with the new {{args.singular_param_type}}.
+        {{arg.key}}_id: The foreign key to the {{arg.key}} table.
         {% else %}
         {{arg.key}}: The {{arg.key}} to modify in the {{args.singular_param_type}} with the given id.
         {% endif %}
         {% endfor %}
         {% endif %}
-        {% endfor %}
-        {% endif %}
-        {{args.singular_service_name}}_id: The primary key of a {{args.singular_param_type}} in the {{args.table_type}}_{{args.plural_service_name}} table.
+        {{args.singular_service_name}}_id: The primary key of a {{args.singular_param_type}}.
 
     Returns:
         An updated {{args.singular_param_type}} with the given id else None.
 
     Raises:
-        ValidationException: If any of the given params needed to update a {{args.singular_param_type}} are None.
+        InvalidParamException: If any of the given params are None.
     """
     validate_params(
         func='update_{{args.singular_service_name}}',
         params={
-            {% if args.method_args %}
-            {% for method_args in args.method_args %}
-            {% if method_args.method == 'PATCH' %}
-            {% for arg in method_args.args %}
+            {% if args.method_args and args.method_args.get('PATCH') %}
+            {% for arg in args.method_args.get('PATCH') %}
             {% if arg.type == 'UUIDType' %}
             '{{arg.key}}_id': {{arg.key}}_id,
             {% else %}
-            '{{arg.key}}':{{arg.key}},
-            {% endif %}
-            {% endfor %}
+            '{{arg.key}}': {{arg.key}},
             {% endif %}
             {% endfor %}
             {% endif %}
@@ -221,10 +201,8 @@ def update_{{args.singular_service_name}}(
     )
 
     return data.update_{{args.singular_service_name}}(
-        {% if args.method_args %}
-        {% for method_args in args.method_args %}
-        {% if method_args.method == 'PATCH' %}
-        {% for arg in method_args.args %}
+        {% if args.method_args and args.method_args.get('PATCH') %}
+        {% for arg in args.method_args.get('PATCH') %}
         {% if arg.type == 'UUIDType' %}
         {{arg.key}}_id={{arg.key}}_id,
         {% else %}
@@ -232,58 +210,64 @@ def update_{{args.singular_service_name}}(
         {% endif %}
         {% endfor %}
         {% endif %}
-        {% endfor %}
-        {% endif %}
-        {{args.singular_service_name}}_id={{args.singular_service_name}}_id
+        {{args.singular_service_name}}_id={{args.singular_service_name}}_id,
     )
 {% endif %}
 {% if 'DELETE' in args.methods %}
 
 
-{% if args.method_args %}
+{% if args.method_args and args.method_args.get('DELETE') %}
 def delete_{{args.plural_service_name}}(
-    {% for method_args in args.method_args %}
-    {% if method_args.method == 'DELETE' %}
-    {% for arg in method_args.args %}
+    {% for arg in args.method_args.get('DELETE') %}
     {% if arg.type == 'UUIDType' %}
     {{arg.key}}_id: {{arg.type}},
     {% else %}
     {{arg.key}}: {{arg.type}},
     {% endif %}
     {% endfor %}
-    {% endif %}
-    {% endfor %}
-) -> list:
+) -> Optional[list]:
 {% else %}
 def delete_{{args.plural_service_name}}(
-    param_to_delete_by: str = 'placeholder', # update this
-) -> list:
+    param_to_delete_by: str = 'placeholder' # update this
+) -> Optional[list]:
 {% endif %}
-    """Deletes {{args.plural_param_type}} from the {{args.table_type}}_{{args.plural_service_name}} table using the given params.
+    """Deletes {{args.plural_param_type}} from the table using the given params.
 
     Args:
-        {% if args.method_args %}
-        {% for method_args in args.method_args %}
-        {% if method_args.method == 'DELETE' %}
-        {% for arg in method_args.args %}
+        {% if args.method_args and args.method_args.get('DELETE') %}
+        {% for arg in args.method_args.get('DELETE') %}
         {% if arg.type == 'UUIDType' %}
-        {{arg.key}}_id: The foreign key to the {{arg.key}} table associated with the new {{args.singular_param_type}}.
+        {{arg.key}}_id: The foreign key to the {{arg.key}} table.
         {% else %}
         {{arg.key}}: The {{arg.key}} to delete {{args.plural_param_type}} by.
-        {% endif %}
-        {% endfor %}
         {% endif %}
         {% endfor %}
         {% endif %}
 
     Returns:
         A list of {{args.plural_param_type}} deleted using the given params.
+
+    Raises:
+        InvalidParamException: If any of the given params are None.
     """
+    validate_params(
+        func='delete_{{args.plural_service_name}}',
+        params={
+            {% if args.method_args and args.method_args.get('DELETE') %}
+            {% for arg in args.method_args.get('DELETE') %}
+            {% if arg.type == 'UUIDType' %}
+            '{{arg.key}}_id': {{arg.key}}_id,
+            {% else %}
+            '{{arg.key}}': {{arg.key}},
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+        },
+    )
+
     return data.delete_{{args.plural_service_name}}(
-        {% if args.method_args %}
-        {% for method_args in args.method_args %}
-        {% if method_args.method == 'DELETE' %}
-        {% for arg in method_args.args %}
+        {% if args.method_args and args.method_args.get('DELETE') %}
+        {% for arg in args.method_args.get('DELETE') %}
         {% if arg.type == 'UUIDType' %}
         {{arg.key}}_id={{arg.key}}_id,
         {% else %}
@@ -291,24 +275,22 @@ def delete_{{args.plural_service_name}}(
         {% endif %}
         {% endfor %}
         {% endif %}
-        {% endfor %}
-        {% endif %}
-    ) if param_to_delete_by else []
+    )
 {% endif %}
 {% if 'DELETE_BY_ID' in args.methods %}
 
 
 def delete_{{args.singular_service_name}}_by_id({{args.singular_service_name}}_id: UUIDType) -> Optional[dict]:
-    """Deletes a {{args.singular_param_type}} from the {{args.table_type}}_{{args.plural_service_name}} table by the given id.
+    """Deletes a {{args.singular_param_type}} from the table by the given id.
 
     Args:
-        {{args.singular_service_name}}_id: The primary key of a {{args.singular_param_type}} in the {{args.table_type}}_{{args.plural_service_name}} table.
+        {{args.singular_service_name}}_id: The primary key of a {{args.singular_param_type}}.
 
     Returns:
         A deleted {{args.singular_param_type}} with the given id else None.
 
     Raises:
-        ValidationException: If the given {{args.singular_service_name}}_id is None.
+        InvalidParamException: If the given {{args.singular_service_name}}_id is None.
     """
     validate_params(
         func='delete_{{args.singular_service_name}}_by_id',

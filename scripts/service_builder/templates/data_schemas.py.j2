@@ -3,8 +3,8 @@ from marshmallow import fields, Schema, EXCLUDE
 {% if args.table_type == 'fct' %}
 
 {% if args.foreign_dims and args.table_type == 'fct' %}
-{% for foreign_dim in args.foreign_dims %}
-from restful_services.{{foreign_dim.plural}}.model_layer.data_schemas import {{foreign_dim.schema}}Schema
+{% for _, foreign_dim in args.foreign_dims.items() %}
+from restful_services.{{foreign_dim.plural}}.model_layer.data_schemas import {{foreign_dim.singular_schema}}Schema
 {% endfor %}
 {% else %}
 # import dimension schemas here
@@ -16,13 +16,13 @@ class {{args.singular_schema_name}}Schema(Schema):
     """Base data schema for a {{args.singular_param_type}}."""
     id = fields.UUID(required=True)
     {% if args.dimensions %}
-    {% for dimension in args.dimensions %}
+    {% for _, dimension in args.dimensions.items() %}
     {{dimension.key}} = fields.{{dimension.sqlalchemy_type}}(required=True)
     {% endfor %}
     {% endif %}
     {% if args.foreign_dims and args.table_type == 'fct' %}
-    {% for foreign_dim in args.foreign_dims %}
-    {{foreign_dim.singular}}_id = fields.UUID({{foreign_dim.schema}}Schema, attribute="dim_{{foreign_dim.singular}}_id")
+    {% for _, foreign_dim in args.foreign_dims.items() %}
+    {{foreign_dim.singular}}_id = fields.UUID(required=True, attribute="dim_{{foreign_dim.singular}}_id")
     {% endfor %}
     {% endif %}
 
@@ -37,13 +37,13 @@ class Populated{{args.singular_schema_name}}Schema(Schema):
     """Populated data schema for a {{args.singular_param_type}}."""
     id = fields.UUID(required=True)
     {% if args.dimensions %}
-    {% for dimension in args.dimensions %}
+    {% for _, dimension in args.dimensions.items() %}
     {{dimension.key}} = fields.{{dimension.sqlalchemy_type}}(required=True)
     {% endfor %}
     {% endif %}
     {% if args.foreign_dims and args.table_type == 'fct' %}
-    {% for foreign_dim in args.foreign_dims %}
-    {{foreign_dim.singular}} = fields.Nested({{foreign_dim.schema}}Schema, attribute="dim_{{foreign_dim.singular}}")
+    {% for _, foreign_dim in args.foreign_dims.items() %}
+    {{foreign_dim.singular}} = fields.Nested({{foreign_dim.singular_schema}}Schema, attribute="dim_{{foreign_dim.singular}}")
     {% endfor %}
     {% endif %}
 

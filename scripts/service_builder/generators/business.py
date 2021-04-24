@@ -31,16 +31,59 @@ def determine_file_imports(args: argparse.Namespace) -> list:
     """
     imports = []
 
-    if any(method in ['POST', 'GET_BY_ID', 'PATCH', 'DELETE_BY_ID'] for method in args.methods):
+    should_import_optional = determine_should_import_optional(args)
+    if should_import_optional:
         imports.append('from typing import Optional')
         imports.append('')
 
-    imports.append(f'from restful_services.{{args.plural_service_name}}.data_layer import data')
+    imports.append(
+        f'from restful_services.{args.plural_service_name}.data_layer import data'
+    )
 
-    if any(method in ['GET_BY_ID', 'PATCH', 'DELETE_BY_ID'] for method in args.methods):
+    should_import_uuidtype = determine_should_import_uuidtype(args)
+    if should_import_uuidtype:
         imports.append('from utils.types import UUIDType')
 
     if any(method in ['POST', 'GET_BY_ID', 'PATCH', 'DELETE_BY_ID'] for method in args.methods):
         imports.append('from utils.validation import validate_params')
 
     return imports
+
+
+def determine_should_import_optional(args: argparse.Namespace) -> bool:
+    """Determines whether or not a file needs the typings Optional library.
+
+    Args:
+        args: An object containing attributes parsed out of the command line.
+
+    Returns:
+        A bool representing whether or not a file should import the typings Optional library.
+    """
+    optional_methods = ['POST', 'GET_BY_ID', 'PATCH', 'DELETE', 'DELETE_BY_ID']
+    if any(method in optional_methods for method in args.methods):
+        return True
+    if args.method_args and args.method_args.get('GET'):
+        return True
+    return False
+
+
+def determine_should_import_uuidtype(args: argparse.Namespace) -> bool:
+    """Determines whether or not a file needs the UUIDType.
+
+    Args:
+        args: An object containing attributes parsed out of the command line.
+
+    Returns:
+        A bool representing whether or not a file should import the UUIDType.
+    """
+    if any(method in ['POST', 'GET_BY_ID', 'PATCH', 'DELETE_BY_ID'] for method in args.methods):
+        return True
+
+    if args.method_args and args.method_args.get('GET'):
+        if any(arg.get('type') == 'UUIDType' for arg in args.method_args.get('GET')):
+            return True
+    if args.method_args and args.method_args.get('DELETE'):
+        if any(arg.get('type') == 'UUIDType' for arg in args.method_args.get('DELETE')):
+            return True
+
+    return False
