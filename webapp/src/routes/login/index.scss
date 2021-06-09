@@ -1,11 +1,13 @@
+@use 'src/global';
+
 #login-page {
-  background: url(../../assets/images/login_background.jpg) no-repeat center center fixed;
+  background: url(global.$image-assets-path + 'login_background.jpg') no-repeat center center fixed;
   background-size: cover;
   height: 100%;
-}
 
-.inline-span {
-  display: inline-block;
-  line-height: 0;
-  margin: 0;
+  .inline-span {
+    display: inline-block;
+    line-height: 0;
+    margin: 0;
+  }
 }

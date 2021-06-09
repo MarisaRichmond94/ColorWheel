@@ -16,6 +16,7 @@ const BookModal = props => {
   };
 
   const [headerText, setHeaderText] = useState(props.selectedBook?.name || 'Untitled Book');
+  console.log({ setHeaderText }); // TODO - get rid of this whenever you implement the feature
 
   const resetStateAndCloseModal = () => {
     props.setIsModalShowing(false);

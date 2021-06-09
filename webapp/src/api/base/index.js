@@ -3,15 +3,23 @@ import 'isomorphic-fetch';
 import { update } from '~/reducers/user';
 import { keysToCamel, keysToSnake } from '~/utils/convertCasing';
 import generateUUID from '~/utils/generateUUID';
-import store from '~/utils/store';
 
 class BaseApi {
   constructor(route, isAuthenticatedRoute = true) {
-    this.accessToken = undefined;
-    this.email = undefined;
     this.isAuthenticatedRoute = isAuthenticatedRoute;
     this.url = `${window?.CONFIG?.API_URL}/${route}`;
     this.useMock = window.location.search.includes('MOCK_BE');
+  }
+
+  static accessToken = undefined;
+  static email = undefined;
+
+  static setAccessToken = accessToken => {
+    BaseApi.accessToken = accessToken;
+  }
+
+  static setEmail = email => {
+    BaseApi.email = email;
   }
 
   async post(body) {
@@ -158,17 +166,12 @@ class BaseApi {
   }
 
   getHeaders = () => {
-    if (this.isAuthenticatedRoute && (!this.accessToken || !this.email)) {
-      this.accessToken = store?.getState()?.userState?.accessToken;
-      this.email = store?.getState()?.userState?.email;
-    }
-
     return this.isAuthenticatedRoute
       ? {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          email: this.email,
-          Authorization: `Bearer ${this.accessToken}`,
+          email: BaseApi.email,
+          Authorization: `Bearer ${BaseApi.accessToken}`,
         }
       : {
           Accept: 'application/json',
@@ -189,9 +192,9 @@ class BaseApi {
         const { authResults, data } = keysToCamel(res.data);
         window.dispatchReduxAction(update({ authResults }));
         return data;
+      } else {
+        return keysToCamel(res.data);
       }
-
-      return keysToCamel(res.data);
     }
   }
 };

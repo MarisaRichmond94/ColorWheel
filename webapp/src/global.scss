@@ -1,11 +1,18 @@
-body,
-#body-container {
+$dark-background-font-color: white;
+$image-assets-path: '../../assets/images/';
+
+%fill-container {
   height: 100vh;
   overflow: hidden auto;
   width: 100vw;
 }
 
+body {
+  @extend %fill-container;
+}
+
 #body-container {
+  @extend %fill-container;
   padding: 40px 0 35px 0;
 }
 

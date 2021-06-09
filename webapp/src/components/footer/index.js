@@ -6,7 +6,7 @@ import { Col, Row } from 'react-bootstrap';
 const Footer = () => (
   <Row id='main-footer'>
     <Col>
-      <p style={{ color: 'white', margin: '0', padding: '5px' }}>
+      <p id='main-footer-text'>
         Created By Marisa Richmond
       </p>
     </Col>
