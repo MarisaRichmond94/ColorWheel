@@ -8,7 +8,7 @@ import marshmallow
 from restless_services.authentication.business_layer.business import refresh_authorization
 from utils.authorizer import authorizer
 from utils.request import validate_request
-from utils.response import Response
+from utils.response import generate_fail_response, generate_success_response, Response
 
 
 def api_handler(
@@ -18,7 +18,7 @@ def api_handler(
     *,
     api_key_required: bool = True,
     body_schema: marshmallow.Schema = None,
-    query_schema: marshmallow.Schema = None,
+    query_schema: marshmallow.Schema = None
 ) -> Response:
     """Generates API response using given variables."""
     def wrapped_api(func):
@@ -46,32 +46,14 @@ def api_handler(
                 data = func(*args, **kwargs)
             except Exception as api_handler_exception:
                 log.exception(api_handler_exception)
-                return Response(
-                    status_code=500,
-                    message='API Error',
-                    origin=api.current_request.headers.get('origin', ''),
-                )
+                return generate_fail_response(path, api.current_request.headers.get('origin', ''))
 
             if data is None:
                 log.error(f'{func.__name__} {methods[0]} request resulted in None response.')
-                return Response(
-                    status_code=500,
-                    message='API Error',
-                    origin=api.current_request.headers.get('origin', ''),
-                )
+                return generate_fail_response(path, api.current_request.headers.get('origin', ''))
 
             log.debug(f'{func.__name__} {methods[0]} request result: {data}.')
-            if api_key_required:
-                data = {
-                    'data': data,
-                    'auth_results': refresh_authorization(
-                        email=api.current_request.headers.get('email')
-                    ),
-                }
-            return Response(
-                data=data,
-                origin=api.current_request.headers.get('origin', ''),
-            )
+            return generate_success_response(api.current_request, data, api_key_required)
 
         return api_endpoint
 
