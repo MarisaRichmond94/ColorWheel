@@ -9,7 +9,7 @@ from settings.db import DB_STRING_MAX_LENGTH
 @DimUsers.dimension
 class FctGenres(Base):
     """SQLAlchemy object for the fct_genres table."""
-    __tablename__ = "fct_genres"
+    __tablename__ = 'fct_genres'
     name = Column(String(DB_STRING_MAX_LENGTH), unique=True, nullable=False)
     display_name = Column(String(DB_STRING_MAX_LENGTH), unique=True, nullable=False)
     bucket_name = Column(String(DB_STRING_MAX_LENGTH), nullable=True)

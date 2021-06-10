@@ -35,8 +35,8 @@ def authorize_user(
         InvalidParamException - If email or password is None.
     """
     validate_params(
-        func="authorize_user",
-        params={"email": email, "password": password}
+        func='authorize_user',
+        params={'email': email, 'password': password}
     )
 
     user = (
@@ -45,8 +45,8 @@ def authorize_user(
     )
     if not user:
         log.debug(
-            f'Failed to GET user by email "{email}" from Users Service.'
-            if not name else f'Failed to POST new user with name "{name}" and email "{email}".'
+            f'Failed to GET user by email '{email}' from Users Service.'
+            if not name else f'Failed to POST new user with name '{name}' and email '{email}'.'
         )
         return None
 
@@ -56,8 +56,8 @@ def authorize_user(
     )
     if not is_user_validated:
         log.debug(
-            f'Failed to validate given plain text password "{password}" with the entity '
-            f'associated with the given email "{email}".'
+            f'Failed to validate given plain text password '{password}' with the entity '
+            f'associated with the given email '{email}'.'
         )
         return None
 
@@ -83,13 +83,13 @@ def refresh_authorization(email: str) -> Optional[dict]:
         InvalidParamException - If the given email is None.
     """
     validate_params(
-        func="refresh_authorization",
-        params={"email": email},
+        func='refresh_authorization',
+        params={'email': email},
     )
 
     user = get_user_by_email(email=email)
     if not user:
-        log.debug(f'Failed to GET user by email "{email}" from Users Service.')
+        log.debug(f'Failed to GET user by email '{email}' from Users Service.')
         return None
 
     access_token, auth_results = encode_json_web_token(user=user)
@@ -119,22 +119,22 @@ def authenticate_user(
         InvalidParamException - If any of the given params is None.
     """
     validate_params(
-        func="authenticate_user",
+        func='authenticate_user',
         params={
-            "email": email,
-            "password": password,
-            "json_web_token": json_web_token,
+            'email': email,
+            'password': password,
+            'json_web_token': json_web_token,
         }
     )
 
     user = get_user_by_email(email=email)
     if not user:
-        log.debug(f'Failed to GET user by email "{email}" from Users Service.')
+        log.debug(f'Failed to GET user by email '{email}' from Users Service.')
         return None
     if not password == user.get('password'):
         log.debug(
-            f'Failed to validate given plain text password "{password}" with the entity '
-            f'associated with the given email "{email}".'
+            f'Failed to validate given plain text password '{password}' with the entity '
+            f'associated with the given email '{email}'.'
         )
         return None
 

@@ -8,7 +8,7 @@ from sqlalchemy import create_engine
 
 parent_dir = os.path.abspath(os.path.join(os.getcwd()))
 sys.path.append(parent_dir)
-sys.path.insert(0, os.path.abspath("chalicelib"))
+sys.path.insert(0, os.path.abspath('chalicelib'))
 
 from db_models.base_model import Base, BaseModel
 from db_models.dim_book_statuses import DimBookStatuses
@@ -32,7 +32,7 @@ def run_migrations_offline():
         url=db.DATABASE_URI,
         target_metadata=target_metadata,
         literal_binds=True,
-        dialect_opts={"paramstyle": "named"},
+        dialect_opts={'paramstyle': 'named'},
     )
     with context.begin_transaction():
         context.run_migrations()
@@ -44,7 +44,7 @@ def run_migrations_online():
         context.configure(
             connection=connection,
             target_metadata=target_metadata,
-            version_table="alembic_version",
+            version_table='alembic_version',
         )
         with context.begin_transaction():
             context.run_migrations()

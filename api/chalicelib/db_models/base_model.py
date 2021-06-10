@@ -10,5 +10,5 @@ BaseModel = declarative_base()
 class Base:
     """The base declarative model for a database table model."""
     id = Column(
-        UUID(as_uuid=True), primary_key=True, server_default=text("uuid_generate_v4()")
+        UUID(as_uuid=True), primary_key=True, server_default=text('uuid_generate_v4()')
     )

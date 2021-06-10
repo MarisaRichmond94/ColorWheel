@@ -23,8 +23,8 @@ def create_session(
         InvalidParamException - If the user_id or token is None.
     """
     validate_params(
-        func="create_session",
-        params={"user_id": user_id, "token": token},
+        func='create_session',
+        params={'user_id': user_id, 'token': token},
     )
     return data.create_session(user_id=user_id, token=token)
 
@@ -42,8 +42,8 @@ def get_session_by_token(token: str) -> Optional[dict]:
         InvalidParamException - If the token is None.
     """
     validate_params(
-        func="get_session_by_token",
-        params={"token": token},
+        func='get_session_by_token',
+        params={'token': token},
     )
     return data.get_session_by_token(token=token)
 
@@ -61,7 +61,7 @@ def get_session_by_user(user_id: UUIDType) -> Optional[dict]:
         InvalidParamException - If the user_id is None.
     """
     validate_params(
-        func="get_session_by_user",
-        params={"user_id": user_id},
+        func='get_session_by_user',
+        params={'user_id': user_id},
     )
     return data.get_session_by_user(user_id=user_id)

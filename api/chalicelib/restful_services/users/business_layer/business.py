@@ -25,11 +25,11 @@ def create_user(
         InvalidParamException - if any of the given params are None.
     """
     validate_params(
-        func="create_user",
+        func='create_user',
         params={
-            "name": name,
-            "email": email,
-            "password": password
+            'name': name,
+            'email': email,
+            'password': password
         },
     )
     hashed_password = generate_hashed_password(password=password)
@@ -53,7 +53,7 @@ def get_user_by_email(email: str) -> Optional[dict]:
         InvalidParamException - if email is None.
     """
     validate_params(
-        func="get_user_by_email",
-        params={"email": email},
+        func='get_user_by_email',
+        params={'email': email},
     )
     return data.get_user_by_email(email=email)

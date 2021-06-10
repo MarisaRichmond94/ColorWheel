@@ -9,8 +9,8 @@ api = Blueprint(__name__)
 
 @api_handler(
     api=api,
-    path="/book-statuses",
-    methods=["GET"],
+    path='/book-statuses',
+    method='GET',
 )
 def get_book_statuses() -> list:
     """Gets book statuses from the dim_book_statuses table.

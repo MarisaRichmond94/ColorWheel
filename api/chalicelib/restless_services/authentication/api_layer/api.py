@@ -16,8 +16,8 @@ api = Blueprint(__name__)
 
 @api_handler(
     api=api,
-    path="/authentication",
-    methods=["POST"],
+    path='/authentication',
+    method='POST',
     api_key_required=False,
     body_schema=PostAuthenticationBodySchema,
 )
@@ -28,16 +28,16 @@ def authorize_user() -> Optional[dict]:
         A dict containing an access token and auth results else None.
     """
     return business.authorize_user(
-        email=api.handled_request.body.get("email"),
-        password=api.handled_request.body.get("password"),
-        name=api.handled_request.body.get("name"),
+        email=api.handled_request.body.get('email'),
+        password=api.handled_request.body.get('password'),
+        name=api.handled_request.body.get('name'),
     )
 
 
 @api_handler(
     api=api,
-    path="/authentication",
-    methods=["GET"],
+    path='/authentication',
+    method='GET',
     api_key_required=False,
     query_schema=GetAuthenticationQuerySchema,
 )
@@ -48,5 +48,5 @@ def refresh_authorization() -> Optional[dict]:
         A dict containing an access token and auth results else None.
     """
     return business.refresh_authorization(
-        email=api.handled_request.query.get("email"),
+        email=api.handled_request.query.get('email'),
     )

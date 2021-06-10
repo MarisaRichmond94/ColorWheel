@@ -14,7 +14,7 @@ from utils.response import Response
 def api_handler(
     api: Blueprint,
     path: str,
-    methods: list,
+    method: str,
     *,
     api_key_required: bool = True,
     body_schema: marshmallow.Schema = None,
@@ -24,13 +24,13 @@ def api_handler(
     def wrapped_api(func):
         @api.route(
             path=path,
-            methods=methods,
+            methods=list(method),
             api_key_required=api_key_required,
             authorizer=authorizer if api_key_required else None
         )
         @functools.wraps(func)
         def api_endpoint(*args, **kwargs):
-            log.debug(f'{func.__name__} received {methods[0]} request.')
+            log.debug(f'{func.__name__} received {method} request.')
             request, error_response = validate_request(
                 current_request=api.current_request,
                 body_schema=body_schema,
@@ -53,14 +53,14 @@ def api_handler(
                 )
 
             if data is None:
-                log.error(f'{func.__name__} {methods[0]} request resulted in None response.')
+                log.error(f'{func.__name__} {method} request resulted in None response.')
                 return Response(
                     status_code=500,
                     message='API Error',
                     origin=api.current_request.headers.get('origin', ''),
                 )
 
-            log.debug(f'{func.__name__} {methods[0]} request result: {data}.')
+            log.debug(f'{func.__name__} {method} request result: {data}.')
             if api_key_required:
                 data = {
                     'data': data,

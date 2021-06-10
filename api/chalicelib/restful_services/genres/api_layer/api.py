@@ -17,8 +17,8 @@ api = Blueprint(__name__)
 
 @api_handler(
     api=api,
-    path="/genres",
-    methods=["POST"],
+    path='/genres',
+    method='POST',
     body_schema=CreateGenreBodySchema,
 )
 def create_genre() -> Optional[dict]:
@@ -34,8 +34,8 @@ def create_genre() -> Optional[dict]:
 
 @api_handler(
     api=api,
-    path="/genres",
-    methods=["GET"],
+    path='/genres',
+    method='GET',
     query_schema=GetGenresQuerySchema,
 )
 def get_genres() -> list:
@@ -51,8 +51,8 @@ def get_genres() -> list:
 
 @api_handler(
     api=api,
-    path="/genres/{genre_id}",
-    methods=["PATCH"],
+    path='/genres/{genre_id}',
+    method='PATCH',
     body_schema=UpdateGenreBodySchema,
 )
 def update_genre(genre_id: str) -> Optional[dict]:
@@ -72,8 +72,8 @@ def update_genre(genre_id: str) -> Optional[dict]:
 
 @api_handler(
     api=api,
-    path="/genres",
-    methods=["DELETE"],
+    path='/genres',
+    method='DELETE',
     query_schema=DeleteGenresQuerySchema,
 )
 def delete_genres() -> list:
@@ -89,8 +89,8 @@ def delete_genres() -> list:
 
 @api_handler(
     api=api,
-    path="/genres/{genre_id}",
-    methods=["DELETE"],
+    path='/genres/{genre_id}',
+    method='DELETE',
 )
 def delete_genre_by_id(genre_id: str) -> Optional[dict]:
     """Deletes a genre from the fct_genres table by the given id.

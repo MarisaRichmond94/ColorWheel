@@ -15,13 +15,13 @@ def validate_params(func: str, params: dict) -> None:
         InvalidParamException - If any of the given params are None.
     """
     if not func:
-        raise ValueError('Missing required parameter "func".')
+        raise ValueError('Missing required parameter 'func'.')
     if not params:
-        raise ValueError('Missing required parameter "params".')
+        raise ValueError('Missing required parameter 'params'.')
 
     if not isinstance(params, dict):
         raise TypeError(
-            f"Params expected a dictionary but recieved {type(params)}.")
+            f'Params expected a dictionary but recieved {type(params)}.')
 
     missing_params = [key for key, value in params.items() if value is None]
     if missing_params:

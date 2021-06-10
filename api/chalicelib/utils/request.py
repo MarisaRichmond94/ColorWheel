@@ -13,7 +13,7 @@ class Request:
 
 
 def __str__(self) -> str:
-    return f"Request(body={self.body}, query='{self.query}', headers={self.headers})"
+    return f'Request(body={self.body}, query='{self.query}', headers={self.headers})'
 
 
 def validate_request(
