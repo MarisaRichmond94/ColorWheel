@@ -2,7 +2,7 @@
 import argparse
 import os
 
-from helpers import generate_init_file
+from utils.common import generate_init_file
 
 
 def generate_api_layer(template, args: argparse.Namespace) -> None:
@@ -38,10 +38,7 @@ def determine_api_schema_import_funcs(args: argparse.Namespace) -> str:
     api_schema_import_funcs = []
     valid_api_schema_methods = args.valid_api_schema_methods.split(' ')
     for method in args.methods:
-        if method == 'GET':
-            if args.method_args and args.method_args.get('GET'):
-                api_schema_import_funcs.append(f'{api_schema_import_dict[method]},')
-        elif method in valid_api_schema_methods:
+        if method in valid_api_schema_methods:
             api_schema_import_funcs.append(f'{api_schema_import_dict[method]},')
     if len(api_schema_import_funcs) > 0:
         api_schema_import_funcs.sort()
@@ -68,7 +65,7 @@ def determine_file_imports(args: argparse.Namespace) -> list:
     imports = imports + [
         'from chalice import Blueprint',
         '',
-        f'from restful_services.{args.plural_service_name}.business_layer import business',
+        f'from restful_services.{args.plural_service_name}.business_layer import business'
     ]
 
     api_schema_imports = determine_api_schema_import_funcs(args)
@@ -86,5 +83,20 @@ def determine_file_imports(args: argparse.Namespace) -> list:
                 imports.append(f'    {api_schema_import}')
             imports.append(')')
 
+    if args.method_permissions:
+        all_permissions = [
+            required_permissions
+            for method_permissions in args.method_permissions.values()
+            for required_permissions in method_permissions.get("required_permissions_upper")
+        ]
+        unique_sorted_permissions = sorted(list(set(all_permissions)))
+        permissions_string = ''
+        for permission in unique_sorted_permissions:
+            permissions_string += f' {permission},'
+        imports.append(
+            f'from settings.permissions import {permissions_string.rstrip(permissions_string[-1])}'
+        )
+
     imports.append('from utils.api_handler import api_handler')
+
     return imports

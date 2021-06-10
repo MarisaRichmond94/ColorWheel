@@ -2,7 +2,7 @@
 import argparse
 import os
 
-from helpers import generate_init_file
+from utils.common import generate_init_file
 
 
 def generate_data_layer(template, args: argparse.Namespace) -> None:

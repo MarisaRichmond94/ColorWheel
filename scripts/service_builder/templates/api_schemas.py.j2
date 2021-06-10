@@ -7,7 +7,7 @@
 
 class Create{{args.singular_schema_name}}BodySchema(Schema):
     """Schema for creating a new {{args.singular_service_name}}."""
-    id = fields.String(required=False)
+    id = fields.UUID(required=False)
     {% if args.dimensions %}
     {% for _, dimension in args.dimensions.items() %}
     {{dimension.key}} = fields.{{dimension.sqlalchemy_type}}(required={{dimension.is_required}})
@@ -15,7 +15,7 @@ class Create{{args.singular_schema_name}}BodySchema(Schema):
     {% endif %}
     {% if args.foreign_dims and args.table_type == 'fct' %}
     {% for _, foreign_dim in args.foreign_dims.items() %}
-    {{foreign_dim.singular}}_id = fields.String(required=True)
+    {{foreign_dim.singular}}_id = fields.UUID(required=True)
     {% endfor %}
     {% endif %}
 {% endif %}
@@ -27,11 +27,16 @@ class Get{{args.plural_schema_name}}QuerySchema(Schema):
     """Schema for getting {{args.plural_service_name}}."""
     {% for arg in args.method_args.get('GET') %}
     {% if arg.sqlalchemy_type == 'UUID' %}
-    {{arg.key}}_id = fields.{{arg.sqlalchemy_type}}(required=False)
+    {{arg.key}}_id = fields.UUID(required=False)
     {% else %}
     {{arg.key}} = fields.{{arg.sqlalchemy_type}}(required=False)
     {% endif %}
     {% endfor %}
+{% else %}
+
+
+class Get{{args.plural_schema_name}}QuerySchema(Schema):
+    """Schema for getting {{args.plural_service_name}}."""
 {% endif %}
 {% endif %}
 {% if 'PATCH' in args.methods %}
@@ -42,7 +47,7 @@ class Update{{args.singular_schema_name}}BodySchema(Schema):
     {% if args.method_args and args.method_args.get('PATCH') %}
     {% for arg in args.method_args.get('PATCH') %}
     {% if arg.sqlalchemy_type == 'UUID' %}
-    {{arg.key}}_id = fields.{{arg.sqlalchemy_type}}(required=True)
+    {{arg.key}}_id = fields.UUID(required=True)
     {% else %}
     {{arg.key}} = fields.{{arg.sqlalchemy_type}}(required=True)
     {% endif %}
@@ -57,7 +62,7 @@ class Delete{{args.plural_schema_name}}QuerySchema(Schema):
     {% if args.method_args and args.method_args.get('DELETE') %}
     {% for arg in args.method_args.get('DELETE') %}
     {% if arg.sqlalchemy_type == 'UUID' %}
-    {{arg.key}}_id = fields.{{arg.sqlalchemy_type}}(required=True)
+    {{arg.key}}_id = fields.UUID(required=True)
     {% else %}
     {{arg.key}} = fields.{{arg.sqlalchemy_type}}(required=True)
     {% endif %}

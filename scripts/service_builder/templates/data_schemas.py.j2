@@ -1,13 +1,11 @@
 """Data schemas for the {{args.plural_service_name}} service."""
 from marshmallow import fields, Schema, EXCLUDE
 {% if args.table_type == 'fct' %}
-
 {% if args.foreign_dims and args.table_type == 'fct' %}
 {% for _, foreign_dim in args.foreign_dims.items() %}
 from restful_services.{{foreign_dim.plural}}.model_layer.data_schemas import {{foreign_dim.singular_schema}}Schema
 {% endfor %}
 {% else %}
-# import dimension schemas here
 {% endif %}
 {% endif %}
 
@@ -22,7 +20,7 @@ class {{args.singular_schema_name}}Schema(Schema):
     {% endif %}
     {% if args.foreign_dims and args.table_type == 'fct' %}
     {% for _, foreign_dim in args.foreign_dims.items() %}
-    {{foreign_dim.singular}}_id = fields.UUID(required=True, attribute="dim_{{foreign_dim.singular}}_id")
+    {{foreign_dim.singular}}_id = fields.UUID(required=True, attribute='{{foreign_dim.table_type}}_{{foreign_dim.singular}}_id')
     {% endfor %}
     {% endif %}
 
@@ -43,7 +41,7 @@ class Populated{{args.singular_schema_name}}Schema(Schema):
     {% endif %}
     {% if args.foreign_dims and args.table_type == 'fct' %}
     {% for _, foreign_dim in args.foreign_dims.items() %}
-    {{foreign_dim.singular}} = fields.Nested({{foreign_dim.singular_schema}}Schema, attribute="dim_{{foreign_dim.singular}}")
+    {{foreign_dim.singular}} = fields.Nested({{foreign_dim.singular_schema}}Schema, attribute='{{foreign_dim.table_type}}_{{foreign_dim.singular}}')
     {% endfor %}
     {% endif %}
 

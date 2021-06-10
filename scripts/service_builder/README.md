@@ -1,5 +1,5 @@
 # Service Builder
-**The service builder is a templating script designed to generate 80-95% of the code needed to create a generic RESTful Python service using our team's current standards.**
+**The service builder is a templating script designed to generate 80-95% of the code needed to create a generic RESTful Python service.**
 
 ## How To Run It
 
@@ -7,30 +7,33 @@
 
 2) Run the following command
 
-`python {path/to/script/folder/main.py} --service_name_plural {service_name_plural} --service_name_singular {service_name_singular} --table_type {table_type} --methods [...methods]`
+`python {path/to/script/folder/main.py} -p {service_name_plural} -s {service_name_singular} -t {table_type} -m [...methods]`
 
-Example (starting from the /api folder): `python devops/service_builder/main.py --service_name_plural potatoes --service_name_singular potato --table_type dim --methods POST GET_BY_ID DELETE_BY_ID`
+Example (starting from the /api folder): `python devops/service_builder/main.py -p potatoes -s potato -t dim -m POST GET_BY_ID DELETE_BY_ID`
 
-3) A new service by the `service_name_plural` will be generated in the `/restful_services` folder and a new table database model will be generated in the `/db_models` folder
+3) A new service by the `plural-service-name` will be generated in the `/restful_services` folder and a new table database model will be generated in the `/db_models` folder
 
-## Available Inputs
+## Required Inputs
 
-Available `methods` include POST, GET, GET_BY_ID, PATCH, DELETE, and DELETE_BY_ID (must be in all caps); however, you can use `--all` to generate all method types
-
-Available `table_types` include dim and fct
+| <div style="min-width:190px">Flag</div> | Description | Options |
+| --- | --- | --- |
+| `-p`,<br>`--plural-service-name` | Plural name of the service |
+| `-s`,<br>`--singular-service-name` | Singular name of the service |
+| `-t`,<br>`--table-type` | Type of table | dim, fct |
+| `-m`,<br>`--methods`,<br>`--all` | API methods to create. Options only required for `--methods` | POST, GET, GET_BY_ID, PATCH, DELETE, DELETE_BY_ID |
 
 ## Optional Inputs
 
-There are 3 more optional inputs:
+| <div style="min-width:130px">Flag</div> | Description |
+| --- | --- |
+| `--foreign-dims` | (fct table only, otherwise ignored)<br>The foreign dimensions that should be associated with the table/service as comma separated strings giving the plural/singular service name |
+| `--dimensions` | The dimensions that should be associated with the table/service, listing the key, sqlalchemy type, generic type, whether or not the dimension is required, and whether or not the dimension must be unique as a comma separated string |
+| `--method-args` | (only applicable to `GET`, `PATCH` and `DELETE` methods)<br>The args required for each method |
 
-1) `--foreign-dims` - (fct table only, otherwise ignored) The foreign dimensions that should be associated with the table/service as comma separated strings giving the plura/singular service name
+Examples
 
-example: `--foreign-dims content_items,content_item tags,tag`
+ `--foreign-dims content_items,content_item,dim tags,tag,dim`
 
-2) `--dimensions` - The dimensions that should be associated with the table/service, listing the key, sqlalchemy type, generic type, whether or not the dimension is required, and whether or not the dimension must be unique as a comma separated string
+`--dimensions name,String,str,True,True order_index,Integer,int,False,False`
 
-example: `--dimensions name,String,str,True,True order_index,Integer,int,False,False`
-
-3) `--method-args` - The args required for each method (only applicable to `Get`, `PATCH` and `DELETE` methods)
-
-example: `--method-args get,name patch,name,order_index delete,group`
+`--method-args get,name patch,name,order_index delete,group`

@@ -1,4 +1,4 @@
-"""Business layer for the {{args.plural_service_name}} service."""
+"""Data layer for the {{args.plural_service_name}} service."""
 {% for file_import in imports %}
 {{file_import}}
 {% endfor %}
@@ -20,14 +20,14 @@ def create_{{args.singular_service_name}}(
     {% endif %}
     {% endfor %}
     {% endif %}
-    {{args.singular_service_name}}_id: Optional[UUIDType] = None,
+    {{args.singular_service_name}}_id: Optional[UUIDType] = None
 ) -> Optional[dict]:
     """Creates a new {{args.singular_param_type}}.
 
     Args:
         {% if args.table_type == 'fct' and args.foreign_dims %}
         {% for _, foreign_dim in args.foreign_dims.items() %}
-        {{foreign_dim.singular}}_id: The foreign key to the {{foreign_dim.plural}} table.
+        {{foreign_dim.singular}}_id: The FK to the {{foreign_dim.plural}} table.
         {% endfor %}
         {% endif %}
         {% if args.dimensions %}
@@ -35,7 +35,7 @@ def create_{{args.singular_service_name}}(
         {{dimension.key}}: The {{dimension.key}} to associate with the new {{args.singular_param_type}}.
         {% endfor %}
         {% endif %}
-        {{args.singular_service_name}}_id: The primary key to assign to the new {{args.singular_param_type}}.
+        {{args.singular_service_name}}_id: The PK to assign to the new {{args.singular_param_type}}.
 
     Returns:
         A newly created {{args.singular_param_type}} else None.
@@ -44,7 +44,7 @@ def create_{{args.singular_service_name}}(
         new_{{args.singular_service_name}} = {{args.table_type.capitalize()}}{{args.plural_schema_name}}(
             {% if args.table_type == 'fct' and args.foreign_dims %}
             {% for _, foreign_dim in args.foreign_dims.items() %}
-            dim_{{foreign_dim.singular}}_id={{foreign_dim.singular}}_id,
+            {{foreign_dim.table_type}}_{{foreign_dim.singular}}_id={{foreign_dim.singular}}_id,
             {% endfor %}
             {% endif %}
             {% if args.dimensions %}
@@ -52,7 +52,7 @@ def create_{{args.singular_service_name}}(
             {{dimension.key}}={{dimension.key}},
             {% endfor %}
             {% endif %}
-            id={{args.singular_service_name}}_id,
+            id={{args.singular_service_name}}_id
         )
 
         if new_{{args.singular_service_name}}:
@@ -91,7 +91,7 @@ def get_{{args.plural_service_name}}() -> list:
 
 {% if arg.type == 'UUIDType' %}
 def get_{{args.plural_service_name}}_by_{{arg.key}}_id({{arg.key}}_id: UUIDType) -> list:
-    """Gets {{args.plural_param_type}} from the {{args.table_type}}_{{args.plural_service_name}} table by a given {{arg.key}}.
+    """Gets {{args.plural_param_type}} from the table by a given {{arg.key}}.
 
     Args:
         {{arg.key}}_id: The {{arg.key}}_id to filter {{args.plural_param_type}} by.
@@ -104,11 +104,11 @@ def get_{{args.plural_service_name}}_by_{{arg.key}}_id({{arg.key}}_id: UUIDType)
         {{args.plural_service_name}} = (
             session
                 .query({{args.table_type.capitalize()}}{{args.plural_schema_name}})
-                .filter_by(dim_{{arg.key}}_id={{arg.key}}_id)
+                .filter_by({{arg.table_type}}_{{arg.key}}_id={{arg.key}}_id)
                 .all()
         )
         {% else %}
-        {{args.plural_service_name}} = session.query({{args.table_type.capitalize()}}{{args.plural_schema_name}}).filter_by(dim_{{arg.key}}_id={{arg.key}}_id).all()
+        {{args.plural_service_name}} = session.query({{args.table_type.capitalize()}}{{args.plural_schema_name}}).filter_by({{arg.table_type}}_{{arg.key}}_id={{arg.key}}_id).all()
         {% endif %}
         {% if args.singular_service_name|length > 16  %}
         return (
@@ -124,7 +124,7 @@ def get_{{args.plural_service_name}}_by_{{arg.key}}_id({{arg.key}}_id: UUIDType)
         {% endif %}
 {% else %}
 def get_{{args.plural_service_name}}_by_{{arg.key}}({{arg.key}}: {{arg.type}}) -> list:
-    """Gets {{args.plural_param_type}} from the {{args.table_type}}_{{args.plural_service_name}} table by a given {{arg.key}}.
+    """Gets {{args.plural_param_type}} from the table by a given {{arg.key}}.
 
     Args:
         {{arg.key}}: The {{arg.key}} to filter {{args.plural_param_type}} by.
@@ -165,7 +165,7 @@ def get_{{args.singular_service_name}}_by_id({{args.singular_service_name}}_id: 
     """Gets a {{args.singular_param_type}} from the table by a given id.
 
     Args:
-        {{args.singular_service_name}}_id: The primary key of a {{args.singular_param_type}}.
+        {{args.singular_service_name}}_id: The PK of a {{args.singular_param_type}}.
 
     Returns:
         A {{args.singular_param_type}} from the table by a given id else None.
@@ -206,7 +206,7 @@ def update_{{args.singular_service_name}}(
     {{arg.key}}: {{arg.type}},
     {% endif %}
     {% endfor %}
-    {{args.singular_service_name}}_id: UUIDType,
+    {{args.singular_service_name}}_id: UUIDType
 ) -> Optional[dict]:
 {% else %}
 def update_{{args.singular_service_name}}(
@@ -220,13 +220,13 @@ def update_{{args.singular_service_name}}(
         {% if args.method_args and args.method_args.get('PATCH') %}
         {% for arg in args.method_args.get('PATCH') %}
         {% if arg.type == 'UUIDType' %}
-        {{arg.key}}_id: The foreign key to the {{arg.key}} table.
+        {{arg.key}}_id: The FK to the {{arg.key}} table.
         {% else %}
         {{arg.key}}: The {{arg.key}} to modify in the {{args.singular_param_type}} with the given id.
         {% endif %}
         {% endfor %}
         {% endif %}
-        {{args.singular_service_name}}_id: The primary key of a {{args.singular_param_type}}.
+        {{args.singular_service_name}}_id: The PK of a {{args.singular_param_type}}.
 
     Returns:
         An updated {{args.singular_param_type}} with the given id else None.
@@ -247,7 +247,7 @@ def update_{{args.singular_service_name}}(
             {% if args.method_args and args.method_args.get('PATCH') %}
             {% for arg in args.method_args.get('PATCH') %}
             {% if arg.type == 'UUIDType' %}
-            {{args.singular_service_name}}.dim_{{arg.key}}_id = {{arg.key}}_id
+            {{args.singular_service_name}}.{{arg.table_type}}_{{arg.key}}_id = {{arg.key}}_id
             {% else %}
             {{args.singular_service_name}}.{{arg.key}} = {{arg.key}}
             {% endif %}
@@ -283,7 +283,7 @@ def delete_{{args.plural_service_name}}(
         {% if args.method_args and args.method_args.get('DELETE') %}
         {% for arg in args.method_args.get('DELETE') %}
         {% if arg.type == 'UUIDType' %}
-        {{arg.key}}_id: The foreign key to the {{arg.key}} table.
+        {{arg.key}}_id: The FK to the {{arg.key}} table.
         {% else %}
         {{arg.key}}: The {{arg.key}} to delete {{args.plural_param_type}} by.
         {% endif %}
@@ -298,11 +298,11 @@ def delete_{{args.plural_service_name}}(
         {{args.plural_service_name}} = (
             session
                 .query({{args.table_type.capitalize()}}{{args.plural_schema_name}})
-                .filter_by({% if args.method_args and args.method_args.get('DELETE') %}{% for arg in args.method_args.get('DELETE') %}{% if arg.type == 'UUIDType' %}dim_{{arg.key}}_id={{arg.key}}_id,{% else %}{{arg.key}}={{arg.key}},{% endif %}{% endfor %}{% else %}# pass filters here{% endif %})
+                .filter_by({% if args.method_args and args.method_args.get('DELETE') %}{% for arg in args.method_args.get('DELETE') %}{% if arg.type == 'UUIDType' %}{{arg.table_type}}_{{arg.key}}_id={{arg.key}}_id,{% else %}{{arg.key}}={{arg.key}},{% endif %}{% endfor %}{% else %}# pass filters here{% endif %})
                 .all()
         )
         {% else %}
-        {{args.plural_service_name}} = session.query({{args.table_type.capitalize()}}{{args.plural_schema_name}}).filter_by({% if args.method_args and args.method_args.get('DELETE') %}{% for arg in args.method_args.get('DELETE') %}{% if arg.type == 'UUIDType' %}dim_{{arg.key}}_id={{arg.key}}_id,{% else %}{{arg.key}}={{arg.key}},{% endif %}{% endfor %}{% else %}# pass filters here{% endif %}).all()
+        {{args.plural_service_name}} = session.query({{args.table_type.capitalize()}}{{args.plural_schema_name}}).filter_by({% if args.method_args and args.method_args.get('DELETE') %}{% for arg in args.method_args.get('DELETE') %}{% if arg.type == 'UUIDType' %}{{arg.table_type}}_{{arg.key}}_id={{arg.key}}_id,{% else %}{{arg.key}}={{arg.key}},{% endif %}{% endfor %}{% else %}# pass filters here{% endif %}).all()
         {% endif %}
 
         if {{args.plural_service_name}}:
@@ -319,7 +319,7 @@ def delete_{{args.singular_service_name}}_by_id({{args.singular_service_name}}_i
     """Deletes a {{args.singular_param_type}} from the table by the given id.
 
     Args:
-        {{args.singular_service_name}}_id: The primary key of a {{args.singular_param_type}}.
+        {{args.singular_service_name}}_id: The PK of a {{args.singular_param_type}}.
 
     Returns:
         A deleted {{args.singular_param_type}} with the given id else None.

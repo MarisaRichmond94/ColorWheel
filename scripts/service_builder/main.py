@@ -1,16 +1,18 @@
 #!/usr/bin/python
-import argparse
 import os
 import sys
 
 from jinja2 import Environment, FileSystemLoader
 
+from generators.alembic_migration import generate_alembic_migration_command
 from generators.api import generate_api_layer
 from generators.business import generate_business_layer
 from generators.data import generate_data_layer
 from generators.models import generate_model_layer
-from generators.db import generate_database_model
-from helpers import generate_init_file
+from generators.db import generate_database_model, populate_alembic_env_with_db_model
+from utils.create.service_folders import create_restful_service_folders
+from utils.populate.method_permissions import populate_method_permissions
+from utils.populate.root_app import populate_root_app_with_new_api_routes
 from setup import parse_command_line_options
 
 JINJA_ENV = Environment(
@@ -24,7 +26,7 @@ TEMPLATE_DICT = {
     'business': JINJA_ENV.get_template('business.py.j2'),
     'data': JINJA_ENV.get_template('data.py.j2'),
     'data_schemas': JINJA_ENV.get_template('data_schemas.py.j2'),
-    'db_model': JINJA_ENV.get_template('db_model.py.j2'),
+    'db_model': JINJA_ENV.get_template('db_model.py.j2')
 }
 
 
@@ -32,8 +34,10 @@ def main() -> None:
     """Generates a new service package using arguments parsed from the command line as inputs."""
     args = parse_command_line_options()
     navigate_to_restful_services()
-    create_folders_and_inits(args)
-    generate_api_layer(template=TEMPLATE_DICT['api'], args=args)
+    populate_root_app_with_new_api_routes(args=args)
+    create_restful_service_folders(args)
+    if args.generate_api_layer:
+        generate_api_layer(template=TEMPLATE_DICT['api'], args=args)
     generate_business_layer(template=TEMPLATE_DICT['business'], args=args)
     generate_data_layer(template=TEMPLATE_DICT['data'], args=args)
     generate_model_layer(
@@ -42,11 +46,12 @@ def main() -> None:
         args=args
     )
     generate_database_model(template=TEMPLATE_DICT['db_model'], args=args)
+    if args.method_permissions:
+        populate_method_permissions(args.method_permissions)
+    populate_alembic_env_with_db_model(args=args)
+    alembic_migration_command = generate_alembic_migration_command(args=args)
+    print(f"**DON'T FORGET TO GENERATE YOUR SQL MIGRATION: `{alembic_migration_command}`**")
     print(f'Successfully generated {args.plural_service_name} service! (っ＾▿＾)۶🍸🌟🍺٩(˘◡˘ )')
-    print(
-        "**DON'T FORGET TO ADD THE ROUTE TO APP.PY, IMPORT DB_MODEL INTO ENV.PY, "
-        "AND GENERATE YOUR SQL MIGRATION**"
-    )
 
 
 def navigate_to_restful_services() -> None:
@@ -59,22 +64,6 @@ def navigate_to_restful_services() -> None:
     if current_working_directory == 'api':
         print("Changing directories to restful_services...")
         os.chdir('./chalicelib/restful_services')
-
-
-def create_folders_and_inits(args: argparse.Namespace) -> None:
-    """Creates all of the base-level folders needed for the new service given a valid name.
-
-    Args:
-        args - An object containing attributes parsed out of the command line.
-    """
-    print(f'Generating new service with name {args.plural_service_name}...')
-    os.mkdir(f'./{args.plural_service_name}')
-    os.chdir(f'./{args.plural_service_name}')
-    generate_init_file()
-    os.mkdir('./api_layer')
-    os.mkdir('./business_layer')
-    os.mkdir('./data_layer')
-    os.mkdir('./model_layer')
 
 
 if __name__ == "__main__":

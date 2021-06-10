@@ -7,7 +7,7 @@
 {% if args.table_type == 'fct' %}
 {% if args.foreign_dims and args.table_type == 'fct' %}
 {% for _, foreign_dim in args.foreign_dims.items() %}
-@Dim{{foreign_dim.plural_schema}}.dimension
+@{{foreign_dim.table_type.capitalize()}}{{foreign_dim.plural_schema}}.dimension
 {% endfor %}
 {% endif %}
 {% endif %}
@@ -16,10 +16,10 @@ class {{args.table_type.capitalize()}}{{args.plural_schema_name}}(Base):
     __tablename__ = '{{args.table_type}}_{{args.plural_service_name}}'
     {% if args.dimensions %}
     {% for _, dimension in args.dimensions.items() %}
-    {{dimension.key}} = Column({{dimension.sqlalchemy_type}}(), nullable={% if dimension.is_required %}False{% else %}True{% endif %}, unique={% if dimension.is_unique %}True{% else %}False{% endif %})
+    {{dimension.key}} = Column({{dimension.sqlalchemy_type}}({% if dimension.sqlalchemy_type == 'String' %}MAX_STRING_LENGTH{% endif %}), nullable={% if dimension.is_required %}False{% else %}True{% endif %})
     {% endfor %}
     {% endif %}
-{% if args.table_type == 'dim' %}
+{% if args.table_type == 'dim' or args.dimension %}
 
     @classmethod
     def dimension(cls, target):
@@ -30,8 +30,36 @@ class {{args.table_type.capitalize()}}{{args.plural_schema_name}}(Base):
             ForeignKey({{args.table_type.capitalize()}}{{args.plural_schema_name}}.id),
             nullable=False,
         )
-        target.{{args.table_type}}_{{args.singular_service_name}} = relationship(cls)
+        target.{{args.table_type}}_{{args.singular_service_name}} = relationship(cls, lazy='subquery')
+        return target
+    {% if args.relationship %}
+
+    @classmethod
+    def parent_dimension(cls, target):
+        """Class decorator to add this dimension as a foreign key to another model."""
+        target.{{args.table_type}}_{{args.singular_service_name}}_id_parent = Column(
+            '{{args.table_type}}_{{args.singular_service_name}}_id_parent',
+            UUID(as_uuid=True),
+            ForeignKey({{args.table_type.capitalize()}}{{args.plural_schema_name}}.id),
+            nullable=False
+        )
+        target.{{args.table_type}}_{{args.singular_service_name}}_parent = relationship(
+            cls, foreign_keys=[target.{{args.table_type}}_{{args.singular_service_name}}_id_parent], lazy='subquery'
+        )
+        return target
+
+    @classmethod
+    def child_dimension(cls, target):
+        """Class decorator to add this dimension as a foreign key to another model."""
+        target.{{args.table_type}}_{{args.singular_service_name}}_id_child = Column(
+            '{{args.table_type}}_{{args.singular_service_name}}_id_child',
+            UUID(as_uuid=True),
+            ForeignKey({{args.table_type.capitalize()}}{{args.plural_schema_name}}.id),
+            nullable=False
+        )
+        target.{{args.table_type}}_{{args.singular_service_name}}_child = relationship(
+            cls, foreign_keys=[target.{{args.table_type}}_{{args.singular_service_name}}_id_child], lazy='subquery'
+        )
         return target
     {% endif %}
-    {% if args.table_type == 'fct' %}
 {% endif %}
