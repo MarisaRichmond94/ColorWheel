@@ -8,11 +8,9 @@ from restful_services.users.business_layer.business import (
     create_user,
     get_user_by_email
 )
-from restful_services.users.business_layer.helpers import validate_password
-from restless_services.authentication.business_layer.helpers import (
-    decode_json_web_token,
-    encode_json_web_token
-)
+from restful_services.users.business_layer import validate
+from restless_services.authentication.business_layer import decode
+from restless_services.authentication.business_layer import encode
 from utils.validation import validate_params
 
 
@@ -45,23 +43,23 @@ def authorize_user(
     )
     if not user:
         log.debug(
-            f'Failed to GET user by email '{email}' from Users Service.'
-            if not name else f'Failed to POST new user with name '{name}' and email '{email}'.'
+            f'Failed to GET user by email "{email}" from Users Service.'
+            if not name else f'Failed to POST new user with name "{name}" and email "{email}".'
         )
         return None
 
     is_user_validated = (
-        validate_password(password=password, hashed=user.get('password'))
+        validate.validate_password(password=password, hashed=user.get('password'))
         if not name else True
     )
     if not is_user_validated:
         log.debug(
-            f'Failed to validate given plain text password '{password}' with the entity '
-            f'associated with the given email '{email}'.'
+            f'Failed to validate given plain text password "{password}" with the entity '
+            f'associated with the given email "{email}".'
         )
         return None
 
-    access_token, auth_results = encode_json_web_token(user=user)
+    access_token, auth_results = encode.encode_json_web_token(user=user)
     create_session(user_id=user.get('id'), token=access_token)
 
     return {
@@ -89,10 +87,10 @@ def refresh_authorization(email: str) -> Optional[dict]:
 
     user = get_user_by_email(email=email)
     if not user:
-        log.debug(f'Failed to GET user by email '{email}' from Users Service.')
+        log.debug(f'Failed to GET user by email "{email}" from Users Service.')
         return None
 
-    access_token, auth_results = encode_json_web_token(user=user)
+    access_token, auth_results = encode.encode_json_web_token(user=user)
     create_session(user_id=user.get('id'), token=access_token)
 
     return {
@@ -129,16 +127,16 @@ def authenticate_user(
 
     user = get_user_by_email(email=email)
     if not user:
-        log.debug(f'Failed to GET user by email '{email}' from Users Service.')
+        log.debug(f'Failed to GET user by email "{email}" from Users Service.')
         return None
     if not password == user.get('password'):
         log.debug(
-            f'Failed to validate given plain text password '{password}' with the entity '
-            f'associated with the given email '{email}'.'
+            f'Failed to validate given plain text password "{password}" with the entity '
+            f'associated with the given email "{email}".'
         )
         return None
 
-    return decode_json_web_token(
+    return decode.decode_json_web_token(
         json_web_token=json_web_token,
         secret=user.get('password'),
     )

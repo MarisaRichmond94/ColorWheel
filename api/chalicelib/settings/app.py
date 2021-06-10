@@ -10,5 +10,5 @@ try:
     DOMAIN = os.getenv('DOMAIN', 'http://localhost')
     ENVIRONMENT = os.getenv('ENVIRONMENT', 'local')
 except KeyError as exp:
-    log.error(f'Environment variable '{exp.args[0]}' is not set.')
+    log.error(f'Environment variable "{exp.args[0]}" is not set.')
     sys.exit(1)

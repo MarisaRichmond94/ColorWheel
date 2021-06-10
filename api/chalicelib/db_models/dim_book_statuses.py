@@ -4,14 +4,14 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
 
 from db_models.base_model import Base
-from settings.db import DB_STRING_MAX_LENGTH
+from settings.db import MAX_STRING_LENGTH
 
 
 class DimBookStatuses(Base):
     """SQLAlchemy object for the dim_book_statuses table."""
     __tablename__ = 'dim_book_statuses'
-    name = Column(String(DB_STRING_MAX_LENGTH), nullable=False)
-    display_name = Column(String(DB_STRING_MAX_LENGTH), nullable=False)
+    name = Column(String(MAX_STRING_LENGTH), nullable=False)
+    display_name = Column(String(MAX_STRING_LENGTH), nullable=False)
     order_index = Column(Integer(), nullable=False)
 
     @classmethod

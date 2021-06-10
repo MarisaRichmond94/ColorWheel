@@ -17,7 +17,7 @@ api = Blueprint(__name__)
 @api_handler(
     api=api,
     path='/authentication',
-    method='POST',
+    methods=['POST'],
     api_key_required=False,
     body_schema=PostAuthenticationBodySchema,
 )
@@ -37,7 +37,7 @@ def authorize_user() -> Optional[dict]:
 @api_handler(
     api=api,
     path='/authentication',
-    method='GET',
+    methods=['GET'],
     api_key_required=False,
     query_schema=GetAuthenticationQuerySchema,
 )

@@ -30,14 +30,14 @@ class Response(ChaliceResponse):
             if self.origin in whitelist:
                 self.headers['Access-Control-Allow-Origin'] = self.origin
             else:
-                log.info(f'WARNING: Origin not found in  CORS whitelist: '{self.origin}'')
+                log.info(f'WARNING: Origin not found in  CORS whitelist: "{self.origin}"')
         else:
-            log.info(f'WARNING: No Origin provided: '{origin}'')
+            log.info(f'WARNING: No Origin provided: "{origin}"')
         self.status_code = 200
         if not isinstance(self.body, six.string_types):
             self.body = json.dumps(self.body)
 
     def __str__(self) -> str:
         return (
-            f'Response(headers={self.headers}, status_code='{self.status_code}', body={self.body})'
+            f'Response(headers={self.headers}, status_code="{self.status_code}", body={self.body})'
         )

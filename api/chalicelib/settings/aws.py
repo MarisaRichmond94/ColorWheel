@@ -10,5 +10,5 @@ try:
     AWS_REGION = os.getenv('AWS_REGION', 'us-west-2')
     AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 except KeyError as exp:
-    log.error(f'Environment variable '{exp.args[0]}' is not set.')
+    log.error(f'Environment variable "{exp.args[0]}" is not set.')
     sys.exit(1)

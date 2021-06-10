@@ -13,14 +13,14 @@ class Request:
 
 
 def __str__(self) -> str:
-    return f'Request(body={self.body}, query='{self.query}', headers={self.headers})'
+    return f'Request(body={self.body}, query="{self.query}", headers={self.headers})'
 
 
 def validate_request(
     current_request: object = None,
     body_schema: marshmallow.Schema = None,
     query_schema: marshmallow.Schema = None,
-) -> (object, dict):
+) -> tuple:
     """Validates a request using given request and optional schema."""
     request = Request()
     error_info = {}

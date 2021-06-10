@@ -4,14 +4,14 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
 
 from db_models.base_model import Base
-from settings.db import DB_STRING_MAX_LENGTH
+from settings.db import MAX_STRING_LENGTH
 
 
 class DimUsers(Base):
     """SQLAlchemy object for the dim_users table."""
     __tablename__ = 'dim_users'
-    name = Column(String(DB_STRING_MAX_LENGTH), nullable=False)
-    email = Column(String(DB_STRING_MAX_LENGTH), unique=True, nullable=False)
+    name = Column(String(MAX_STRING_LENGTH), nullable=False)
+    email = Column(String(MAX_STRING_LENGTH), unique=True, nullable=False)
     password = Column(LargeBinary(), nullable=False)
 
     @classmethod

@@ -3,7 +3,7 @@ from typing import Optional
 
 from utils.validation import validate_params
 from restful_services.users.data_layer import data
-from restful_services.users.business_layer.helpers import generate_hashed_password
+from restful_services.users.business_layer import hash
 
 
 def create_user(
@@ -32,7 +32,7 @@ def create_user(
             'password': password
         },
     )
-    hashed_password = generate_hashed_password(password=password)
+    hashed_password = hash.generate_hashed_password(password=password)
     return data.create_user(
         name=name,
         email=email,
