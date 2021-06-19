@@ -2,8 +2,8 @@
 from typing import Optional
 
 from utils.validation import validate_params
-from restful_services.users.data_layer import data
-from restful_services.users.business_layer import hash
+from restful_services.users import data
+from restful_services.users.utils import hash
 
 
 def create_user(

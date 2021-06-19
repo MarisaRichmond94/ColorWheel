@@ -1,8 +1,8 @@
 """Custom authorizer used for authenticated endpoints."""
 from chalice import AuthResponse
 
-from restful_services.sessions.business_layer.business import get_session_by_token
-from restless_services.authentication.business_layer.business import authenticate_user
+from restful_services.sessions.business import get_session_by_token
+from restless_services.authentication.business import authenticate_user
 from utils.app import APP
 
 

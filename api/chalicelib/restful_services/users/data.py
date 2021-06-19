@@ -3,7 +3,7 @@ from typing import Optional
 
 from db_models.dim_users import DimUsers
 from utils import db
-from restful_services.users.model_layer.data_schemas import UserSchema
+from restful_services.users.data_schemas import UserSchema
 
 
 def create_user(

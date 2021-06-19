@@ -7,7 +7,7 @@ import six
 from chalice import Response as ChaliceResponse
 from loguru import logger as log
 
-from restless_services.authentication.business_layer.business import refresh_authorization
+from restless_services.authentication.business import refresh_authorization
 from settings import app as app_settings
 
 

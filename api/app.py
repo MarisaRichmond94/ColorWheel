@@ -7,8 +7,8 @@ from utils.app import create_chalice_app
 app = create_chalice_app()
 
 from utils.response import Response
-from restful_services.book_statuses.api_layer.api import api as book_statuses_api
-from restless_services.authentication.api_layer.api import api as authentication_api
+from restful_services.book_statuses.api import api as book_statuses_api
+from restless_services.authentication.api import api as authentication_api
 
 
 app.register_blueprint(authentication_api)

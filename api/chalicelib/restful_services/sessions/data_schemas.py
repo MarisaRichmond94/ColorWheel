@@ -1,7 +1,7 @@
 """Data schemas for the sessions service."""
 from marshmallow import fields, Schema, EXCLUDE
 
-from restful_services.users.model_layer.data_schemas import UserSchema
+from restful_services.users.data_schemas import UserSchema
 
 class SessionSchema(Schema):
     """Base data schema for a session."""

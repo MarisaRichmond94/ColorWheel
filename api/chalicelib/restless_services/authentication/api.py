@@ -4,8 +4,8 @@ from typing import Optional
 
 from chalice import Blueprint
 
-from restless_services.authentication.business_layer import business
-from restless_services.authentication.model_layer.api_schemas import (
+from restless_services.authentication import business
+from restless_services.authentication.api_schemas import (
     GetAuthenticationQuerySchema,
     PostAuthenticationBodySchema,
 )

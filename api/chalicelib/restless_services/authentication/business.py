@@ -3,14 +3,14 @@ from typing import Optional
 
 from loguru import logger as log
 
-from restful_services.sessions.business_layer.business import create_session
-from restful_services.users.business_layer.business import (
+from restful_services.sessions.business import create_session
+from restful_services.users.business import (
     create_user,
     get_user_by_email
 )
-from restful_services.users.business_layer import validate
-from restless_services.authentication.business_layer import decode
-from restless_services.authentication.business_layer import encode
+from restful_services.users.utils import validate
+from restless_services.authentication.utils import decode
+from restless_services.authentication.utils import encode
 from utils.validation import validate_params
 
 

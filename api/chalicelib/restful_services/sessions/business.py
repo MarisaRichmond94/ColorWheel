@@ -3,7 +3,7 @@ from typing import Optional
 
 from utils.types import UUIDType
 from utils.validation import validate_params
-from restful_services.sessions.data_layer import data
+from restful_services.sessions import data
 
 
 def create_session(

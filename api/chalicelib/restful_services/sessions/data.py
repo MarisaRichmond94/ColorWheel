@@ -4,7 +4,7 @@ from typing import Optional
 from db_models.fct_sessions import FctSessions
 from utils import db
 from utils.types import UUIDType
-from restful_services.sessions.model_layer.data_schemas import (
+from restful_services.sessions.data_schemas import (
     PopulatedSessionSchema,
     SessionSchema,
 )

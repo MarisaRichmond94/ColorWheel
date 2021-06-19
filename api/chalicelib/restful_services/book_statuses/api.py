@@ -1,7 +1,7 @@
 """API layer for the book_statuses service."""
 from chalice import Blueprint
 
-from restful_services.book_statuses.business_layer import business
+from restful_services.book_statuses import business
 from utils.api_handler import api_handler
 
 api = Blueprint(__name__)

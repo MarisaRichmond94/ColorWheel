@@ -1,5 +1,5 @@
 """Business layer for the book_statuses service."""
-from restful_services.book_statuses.data_layer import data
+from restful_services.book_statuses import data
 
 
 def get_book_statuses() -> list:
