@@ -10,9 +10,13 @@ parent_dir = os.path.abspath(os.path.join(os.getcwd()))
 sys.path.append(parent_dir)
 sys.path.insert(0, os.path.abspath('chalicelib'))
 
+# Dim Models
 from db_models.base_model import Base, BaseModel
 from db_models.dim_book_statuses import DimBookStatuses
 from db_models.dim_users import DimUsers
+
+# Fct Models
+from db_models.fct_genres import FctGenres
 from db_models.fct_sessions import FctSessions
 
 from settings import db

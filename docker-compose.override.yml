@@ -1,10 +1,15 @@
 version: '3.7'
 services:
   api:
+    build:
+      context: api
+    depends_on:
+      - postgres
     environment:
       # add secrets here
       - AWS_ACCESS_KEY_ID=
       - AWS_SECRET_ACCESS_KEY=
+      - POSTGRES_HOST=postgres
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=user
       # non-secrets below
@@ -14,6 +19,19 @@ services:
       - ./api/app.py:/code/api/app.py
       - ./api/chalicelib:/code/api/chalicelib
     command: bash -c "alembic -c chalicelib/alembic.ini upgrade head && chalice local --host 0.0.0.0 --stage docker"
+    expose:
+      - 8000
+    ports:
+      - 8000:8000
+    restart: unless-stopped
   postgres:
+    image: postgres:11.5-alpine
+    environment:
+      - POSTGRES_DB=colorwheel
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=user
+    expose:
+      - 5432
+    restart: unless-stopped
     ports:
       - 5432:5432

@@ -1,16 +1,16 @@
 """Data layer for the sessions service."""
-from typing import Optional
+from typing import Optional, Union
+from uuid import uuid4
 
 from db_models.fct_sessions import FctSessions
 from utils import db
-from utils.types import UUIDType
 from restful_services.sessions.data_schemas import (
     PopulatedSessionSchema,
     SessionSchema,
 )
 
 
-def create_session(user_id: UUIDType, token: str) -> Optional[dict]:
+def create_session(user_id: Union[str, uuid4], token: str) -> Optional[dict]:
     """Creates a new session in the fct_sessions table.
 
     Args:
@@ -48,7 +48,7 @@ def get_session_by_token(token: str) -> Optional[dict]:
         return PopulatedSessionSchema().dump(retrieved_session) if retrieved_session else None
 
 
-def get_session_by_user(user_id: UUIDType) -> Optional[dict]:
+def get_session_by_user(user_id: Union[str, uuid4]) -> Optional[dict]:
     """Gets a session using the given user_id.
 
     Args:

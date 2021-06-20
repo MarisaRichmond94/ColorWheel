@@ -5,7 +5,6 @@ from chalice import Blueprint
 from loguru import logger as log
 import marshmallow
 
-from restless_services.authentication.business import refresh_authorization
 from utils.authorizer import authorizer
 from utils.request import validate_request
 from utils.response import generate_fail_response, generate_success_response, Response

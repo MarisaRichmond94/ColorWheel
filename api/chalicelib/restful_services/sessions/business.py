@@ -1,13 +1,13 @@
 """Business layer for the sessions service."""
-from typing import Optional
+from typing import Optional, Union
+from uuid import uuid4
 
-from utils.types import UUIDType
 from utils.validation import validate_params
 from restful_services.sessions import data
 
 
 def create_session(
-    user_id: UUIDType,
+    user_id: Union[str, uuid4],
     token: str,
 ) -> Optional[dict]:
     """Creates a new session in the fct_sessions table.
@@ -48,7 +48,7 @@ def get_session_by_token(token: str) -> Optional[dict]:
     return data.get_session_by_token(token=token)
 
 
-def get_session_by_user(user_id: UUIDType) -> Optional[dict]:
+def get_session_by_user(user_id: Union[str, uuid4]) -> Optional[dict]:
     """Gets a session using the given user_id.
 
     Args:
