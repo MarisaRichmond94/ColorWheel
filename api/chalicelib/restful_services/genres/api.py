@@ -21,7 +21,8 @@ ENTITY_ID = '/{genre_id}'
     api,
     path=ROUTE,
     methods=['POST'],
-    body_schema=CreateGenreBodySchema)
+    body_schema=CreateGenreBodySchema
+)
 def create_genre() -> Optional[dict]:
     """Creates a new genre in the table.
 
@@ -40,7 +41,8 @@ def create_genre() -> Optional[dict]:
     api,
     path=ROUTE,
     methods=['GET'],
-    query_schema=GetGenresQuerySchema)
+    query_schema=GetGenresQuerySchema
+)
 def get_genres() -> list:
     """Gets genres from the table filtered by given params.
 
@@ -53,7 +55,8 @@ def get_genres() -> list:
 @api_handler(
     api,
     path=f'{ROUTE}{ENTITY_ID}',
-    methods=['GET'])
+    methods=['GET']
+)
 def get_genre_by_id(genre_id: str) -> Optional[dict]:
     """Gets a genre from the table by a given id.
 
@@ -70,7 +73,8 @@ def get_genre_by_id(genre_id: str) -> Optional[dict]:
     api,
     path=f'{ROUTE}{ENTITY_ID}',
     methods=['PATCH'],
-    body_schema=UpdateGenreBodySchema)
+    body_schema=UpdateGenreBodySchema
+)
 def update_genre(genre_id: str) -> Optional[dict]:
     """Updates a genre in the table by a given id.
 
@@ -91,7 +95,8 @@ def update_genre(genre_id: str) -> Optional[dict]:
     api,
     path=ROUTE,
     methods=['DELETE'],
-    query_schema=DeleteGenresQuerySchema)
+    query_schema=DeleteGenresQuerySchema
+)
 def delete_genres() -> Optional[list]:
     """Deletes genres from the table using the given params.
 
@@ -106,7 +111,8 @@ def delete_genres() -> Optional[list]:
 @api_handler(
     api,
     path=f'{ROUTE}{ENTITY_ID}',
-    methods=['DELETE'])
+    methods=['DELETE']
+)
 def delete_genre_by_id(genre_id: str) -> Optional[dict]:
     """Deletes a genre from the table by the given id.
 

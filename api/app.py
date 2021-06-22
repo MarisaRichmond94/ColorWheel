@@ -8,16 +8,20 @@ app = create_chalice_app()
 
 from utils.response import Response
 from restful_services.book_statuses.api import api as book_statuses_api
+from restful_services.books.api import api as books_api
 from restful_services.genres.api import api as genres_api
 from restless_services.authentication.api import api as authentication_api
 
 
 app.register_blueprint(authentication_api)
 app.register_blueprint(book_statuses_api)
+app.register_blueprint(books_api)
 app.register_blueprint(genres_api)
 
 @app.route('/authentication', methods=['OPTIONS'])
 @app.route('/book-statuses', methods=['OPTIONS'])
+@app.route('/books', methods=['OPTIONS'])
+@app.route('/books/{book_id}', methods=['OPTIONS'])
 @app.route('/genres', methods=['OPTIONS'])
 @app.route('/genres/{genre_id}', methods=['OPTIONS'])
 def set_cors_headers() -> Response:
