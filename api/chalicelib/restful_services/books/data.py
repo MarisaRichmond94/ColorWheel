@@ -1,4 +1,5 @@
 """Data layer for the books service."""
+# pylint: disable=too-many-arguments
 import datetime
 from typing import Optional, Union
 from uuid import uuid4
