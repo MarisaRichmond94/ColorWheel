@@ -2,7 +2,7 @@
 from marshmallow import fields, Schema, EXCLUDE
 
 
-class BookStatusesSchema(Schema):
+class BookStatusSchema(Schema):
     """Base data schema for a book status."""
     id = fields.UUID(required=True)
     name = fields.String(required=True)

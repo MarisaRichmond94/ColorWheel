@@ -29,6 +29,7 @@ def authorizer(auth_request) -> AuthResponse:
 
             if decoded_payload:
                 return AuthResponse(
+                    context={'user_id': session.get('user', {}).get('id')},
                     routes=['*'],
                     principal_id=decoded_payload.get('sub'),
                 )

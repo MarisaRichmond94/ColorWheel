@@ -40,6 +40,9 @@ def api_handler(
                 return error_response
 
             api.handled_request = request
+            api.handled_request.user_id = (
+                api.current_request.context.get('authorizer', {}).get('user_id')
+            )
 
             try:
                 data = func(*args, **kwargs)
