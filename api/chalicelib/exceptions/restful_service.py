@@ -6,7 +6,7 @@ class UniqueEntityException(Exception):
     def __init__(self, func, value, **kwargs):
         """Generates message using given variables."""
         self.message = (
-            f'Function "{func}" given arguments "{str(**kwargs)}" returned the following '
+            f'Function "{func}" given arguments "{kwargs}" returned the following '
             f'matching entity: {value}.'
         )
         super().__init__(self.message)

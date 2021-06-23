@@ -29,7 +29,7 @@ def validate_params(func: str, params: dict) -> None:
         raise InvalidParamException(func=func, keys=missing_params)
 
 
-def validate_entity_is_unique(func: function, **kwargs) -> None:
+def validate_entity_is_unique(func, **kwargs) -> None:
     """Validates that given parameters in the form of kwargs are unique.
 
     Args:

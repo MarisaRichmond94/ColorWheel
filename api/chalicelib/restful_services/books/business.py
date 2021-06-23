@@ -69,7 +69,7 @@ def get_books(user_id: Optional[Union[str, uuid4]] = None) -> list:
     """
     if user_id:
         return data.get_books_by_user_id(user_id)
-    return data.get_books()
+    return data.get_books
 
 
 def get_book_by_id(book_id: Union[str, uuid4]) -> Optional[dict]:
