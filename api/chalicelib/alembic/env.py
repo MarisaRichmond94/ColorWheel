@@ -16,6 +16,7 @@ from db_models.dim_book_statuses import DimBookStatuses
 from db_models.dim_users import DimUsers
 
 # Fct Models
+from db_models.fct_book_genres import FctBookGenres
 from db_models.fct_books import FctBooks
 from db_models.fct_genres import FctGenres
 from db_models.fct_sessions import FctSessions

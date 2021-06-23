@@ -1,4 +1,5 @@
 """Business layer for the books service."""
+# pylint: disable=too-many-arguments
 from datetime import datetime, timezone
 from typing import Optional, Union
 from uuid import uuid4
@@ -31,12 +32,12 @@ def create_book(
 
     Raises:
         InvalidParamException: If any of the given params are None.
+        UniqueEntityException: If a title/user_id match already exists in the table.
     """
     validate_params(
         func='create_book',
         params={'user_id': user_id, 'author': author, 'title': title}
     )
-
     validate_entity_is_unique(
         func=data.get_book_by_title_and_user_id,
         title=title,
@@ -112,6 +113,7 @@ def update_book(
 
     Raises:
         InvalidParamException: If any of the given params are None.
+        UniqueEntityException: If a title/user_id match already exists in the table.
     """
     validate_params(func='update_book', params={'book_id': book_id})
     if title:
