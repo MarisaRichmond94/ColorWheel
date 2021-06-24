@@ -1,4 +1,4 @@
-"""Restful level exceptions."""
+"""Restful service level exceptions."""
 
 
 class ModifyingPrimaryException(Exception):
