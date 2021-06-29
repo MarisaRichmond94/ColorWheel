@@ -14,7 +14,7 @@ def validate_user_book(
 
     Args:
         user_id: The unique ID of the user pulled off of the authorized JWT.
-        book_id: The unique ID of the book to tie the new secondary genre to.
+        book_id: The unique ID of the book being accessed by the given user.
 
     Returns:
         The authorized book else None.

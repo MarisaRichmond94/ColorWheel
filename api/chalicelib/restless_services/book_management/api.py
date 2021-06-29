@@ -1,5 +1,5 @@
 """API layer for the book_management service."""
-# pylint: disable=no-member
+# pylint: disable=no-member, unexpected-keyword-arg
 from typing import Optional, Union
 from uuid import uuid4
 
@@ -10,7 +10,8 @@ from restless_services.book_management.api_schemas import (
     CreateBookBodySchema,
     CreateBookGenreBodySchema,
     DeleteBookGenresQuerySchema,
-    UpdateBookBodySchema
+    UpdateBookBodySchema,
+    UpdateBookGenreBodySchema
 )
 from utils.api_handler import api_handler
 
@@ -36,29 +37,26 @@ def create_user_book() -> Optional[dict]:
         primary_genre_id=api.handled_request.body.get('primary_genre_id'),
         image_key=api.handled_request.body.get('image_key'),
         synopsis=api.handled_request.body.get('synopsis'),
-        book_id=api.handled_request.body.get('book_id'),
-        secondary_genre_ids=api.handled_request.body.get('secondary_genre_ids')
+        secondary_genre_ids=api.handled_request.body.get('secondary_genre_ids'),
+        book_id=api.handled_request.body.get('book_id')
     )
 
 
 @api_handler(
     api=api,
-    path='/book-management/genres/{book_id}',
+    path='/book-management/genres',
     methods=['POST'],
     body_schema=CreateBookGenreBodySchema
 )
-def create_secondary_genre(book_id: Union[str, uuid4]) -> Optional[dict]:
+def create_secondary_genre() -> Optional[dict]:
     """Creates a new secondary genre tied to the given book ID.
-
-    Args:
-        book_id: The unique ID of the book to tie the new secondary genre to.
 
     Returns:
         A book populated with the updated aggregated information else None.
     """
     return create_secondary_genre(
         user_id=api.handled_request.user_id,
-        book_id=book_id,
+        book_id=api.handled_request.body.get('book_id'),
         secondary_genre_id=api.handled_request.body.get('secondary_genre_id')
     )
 
@@ -115,6 +113,29 @@ def update_user_book_by_id(book_id: Union[str, uuid4]) -> Optional[dict]:
     )
 
 
+@api_handler(
+    api=api,
+    path='/book-management/genres/{book_genre_id}',
+    methods=['PATCH'],
+    body_schema=UpdateBookGenreBodySchema
+)
+def update_user_book_genre_by_id(book_genre_id: Union[str, uuid4]) -> Optional[dict]:
+    """Updates a book genre with the given ID using the params passed in the body of the request.
+
+    Args:
+        book_genre_id: The unique ID of the book genre to update.
+
+    Returns:
+        An updated book genre else None.
+    """
+    return business.update_user_book_genre_by_id(
+        user_id=api.handled_request.user_id,
+        book_id=api.handled_request.body.get('book_id'),
+        genre_id=api.handled_request.body.get('genre_id'),
+        book_genre_id=book_genre_id
+    )
+
+
 @api_handler(api=api, path='/book-management', methods=['DELETE'])
 def delete_user_books() -> list:
     """Deletes all of the books associated with the user_id pulled from the authorized JWT.
@@ -143,11 +164,11 @@ def delete_user_book_by_id(book_id: Union[str, uuid4]) -> Optional[dict]:
 
 @api_handler(
     api=api,
-    path='/book-management/genres/{book_id}',
+    path='/book-management/genres/{book_genre_id}',
     methods=['DELETE'],
     query_schema=DeleteBookGenresQuerySchema
 )
-def delete_secondary_book_genre(book_id: Union[str, uuid4]) -> Optional[dict]:
+def delete_secondary_book_genre(book_genre_id: Union[str, uuid4]) -> Optional[dict]:
     """Deletes the secondary genre from the given book.
 
     Args:
@@ -158,6 +179,6 @@ def delete_secondary_book_genre(book_id: Union[str, uuid4]) -> Optional[dict]:
     """
     return business.delete_secondary_book_genre(
         user_id=api.handled_request.user_id,
-        book_id=book_id,
-        secondary_book_genre_id=api.handled_request.query.get('secondary_book_genre_id')
+        book_id=api.handled_request.query.get('book_id'),
+        book_genre_id=book_genre_id
     )

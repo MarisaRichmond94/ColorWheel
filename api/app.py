@@ -17,6 +17,8 @@ app.register_blueprint(book_management_api)
 @app.route('/authentication', methods=['OPTIONS'])
 @app.route('/book-management', methods=['OPTIONS'])
 @app.route('/book-management/{book_id}', methods=['OPTIONS'])
+@app.route('/book-management/genres', methods=['OPTIONS'])
+@app.route('/book-management/genres/{book_genre_id}', methods=['OPTIONS'])
 def set_cors_headers() -> Response:
     return Response(
         data=None,
