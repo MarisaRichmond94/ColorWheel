@@ -7,6 +7,7 @@ from utils.validation import validate_params
 
 
 def create_genre(
+    session: any,
     user_id: Union[str, uuid4],
     display_name: str,
     name: str,
@@ -15,6 +16,7 @@ def create_genre(
     """Creates a new genre.
 
     Args:
+        session: The current database session.
         user_id: The FK to the users table.
         display_name: The display_name to associate with the new genre.
         name: The name to associate with the new genre.
@@ -32,6 +34,7 @@ def create_genre(
     )
 
     return data.create_genre(
+        session,
         user_id=user_id,
         bucket_name=None,
         display_name=display_name,
@@ -41,24 +44,26 @@ def create_genre(
     )
 
 
-def get_genres(user_id: Optional[Union[str, uuid4]]) -> list:
+def get_genres(session: any, user_id: Optional[Union[str, uuid4]]) -> list:
     """Gets genres from the table filtered by given params.
 
     Args:
+        session: The current database session.
         user_id: The ID of the user to filter genres by.
 
     Returns:
         A list of genres filtered by any given params.
     """
     if user_id:
-        return data.get_genres_by_user_id(user_id)
-    return data.get_genres()
+        return data.get_genres_by_user_id(session, user_id=user_id)
+    return data.get_genres(session)
 
 
-def get_genre_by_id(genre_id: Union[str, uuid4]) -> Optional[dict]:
+def get_genre_by_id(session: any, genre_id: Union[str, uuid4]) -> Optional[dict]:
     """Gets a genre from the table by a given id.
 
     Args:
+        session: The current database session.
         genre_id: The PK of a genre.
 
     Returns:
@@ -68,10 +73,11 @@ def get_genre_by_id(genre_id: Union[str, uuid4]) -> Optional[dict]:
         InvalidParamException: If the given genre_id is None.
     """
     validate_params(func='get_genre_by_id', params={'genre_id': genre_id})
-    return data.get_genre_by_id(genre_id)
+    return data.get_genre_by_id(session, genre_id=genre_id)
 
 
 def update_genre(
+    session: any,
     name: str,
     display_name: str,
     genre_id: Union[str, uuid4]
@@ -79,6 +85,7 @@ def update_genre(
     """Updates a genre by a given id.
 
     Args:
+        session: The current database session.
         name: The name to modify in the genre with the given id.
         display_name: The display_name to modify in the genre with the given id.
         genre_id: The PK of a genre.
@@ -95,16 +102,18 @@ def update_genre(
     )
 
     return data.update_genre(
+        session,
         name=name,
         display_name=display_name,
         genre_id=genre_id
     )
 
 
-def delete_genres(user_id: Union[str, uuid4]) -> Optional[list]:
+def delete_genres(session: any, user_id: Union[str, uuid4]) -> Optional[list]:
     """Deletes genres from the table using the given params.
 
     Args:
+        session: The current database session.
         user_id: The ID of the user to delete genres by.
 
     Returns:
@@ -114,13 +123,14 @@ def delete_genres(user_id: Union[str, uuid4]) -> Optional[list]:
         InvalidParamException: If any of the given params are None.
     """
     validate_params(func='delete_genres', params={'user_id': user_id})
-    return data.delete_genres_by_user_id(user_id=user_id)
+    return data.delete_genres_by_user_id(session, user_id=user_id)
 
 
-def delete_genre_by_id(genre_id: Union[str, uuid4]) -> Optional[dict]:
+def delete_genre_by_id(session: any, genre_id: Union[str, uuid4]) -> Optional[dict]:
     """Deletes a genre from the table by the given id.
 
     Args:
+        session: The current database session.
         genre_id: The PK of a genre.
 
     Returns:
@@ -130,4 +140,4 @@ def delete_genre_by_id(genre_id: Union[str, uuid4]) -> Optional[dict]:
         InvalidParamException: If the given genre_id is None.
     """
     validate_params(func='delete_genre_by_id', params={'genre_id': genre_id})
-    return data.delete_genre_by_id(genre_id)
+    return data.delete_genre_by_id(session, genre_id=genre_id)

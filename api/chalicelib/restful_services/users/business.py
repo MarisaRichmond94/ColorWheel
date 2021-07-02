@@ -7,6 +7,7 @@ from restful_services.users.utils import hash_password
 
 
 def create_user(
+    session: any,
     name: str,
     email: str,
     password: str,
@@ -14,6 +15,7 @@ def create_user(
     """Creates a new user in the dim_users table.
 
     Args:
+        session: The current database session.
         name: The full name (first and last) of a user.
         email: The unique email address to associated with the new user.
         password: A plain text string containing at least 10 characters.
@@ -22,38 +24,33 @@ def create_user(
         A newly created user else None.
 
     Raises:
-        InvalidParamException - if any of the given params are None.
+        InvalidParamException: if any of the given params are None.
     """
     validate_params(
         func='create_user',
-        params={
-            'name': name,
-            'email': email,
-            'password': password
-        },
+        params={'name': name, 'email': email, 'password': password}
     )
     hashed_password = hash_password.generate_hashed_password(password=password)
     return data.create_user(
+        session=session,
         name=name,
         email=email,
         password=hashed_password,
     )
 
 
-def get_user_by_email(email: str) -> Optional[dict]:
+def get_user_by_email(session: any, email: str) -> Optional[dict]:
     """Gets a user by the given email.
 
     Args:
+        session: The current database session.
         email: The unique email address associated with a user entity in the dim_users table.
 
     Returns:
         A user associated with the given email else None.
 
     Raises:
-        InvalidParamException - if email is None.
+        InvalidParamException: if email is None.
     """
-    validate_params(
-        func='get_user_by_email',
-        params={'email': email},
-    )
-    return data.get_user_by_email(email=email)
+    validate_params(func='get_user_by_email', params={'email': email})
+    return data.get_user_by_email(session, email)

@@ -6,6 +6,7 @@ from loguru import logger as log
 import marshmallow
 
 from utils.authorizer import authorizer
+from utils.db import session_scope
 from utils.request import validate_request
 from utils.response import generate_fail_response, generate_success_response, Response
 
@@ -39,23 +40,31 @@ def api_handler(
             if error_response:
                 return error_response
 
-            api.handled_request = request
-            api.handled_request.user_id = (
-                api.current_request.context.get('authorizer', {}).get('user_id')
-            )
+            with session_scope() as session:
+                api.handled_request = request
+                api.handled_request.session = session
+                api.handled_request.user_id = (
+                    api.current_request.context.get('authorizer', {}).get('user_id')
+                )
 
-            try:
-                data = func(*args, **kwargs)
-            except Exception as api_handler_exception:
-                log.exception(api_handler_exception)
-                return generate_fail_response(path, api.current_request.headers.get('origin', ''))
+                try:
+                    data = func(*args, **kwargs)
+                    session.commit()
+                except Exception as api_handler_exception:
+                    log.exception(api_handler_exception)
+                    return generate_fail_response(path, current_request=api.current_request)
 
-            if data is None:
-                log.error(f'{func.__name__} {methods[0]} request resulted in None response.')
-                return generate_fail_response(path, api.current_request.headers.get('origin', ''))
+                if data is None:
+                    log.error(f'{func.__name__} {methods[0]} request resulted in None response.')
+                    return generate_fail_response(path, current_request=api.current_request)
 
-            log.debug(f'{func.__name__} {methods[0]} request result: {data}.')
-            return generate_success_response(api.current_request, data, api_key_required)
+                log.debug(f'{func.__name__} {methods[0]} request result: {data}.')
+                return generate_success_response(
+                    session=session,
+                    request=api.current_request,
+                    data=data,
+                    api_key_required=api_key_required
+                )
 
         return api_endpoint
 

@@ -9,10 +9,10 @@ from restful_services.books.data_schemas import (
     BookSchema,
     PopulatedBookSchema
 )
-from utils import db
 
 
 def create_book(
+    session: any,
     book_status_id: Union[str, uuid4],
     user_id: Union[str, uuid4],
     author: str,
@@ -25,6 +25,7 @@ def create_book(
     """Creates a new book.
 
     Args:
+        session: The current database session.
         book_status_id: The FK to the book_statuses table.
         user_id: The FK to the users table.
         author: The author to associate with the new book.
@@ -37,80 +38,85 @@ def create_book(
     Returns:
         A newly created book else None.
     """
-    with db.session_scope() as session:
-        new_book = FctBooks(
-            dim_book_status_id=book_status_id,
-            dim_user_id=user_id,
-            author=author,
-            image_key=image_key,
-            synopsis=synopsis,
-            timestamp=timestamp,
-            title=title,
-            id=book_id
-        )
+    new_book = FctBooks(
+        dim_book_status_id=book_status_id,
+        dim_user_id=user_id,
+        author=author,
+        image_key=image_key,
+        synopsis=synopsis,
+        timestamp=timestamp,
+        title=title,
+        id=book_id
+    )
 
-        if new_book:
-            session.add(new_book)
-            session.commit()
-            return BookSchema().dump(new_book)
-        return None
+    if new_book:
+        session.add(new_book)
+        return BookSchema().dump(new_book)
+    return None
 
 
-def get_books() -> list:
+def get_books(session: any) -> list:
     """Gets books from the table filtered by given params.
+
+    Args:
+        session: The current database session.
 
     Returns:
         A list of books filtered by any given params.
     """
-    with db.session_scope() as session:
-        books = session.query(FctBooks).all()
-        return PopulatedBookSchema(many=True).dump(books) if books else []
+    books = session.query(FctBooks).all()
+    return PopulatedBookSchema(many=True).dump(books) if books else []
 
 
-def get_books_by_user_id(user_id: Union[str, uuid4]) -> list:
+def get_books_by_user_id(session: any, user_id: Union[str, uuid4]) -> list:
     """Gets books from the table by a given user.
 
     Args:
+        session: The current database session.
         user_id: The user_id to filter books by.
 
     Returns:
         A list of books with the given user_id else [].
     """
-    with db.session_scope() as session:
-        books = session.query(FctBooks).filter_by(dim_user_id=user_id).all()
-        return PopulatedBookSchema(many=True).dump(books) if books else []
+    books = session.query(FctBooks).filter_by(dim_user_id=user_id).all()
+    return PopulatedBookSchema(many=True).dump(books) if books else []
 
 
-def get_book_by_title_and_user_id(title: str, user_id: Union[str, uuid4]) -> Optional[dict]:
+def get_book_by_title_and_user_id(
+    session: any,
+    title: str,
+    user_id: Union[str, uuid4]
+) -> Optional[dict]:
     """Gets books from the table by a given user.
 
     Args:
+        session: The current database session.
         title: The title of the book to filter books by.
         user_id: The user_id to filter books by.
 
     Returns:
         A book with the given title user_id else None.
     """
-    with db.session_scope() as session:
-        book = session.query(FctBooks).filter_by(title=title, dim_user_id=user_id).one_or_none()
-        return PopulatedBookSchema().dump(book) if book else None
+    book = session.query(FctBooks).filter_by(title=title, dim_user_id=user_id).one_or_none()
+    return PopulatedBookSchema().dump(book) if book else None
 
 
-def get_book_by_id(book_id: Union[str, uuid4]) -> Optional[dict]:
+def get_book_by_id(session: any, book_id: Union[str, uuid4]) -> Optional[dict]:
     """Gets a book from the table by a given id.
 
     Args:
+        session: The current database session.
         book_id: The PK of a book.
 
     Returns:
         A book from the table by a given id else None.
     """
-    with db.session_scope() as session:
-        book = session.query(FctBooks).filter_by(id=book_id).one_or_none()
-        return PopulatedBookSchema().dump(book) if book else None
+    book = session.query(FctBooks).filter_by(id=book_id).one_or_none()
+    return PopulatedBookSchema().dump(book) if book else None
 
 
 def update_book(
+    session: any,
     book_id: Union[str, uuid4],
     title: Optional[str] = None,
     author: Optional[str] = None,
@@ -121,6 +127,7 @@ def update_book(
     """Updates a book by a given id.
 
     Args:
+        session: The current database session.
         book_id: The PK of a book.
         title: The title to modify in the book with the given id.
         author: The author to modify in the book with the given id.
@@ -131,54 +138,50 @@ def update_book(
     Returns:
         An updated book with the given id else None.
     """
-    with db.session_scope() as session:
-        book = session.query(FctBooks).filter_by(id=book_id).one_or_none()
+    book = session.query(FctBooks).filter_by(id=book_id).one_or_none()
 
-        if book:
-            book.title = title if title else book.title
-            book.author = author if author else book.author
-            book.synopsis = synopsis if synopsis else book.synopsis
-            book.image_key = image_key if image_key else book.image_key
-            book.dim_book_status_id = book_status_id if book_status_id else book.dim_book_status_id
-            session.commit()
-            return BookSchema().dump(book)
-        return None
+    if book:
+        book.title = title if title else book.title
+        book.author = author if author else book.author
+        book.synopsis = synopsis if synopsis else book.synopsis
+        book.image_key = image_key if image_key else book.image_key
+        book.dim_book_status_id = book_status_id if book_status_id else book.dim_book_status_id
+        return BookSchema().dump(book)
+    return None
 
 
-def delete_books(user_id: Union[str, uuid4]) -> Optional[list]:
+def delete_books(session: any, user_id: Union[str, uuid4]) -> Optional[list]:
     """Deletes books from the table using the given params.
 
     Args:
+        session: The current database session.
         user_id: The FK to the user table.
 
     Returns:
         A list of books deleted using the given params.
     """
-    with db.session_scope() as session:
-        books = session.query(FctBooks).filter_by(dim_user_id=user_id,).all()
+    books = session.query(FctBooks).filter_by(dim_user_id=user_id,).all()
 
-        if books:
-            for book in books:
-                session.delete(book)
-                session.commit()
-            return BookSchema(many=True).dump(books)
-        return []
+    if books:
+        for book in books:
+            session.delete(book)
+        return BookSchema(many=True).dump(books)
+    return []
 
 
-def delete_book_by_id(book_id: Union[str, uuid4]) -> Optional[dict]:
+def delete_book_by_id(session: any, book_id: Union[str, uuid4]) -> Optional[dict]:
     """Deletes a book from the table by the given id.
 
     Args:
+        session: The current database session.
         book_id: The PK of a book.
 
     Returns:
         A deleted book with the given id else None.
     """
-    with db.session_scope() as session:
-        book = session.query(FctBooks).filter_by(id=book_id).one_or_none()
+    book = session.query(FctBooks).filter_by(id=book_id).one_or_none()
 
     if book:
         session.delete(book)
-        session.commit()
         return BookSchema().dump(book)
     return None

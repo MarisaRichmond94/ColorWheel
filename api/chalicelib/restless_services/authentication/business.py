@@ -15,6 +15,7 @@ from utils.validation import validate_params
 
 
 def authorize_user(
+    session: any,
     email: str,
     password: str,
     name: Optional[str] = None,
@@ -22,24 +23,22 @@ def authorize_user(
     """Authorizes a user with the users service using the given params.
 
     Args:
-        email - The unique email associated with a user entity in the dim_users table.
-        password - The plain string password associated with a user entity in the dim_users table.
-        name - The full name of a new user.
+        session: The current database session.
+        email: The unique email associated with a user entity in the dim_users table.
+        password: The plain string password associated with a user entity in the dim_users table.
+        name: The full name of a new user.
 
     Returns:
         A dict containing an access token and auth results else None.
 
     Raises:
-        InvalidParamException - If email or password is None.
+        InvalidParamException: If email or password is None.
     """
-    validate_params(
-        func='authorize_user',
-        params={'email': email, 'password': password}
-    )
+    validate_params(func='authorize_user', params={'email': email, 'password': password})
 
     user = (
-        create_user(name=name, email=email, password=password)
-        if name else get_user_by_email(email=email)
+        create_user(session, name=name, email=email, password=password)
+        if name else get_user_by_email(session, email=email)
     )
     if not user:
         log.debug(
@@ -60,72 +59,64 @@ def authorize_user(
         return None
 
     access_token, auth_results = encode.encode_json_web_token(user=user)
-    create_session(user_id=user.get('id'), token=access_token)
+    log.info(user)
+    create_session(session, user_id=user.get('id'), token=access_token)
 
-    return {
-        'access_token': access_token,
-        'auth_results': auth_results
-    }
+    return {'access_token': access_token, 'auth_results': auth_results}
 
 
-def refresh_authorization(email: str) -> Optional[dict]:
+def refresh_authorization(session: any, email: str) -> Optional[dict]:
     """Refreshes the authenication token for a user session with the given email.
 
     Args:
-        email - The unique email associated with a session entity in the fct_sessions table.
+        session: The current database session.
+        email: The unique email associated with a session entity in the fct_sessions table.
 
     Returns:
         A dict containing an access token and auth results else None.
 
     Raises:
-        InvalidParamException - If the given email is None.
+        InvalidParamException: If the given email is None.
     """
-    validate_params(
-        func='refresh_authorization',
-        params={'email': email},
-    )
+    validate_params(func='refresh_authorization', params={'email': email})
 
-    user = get_user_by_email(email=email)
+    user = get_user_by_email(session, email=email)
     if not user:
         log.debug(f'Failed to GET user by email "{email}" from Users Service.')
         return None
 
     access_token, auth_results = encode.encode_json_web_token(user=user)
-    create_session(user_id=user.get('id'), token=access_token)
+    create_session(session, user_id=user.get('id'), token=access_token)
 
-    return {
-        'access_token': access_token,
-        'auth_results': auth_results
-    }
+    return {'access_token': access_token, 'auth_results': auth_results}
 
 
 def authenticate_user(
+    session: any,
     email: str,
     password: str,
-    json_web_token: str,
+    json_web_token: str
 ) -> Optional[dict]:
     """Authenticates a user's json web token with the given parameters.
 
     Args:
-        email - The unique email associated with a user entity in the dim_users table.
-        password - The plain string password associated with a user entity in the dim_users table.
+        session: The current database session.
+        email: The unique email associated with a user entity in the dim_users table.
+        password: The plain string password associated with a user entity in the dim_users table.
+        json_web_token: The token pulled from the request.
 
     Returns:
         A dict containing the decoded json web token.
 
     Raises:
-        InvalidParamException - If any of the given params is None.
+        InvalidParamException: If any of the given params is None.
     """
     validate_params(
         func='authenticate_user',
-        params={
-            'email': email,
-            'password': password,
-            'json_web_token': json_web_token,
-        }
+        params={'email': email, 'password': password, 'json_web_token': json_web_token}
     )
 
-    user = get_user_by_email(email=email)
+    user = get_user_by_email(session, email=email)
     if not user:
         log.debug(f'Failed to GET user by email "{email}" from Users Service.')
         return None

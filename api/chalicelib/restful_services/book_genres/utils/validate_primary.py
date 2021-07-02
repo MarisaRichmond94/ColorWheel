@@ -10,6 +10,7 @@ from restful_services.genres import business as genres_service
 
 
 def validate_primary_genre(
+    session: any,
     book_id: Union[str, uuid4],
     genre_id: Union[str, uuid4],
     method: str = 'POST'
@@ -17,15 +18,19 @@ def validate_primary_genre(
     """Validates that a transation won't lead to a violation in the primary genre requirement.
 
     Args:
+        session: The current database session.
         book_id: The unique ID of the book involved in the transation.
     """
-    genre = genres_service.get_genre_by_id(genre_id)
+    genre = genres_service.get_genre_by_id(session, genre_id=genre_id)
     if genre.get('is_primary'):
-        if method == 'POST' and (primary_book_genre := data.get_primary_genre_by_book_id(book_id)):
+        if (
+            method == 'POST' and
+            (primary_book_genre := data.get_primary_genre_by_book_id(session, book_id=book_id))
+        ):
             raise MultiplePrimaryException(
-                book=books_service.get_book_by_id(book_id),
+                book=books_service.get_book_by_id(session, book_id),
                 new_primary=genre.get('name'),
                 existing_primary=primary_book_genre.get('genre', {}).get('name')
             )
         elif method == 'PATCH':
-            raise ModifyingPrimaryException(book=books_service.get_book_by_id(book_id))
+            raise ModifyingPrimaryException(book=books_service.get_book_by_id(session, book_id))
