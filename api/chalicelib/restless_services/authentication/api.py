@@ -28,9 +28,10 @@ def authorize_user() -> Optional[dict]:
         A dict containing an access token and auth results else None.
     """
     return business.authorize_user(
+        session=api.handled_request.session,
         email=api.handled_request.body.get('email'),
         password=api.handled_request.body.get('password'),
-        name=api.handled_request.body.get('name'),
+        name=api.handled_request.body.get('name')
     )
 
 
@@ -48,5 +49,6 @@ def refresh_authorization() -> Optional[dict]:
         A dict containing an access token and auth results else None.
     """
     return business.refresh_authorization(
-        email=api.handled_request.query.get('email'),
+        session=api.handled_request.session,
+        email=api.handled_request.query.get('email')
     )
