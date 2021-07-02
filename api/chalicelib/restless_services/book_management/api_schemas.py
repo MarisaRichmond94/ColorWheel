@@ -9,7 +9,7 @@ class CreateBookBodySchema(Schema):
     primary_genre_id = fields.UUID(required=True)
     image_key = fields.String(required=False)
     synopsis = fields.String(required=False)
-    secondary_genre_ids = fields.List(required=False)
+    secondary_genre_ids = fields.List(fields.UUID, required=False)
     book_id = fields.UUID(required=False)
 
 

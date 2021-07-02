@@ -73,7 +73,7 @@ def create_user_book(
         for secondary_genre_id in secondary_genre_ids
     ]
 
-    return new_book.update({
+    new_book.update({
         'primary_genre': (
             book_genres_service.get_book_genre_by_id(primary_book_genre.get('id'))
         ),
@@ -82,6 +82,8 @@ def create_user_book(
             for secondary_book_genre in secondary_book_genres
         ]
     })
+
+    return new_book
 
 
 def create_secondary_book_genre(
