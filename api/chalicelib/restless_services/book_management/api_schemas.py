@@ -9,14 +9,14 @@ class CreateBookBodySchema(Schema):
     primary_genre_id = fields.UUID(required=True)
     image_key = fields.String(required=False)
     synopsis = fields.String(required=False)
-    secondary_genre_ids = fields.List(fields.UUID, required=False)
+    secondary_genre_names = fields.List(fields.String, required=False)
     book_id = fields.UUID(required=False)
 
 
 class CreateBookGenreBodySchema(Schema):
     """POST book genre body schema for book management."""
     book_id = fields.UUID(required=False)
-    secondary_genre_id = fields.UUID(required=True)
+    secondary_genre_name = fields.String(required=True)
 
 
 class DeleteBookGenresQuerySchema(Schema):
@@ -36,4 +36,4 @@ class UpdateBookBodySchema(Schema):
 class UpdateBookGenreBodySchema(Schema):
     """PATCH book genre body schema for book management."""
     book_id = fields.UUID(required=True)
-    genre_id = fields.UUID(required=True)
+    genre_name = fields.String(required=True)

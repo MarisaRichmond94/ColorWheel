@@ -12,7 +12,10 @@ def populate_genres_for_user_book(session: any, user_book: dict) -> dict:
     Returns:
         The given user_book with its primary and secondary genres populated.
     """
-    user_book_genres = book_genres_service.get_book_genres(session, book_id=user_book.get('id'))
+    user_book_genres = book_genres_service.get_book_genres_by_book_id(
+        session,
+        book_id=user_book.get('id')
+    )
     user_book['primary_genre'] = next((
         user_book_genre
         for user_book_genre in user_book_genres

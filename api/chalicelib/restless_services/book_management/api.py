@@ -38,7 +38,7 @@ def create_user_book() -> Optional[dict]:
         primary_genre_id=api.handled_request.body.get('primary_genre_id'),
         image_key=api.handled_request.body.get('image_key'),
         synopsis=api.handled_request.body.get('synopsis'),
-        secondary_genre_ids=api.handled_request.body.get('secondary_genre_ids'),
+        secondary_genre_names=api.handled_request.body.get('secondary_genre_names'),
         book_id=api.handled_request.body.get('book_id')
     )
 
@@ -59,7 +59,7 @@ def create_secondary_genre() -> Optional[dict]:
         session=api.handled_request.session,
         user_id=api.handled_request.user_id,
         book_id=api.handled_request.body.get('book_id'),
-        secondary_genre_id=api.handled_request.body.get('secondary_genre_id')
+        secondary_genre_name=api.handled_request.body.get('secondary_genre_name')
     )
 
 
@@ -139,7 +139,7 @@ def update_user_book_genre_by_id(book_genre_id: Union[str, uuid4]) -> Optional[d
         session=api.handled_request.session,
         user_id=api.handled_request.user_id,
         book_id=api.handled_request.body.get('book_id'),
-        genre_id=api.handled_request.body.get('genre_id'),
+        genre_name=api.handled_request.body.get('genre_name'),
         book_genre_id=book_genre_id
     )
 

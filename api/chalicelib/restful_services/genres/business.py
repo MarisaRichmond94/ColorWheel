@@ -3,7 +3,7 @@ from typing import Optional, Union
 from uuid import uuid4
 
 from restful_services.genres import data
-from utils.validation import validate_params
+from utils.validation import validate_entity_is_unique, validate_params
 
 
 def create_genre(
@@ -27,10 +27,17 @@ def create_genre(
 
     Raises:
         InvalidParamException: If any of the given params are None.
+        UniqueEntityException: If a matching genre is found by the display name and/or user_id.
     """
     validate_params(
         func='create_genre',
         params={'user_id': user_id, 'display_name': display_name, 'name': name}
+    )
+    validate_entity_is_unique(
+        func=data.get_genres_by_display_name_and_user_id,
+        session=session,
+        display_name=display_name,
+        user_id=user_id
     )
 
     return data.create_genre(
@@ -78,6 +85,7 @@ def get_genre_by_id(session: any, genre_id: Union[str, uuid4]) -> Optional[dict]
 
 def update_genre(
     session: any,
+    user_id: Union[str, uuid4],
     name: str,
     display_name: str,
     genre_id: Union[str, uuid4]
@@ -86,6 +94,7 @@ def update_genre(
 
     Args:
         session: The current database session.
+        user_id: The FK to the users table.
         name: The name to modify in the genre with the given id.
         display_name: The display_name to modify in the genre with the given id.
         genre_id: The PK of a genre.
@@ -95,10 +104,17 @@ def update_genre(
 
     Raises:
         InvalidParamException: If any of the given params are None.
+        UniqueEntityException: If a matching genre is found by the display name and/or user_id.
     """
     validate_params(
         func='update_genre',
         params={'name': name, 'display_name': display_name, 'genre_id': genre_id}
+    )
+    validate_entity_is_unique(
+        func=data.get_genres_by_display_name_and_user_id,
+        session=session,
+        display_name=display_name,
+        user_id=user_id
     )
 
     return data.update_genre(
