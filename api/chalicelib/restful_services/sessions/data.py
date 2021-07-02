@@ -25,6 +25,7 @@ def create_session(
         A newly created session else None.
     """
     new_session = FctSessions(
+        id=uuid4(),
         dim_user_id=user_id,
         token=token
     )

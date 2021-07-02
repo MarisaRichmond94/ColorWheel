@@ -46,7 +46,7 @@ def create_book(
         synopsis=synopsis,
         timestamp=timestamp,
         title=title,
-        id=book_id
+        id=book_id or uuid4(),
     )
 
     if new_book:

@@ -30,7 +30,7 @@ def create_book_genre(
     new_book_genre = FctBookGenres(
         fct_book_id=book_id,
         fct_genre_id=genre_id,
-        id=book_genre_id
+        id=book_genre_id or uuid4()
     )
 
     if new_book_genre:

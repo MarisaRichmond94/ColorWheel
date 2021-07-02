@@ -1,8 +1,10 @@
 """Business layer for the books service."""
 # pylint: disable=too-many-arguments
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Optional, Union
 from uuid import uuid4
+
+import pytz
 
 from restful_services.books import data
 from settings.restful_services import INITIAL_BOOK_STATUS_ID
@@ -47,9 +49,6 @@ def create_book(
         user_id=user_id
     )
 
-    timestamp = datetime.now()
-    timestamp = timestamp.replace(tzinfo=timezone.utc)
-
     return data.create_book(
         session,
         book_status_id=INITIAL_BOOK_STATUS_ID,
@@ -57,7 +56,7 @@ def create_book(
         author=author,
         image_key=image_key,
         synopsis=synopsis,
-        timestamp=timestamp.isoformat(),
+        timestamp=datetime.utcnow().replace(tzinfo=pytz.utc),
         title=title,
         book_id=book_id
     )

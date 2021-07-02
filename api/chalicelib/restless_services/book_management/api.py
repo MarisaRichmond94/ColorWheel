@@ -31,6 +31,7 @@ def create_user_book() -> Optional[dict]:
         A dict containing aggregated information for the newly created book else None.
     """
     return business.create_user_book(
+        session=api.handled_request.session,
         user_id=api.handled_request.user_id,
         author=api.handled_request.body.get('author'),
         title=api.handled_request.body.get('title'),
@@ -55,6 +56,7 @@ def create_secondary_genre() -> Optional[dict]:
         A book populated with the updated aggregated information else None.
     """
     return create_secondary_genre(
+        session=api.handled_request.session,
         user_id=api.handled_request.user_id,
         book_id=api.handled_request.body.get('book_id'),
         secondary_genre_id=api.handled_request.body.get('secondary_genre_id')
@@ -68,7 +70,10 @@ def get_user_books() -> list:
     Returns:
         A list of all books associated with the given user_id else an empty list.
     """
-    return business.get_user_books(user_id=api.handled_request.user_id)
+    return business.get_user_books(
+        session=api.handled_request.session,
+        user_id=api.handled_request.user_id
+    )
 
 
 @api_handler(api=api, path='/book-management/{book_id}', methods=['GET'])
@@ -82,6 +87,7 @@ def get_user_book_by_id(book_id: Union[str, uuid4]) -> Optional[dict]:
         A book populated with aggregated information else None.
     """
     return business.get_user_book_by_id(
+        session=api.handled_request.session,
         user_id=api.handled_request.user_id,
         book_id=book_id
     )
@@ -103,6 +109,7 @@ def update_user_book_by_id(book_id: Union[str, uuid4]) -> Optional[dict]:
         A book populated with the updated aggregated information else None.
     """
     return business.update_user_book_by_id(
+        session=api.handled_request.session,
         user_id=api.handled_request.user_id,
         book_id=book_id,
         title=api.handled_request.body.get('title'),
@@ -129,6 +136,7 @@ def update_user_book_genre_by_id(book_genre_id: Union[str, uuid4]) -> Optional[d
         An updated book genre else None.
     """
     return business.update_user_book_genre_by_id(
+        session=api.handled_request.session,
         user_id=api.handled_request.user_id,
         book_id=api.handled_request.body.get('book_id'),
         genre_id=api.handled_request.body.get('genre_id'),
@@ -143,7 +151,10 @@ def delete_user_books() -> list:
     Returns:
         A list of all of the books that were deleted.
     """
-    return business.delete_user_books(user_id=api.handled_request.user_id)
+    return business.delete_user_books(
+        session=api.handled_request.session,
+        user_id=api.handled_request.user_id
+    )
 
 
 @api_handler(api=api, path='/book-management/{book_id}', methods=['DELETE'])
@@ -157,6 +168,7 @@ def delete_user_book_by_id(book_id: Union[str, uuid4]) -> Optional[dict]:
         The deleted book else None.
     """
     return business.delete_user_book_by_id(
+        session=api.handled_request.session,
         user_id=api.handled_request.user_id,
         book_id=book_id
     )
@@ -178,6 +190,7 @@ def delete_secondary_book_genre(book_genre_id: Union[str, uuid4]) -> Optional[di
         The deleted genre else None.
     """
     return business.delete_secondary_book_genre(
+        session=api.handled_request.session,
         user_id=api.handled_request.user_id,
         book_id=api.handled_request.query.get('book_id'),
         book_genre_id=book_genre_id

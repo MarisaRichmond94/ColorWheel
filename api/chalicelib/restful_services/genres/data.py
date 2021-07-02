@@ -37,7 +37,7 @@ def create_genre(
         display_name=display_name,
         is_primary=is_primary,
         name=name,
-        id=genre_id
+        id=genre_id or uuid4()
     )
 
     if new_genre:
