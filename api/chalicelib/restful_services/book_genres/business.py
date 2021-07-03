@@ -49,7 +49,7 @@ def create_book_genre(
     )
 
 
-def get_book_genres(session: any, book_id: Optional[Union[str, uuid4]]) -> list:
+def get_book_genres_by_book_id(session: any, book_id: Optional[Union[str, uuid4]]) -> list:
     """Gets book_genres from the table filtered by given params.
 
     Args:
@@ -59,9 +59,22 @@ def get_book_genres(session: any, book_id: Optional[Union[str, uuid4]]) -> list:
     Returns:
         A list of book_genres filtered by any given params.
     """
-    if book_id:
-        return data.get_book_genres_by_book_id(session, book_id=book_id)
-    return []
+    validate_params(func='get_book_genres_by_book_id', params={'book_id': book_id})
+    return data.get_book_genres_by_book_id(session, book_id=book_id)
+
+
+def get_book_genres_by_genre_id(session: any, genre_id: Optional[Union[str, uuid4]]) -> list:
+    """Gets book_genres from the table filtered by given params.
+
+    Args:
+        session: The current database session.
+        genre_id: The FK to the genres table.
+
+    Returns:
+        A list of book_genres filtered by any given params.
+    """
+    validate_params(func='get_book_genres_by_genre_id', params={'genre_id': genre_id})
+    return data.get_book_genres_by_genre_id(session, genre_id=genre_id)
 
 
 def get_book_genre_by_id(session: any, book_genre_id: Union[str, uuid4]) -> Optional[dict]:
@@ -105,10 +118,11 @@ def update_book_genre(
         func='update_book_genre',
         params={'genre_id': genre_id, 'book_genre_id': book_genre_id}
     )
+    book_genre = data.get_book_genre_by_id(session, book_genre_id=book_genre_id)
     validate_entity_is_unique(
         func=data.get_book_genres_by_book_id_and_genre_id,
         session=session,
-        book_id=data.get_book_genre_by_id(session, book_genre_id).get('book', {}).get('id'),
+        book_id=book_genre.get('book_id'),
         genre_id=genre_id
     )
     validate_primary_genre(

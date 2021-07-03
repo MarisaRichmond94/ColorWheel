@@ -1,8 +1,10 @@
 """Business layer for the books service."""
 # pylint: disable=too-many-arguments
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Optional, Union
 from uuid import uuid4
+
+import pytz
 
 from restful_services.books import data
 from settings.restful_services import INITIAL_BOOK_STATUS_ID
@@ -15,7 +17,7 @@ def create_book(
     author: str,
     title: str,
     image_key: Optional[str] = None,
-    summary: Optional[str] = None,
+    synopsis: Optional[str] = None,
     book_id: Optional[Union[str, uuid4]] = None
 ) -> Optional[dict]:
     """Creates a new book.
@@ -25,7 +27,7 @@ def create_book(
         user_id: The FK to the users table.
         author: The author to associate with the new book.
         image_key: The image_key to associate with the new book.
-        summary: The summary to associate with the new book.
+        synopsis: The synopsis to associate with the new book.
         title: The title to associate with the new book.
         book_id: The PK to assign to the new book.
 
@@ -47,17 +49,14 @@ def create_book(
         user_id=user_id
     )
 
-    timestamp = datetime.now()
-    timestamp = timestamp.replace(tzinfo=timezone.utc)
-
     return data.create_book(
         session,
         book_status_id=INITIAL_BOOK_STATUS_ID,
         user_id=user_id,
         author=author,
         image_key=image_key,
-        summary=summary,
-        timestamp=timestamp.isoformat(),
+        synopsis=synopsis,
+        timestamp=datetime.utcnow().replace(tzinfo=pytz.utc),
         title=title,
         book_id=book_id
     )
@@ -101,7 +100,7 @@ def update_book(
     user_id: Union[str, uuid4],
     title: Optional[str] = None,
     author: Optional[str] = None,
-    summary: Optional[str] = None,
+    synopsis: Optional[str] = None,
     image_key: Optional[str] = None,
     book_status_id: Optional[Union[str, uuid4]] = None
 ) -> Optional[dict]:
@@ -112,7 +111,7 @@ def update_book(
         book_id: The PK of a book.
         title: The title to modify in the book with the given id.
         author: The author to modify in the book with the given id.
-        summary: The summary to modify in the book with the given id.
+        synopsis: The synopsis to modify in the book with the given id.
         image_key: The image_key to modify in the book with the given id.
         book_status_id: The FK to the book_status table.
 
@@ -137,7 +136,7 @@ def update_book(
         book_id=book_id,
         title=title,
         author=author,
-        summary=summary,
+        synopsis=synopsis,
         image_key=image_key,
         book_status_id=book_status_id
     )

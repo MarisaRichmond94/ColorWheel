@@ -73,7 +73,7 @@ def upgrade():
         ),
         sa.Column('author', sa.String(length=2048), nullable=False),
         sa.Column('image_key', sa.String(length=2048), nullable=True),
-        sa.Column('summary', sa.String(length=2048), nullable=True),
+        sa.Column('synopsis', sa.String(length=2048), nullable=True),
         sa.Column('timestamp', sa.DateTime(), nullable=False),
         sa.Column('title', sa.String(length=2048), nullable=False),
         sa.Column('dim_user_id', postgresql.UUID(as_uuid=True), nullable=False),

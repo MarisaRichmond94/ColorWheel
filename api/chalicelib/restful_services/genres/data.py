@@ -37,7 +37,7 @@ def create_genre(
         display_name=display_name,
         is_primary=is_primary,
         name=name,
-        id=genre_id
+        id=genre_id or uuid4()
     )
 
     if new_genre:
@@ -76,6 +76,31 @@ def get_genres_by_user_id(session: any, user_id: Union[str, uuid4]) -> list:
             .all()
     )
     return PopulatedGenreSchema(many=True).dump(genres) if genres else []
+
+
+def get_genre_by_display_name_and_user_id(
+    session: any,
+    display_name: str,
+    user_id: Union[str, uuid4]
+) -> Optional[dict]:
+    """Gets a genre by a given name.
+
+    Args:
+        session: The current database session.
+        display_name: The unique name of the genre.
+        user_id: The ID of the user to filter genres by.
+
+    Returns:
+        A genre by the given name else None.
+    """
+    genre = (
+        session
+            .query(FctGenres)
+            .filter(FctGenres.display_name == display_name)
+            .filter(FctGenres.dim_user_id.in_([user_id, DEFAULT_USER_ID]))
+            .one_or_none()
+    )
+    return PopulatedGenreSchema().dump(genre) if genre else None
 
 
 def get_genre_by_id(session: any, genre_id: Union[str, uuid4]) -> Optional[dict]:

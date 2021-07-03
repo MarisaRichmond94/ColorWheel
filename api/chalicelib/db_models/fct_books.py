@@ -16,7 +16,7 @@ class FctBooks(Base):
     __tablename__ = 'fct_books'
     author = Column(String(MAX_STRING_LENGTH), nullable=False)
     image_key = Column(String(MAX_STRING_LENGTH), nullable=True)
-    summary = Column(String(MAX_STRING_LENGTH), nullable=True)
+    synopsis = Column(String(MAX_STRING_LENGTH), nullable=True)
     timestamp = Column(DateTime(), nullable=False)
     title = Column(String(MAX_STRING_LENGTH), nullable=False)
 

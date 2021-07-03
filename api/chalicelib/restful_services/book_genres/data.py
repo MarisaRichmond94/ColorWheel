@@ -30,7 +30,7 @@ def create_book_genre(
     new_book_genre = FctBookGenres(
         fct_book_id=book_id,
         fct_genre_id=genre_id,
-        id=book_genre_id
+        id=book_genre_id or uuid4()
     )
 
     if new_book_genre:
@@ -61,7 +61,7 @@ def get_primary_genre_by_book_id(session: any, book_id: Union[str, uuid4]) -> Op
 
 
 def get_book_genres_by_book_id(session: any, book_id: Union[str, uuid4]) -> list:
-    """Gets book_genres from the table by a given book.
+    """Gets book_genres from the table by a given book ID.
 
     Args:
         session: The current database session.
@@ -71,6 +71,20 @@ def get_book_genres_by_book_id(session: any, book_id: Union[str, uuid4]) -> list
         A list of book_genres with the given book_id else [].
     """
     book_genres = session.query(FctBookGenres).filter_by(fct_book_id=book_id).all()
+    return PopulatedBookGenreSchema(many=True).dump(book_genres) if book_genres else []
+
+
+def get_book_genres_by_genre_id(session: any, genre_id: Union[str, uuid4]) -> list:
+    """Gets book_genres from the table by a given genre ID.
+
+    Args:
+        session: The current database session.
+        genre_id: The genre_id to filter book_genres by.
+
+    Returns:
+        A list of book_genres with the given genre_id else [].
+    """
+    book_genres = session.query(FctBookGenres).filter_by(fct_genre_id=genre_id).all()
     return PopulatedBookGenreSchema(many=True).dump(book_genres) if book_genres else []
 
 
