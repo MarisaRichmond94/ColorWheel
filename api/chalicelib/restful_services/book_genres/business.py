@@ -118,10 +118,11 @@ def update_book_genre(
         func='update_book_genre',
         params={'genre_id': genre_id, 'book_genre_id': book_genre_id}
     )
+    book_genre = data.get_book_genre_by_id(session, book_genre_id=book_genre_id)
     validate_entity_is_unique(
         func=data.get_book_genres_by_book_id_and_genre_id,
         session=session,
-        book_id=data.get_book_genre_by_id(session, book_genre_id).get('book', {}).get('id'),
+        book_id=book_genre.get('book_id'),
         genre_id=genre_id
     )
     validate_primary_genre(

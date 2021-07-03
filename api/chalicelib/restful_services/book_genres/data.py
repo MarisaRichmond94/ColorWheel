@@ -84,7 +84,7 @@ def get_book_genres_by_genre_id(session: any, genre_id: Union[str, uuid4]) -> li
     Returns:
         A list of book_genres with the given genre_id else [].
     """
-    book_genres = session.query(FctBookGenres).filter_by(dim_genre_id=genre_id).all()
+    book_genres = session.query(FctBookGenres).filter_by(fct_genre_id=genre_id).all()
     return PopulatedBookGenreSchema(many=True).dump(book_genres) if book_genres else []
 
 

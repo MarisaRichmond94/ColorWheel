@@ -34,7 +34,7 @@ def create_genre(
         params={'user_id': user_id, 'display_name': display_name, 'name': name}
     )
     validate_entity_is_unique(
-        func=data.get_genres_by_display_name_and_user_id,
+        func=data.get_genre_by_display_name_and_user_id,
         session=session,
         display_name=display_name,
         user_id=user_id
@@ -83,6 +83,29 @@ def get_genre_by_id(session: any, genre_id: Union[str, uuid4]) -> Optional[dict]
     return data.get_genre_by_id(session, genre_id=genre_id)
 
 
+def get_genre_by_display_name_and_user_id(
+    session: any,
+    display_name: str,
+    user_id: Union[str, uuid4]
+) -> Optional[dict]:
+    """Gets a genre by a given name.
+
+    Args:
+        session: The current database session.
+        display_name: The unique name of the genre.
+        user_id: The ID of the user to filter genres by.
+
+    Returns:
+        A genre by the given name else None.
+
+    """
+    return data.get_genre_by_display_name_and_user_id(
+        session,
+        display_name=display_name,
+        user_id=user_id
+    )
+
+
 def update_genre(
     session: any,
     user_id: Union[str, uuid4],
@@ -111,7 +134,7 @@ def update_genre(
         params={'name': name, 'display_name': display_name, 'genre_id': genre_id}
     )
     validate_entity_is_unique(
-        func=data.get_genres_by_display_name_and_user_id,
+        func=data.get_genre_by_display_name_and_user_id,
         session=session,
         display_name=display_name,
         user_id=user_id

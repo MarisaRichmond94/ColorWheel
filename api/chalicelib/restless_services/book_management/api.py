@@ -49,13 +49,13 @@ def create_user_book() -> Optional[dict]:
     methods=['POST'],
     body_schema=CreateBookGenreBodySchema
 )
-def create_secondary_genre() -> Optional[dict]:
+def create_secondary_book_genre() -> Optional[dict]:
     """Creates a new secondary genre tied to the given book ID.
 
     Returns:
         A book populated with the updated aggregated information else None.
     """
-    return create_secondary_genre(
+    return business.create_secondary_book_genre(
         session=api.handled_request.session,
         user_id=api.handled_request.user_id,
         book_id=api.handled_request.body.get('book_id'),

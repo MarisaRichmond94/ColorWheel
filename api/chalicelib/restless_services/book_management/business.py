@@ -72,12 +72,12 @@ def create_user_book(
 
     secondary_book_genres = []
     for secondary_genre_name in secondary_genre_names:
-        genre_id = genres_service.get_genres_by_display_name_and_user_id(
+        existing_genre = genres_service.get_genre_by_display_name_and_user_id(
             session,
             display_name=secondary_genre_name,
             user_id=user_id,
         )
-        if not genre_id:
+        if not existing_genre:
             log.info(f'Creating new genre "{secondary_genre_name}" tied to user id: "{user_id}"')
             new_genre = genres_service.create_genre(
                 session,
@@ -91,7 +91,7 @@ def create_user_book(
             book_genres_service.create_book_genre(
                 session,
                 book_id=new_book.get('id'),
-                genre_id=genre_id or new_genre.get('id')
+                genre_id=existing_genre.get('id') if existing_genre else new_genre.get('id')
             )
         )
 
@@ -143,12 +143,12 @@ def create_secondary_book_genre(
     )
     security.validate_user_book(session, user_id=user_id, book_id=book_id)
 
-    genre_id = genres_service.get_genres_by_display_name_and_user_id(
+    existing_genre = genres_service.get_genre_by_display_name_and_user_id(
         session,
         display_name=secondary_genre_name,
         user_id=user_id,
     )
-    if not genre_id:
+    if not existing_genre:
         log.info(f'Creating new genre "{secondary_genre_name}" tied to user id: "{user_id}"')
         new_genre = genres_service.create_genre(
             session,
@@ -160,7 +160,7 @@ def create_secondary_book_genre(
     new_book_genre = book_genres_service.create_book_genre(
         session,
         book_id=book_id,
-        genre_id=genre_id or new_genre.get('id')
+        genre_id=existing_genre.get('id') if existing_genre else new_genre.get('id')
     )
     return book_genres_service.get_book_genre_by_id(session, new_book_genre.get('id'))
 
@@ -301,7 +301,7 @@ def update_user_book_genre_by_id(
             'book_genre_id': book_genre_id
         }
     )
-    security.validate_user_book(user_id=user_id, book_id=book_id)
+    security.validate_user_book(session, user_id=user_id, book_id=book_id)
 
     original_book_genre = book_genres_service.get_book_genre_by_id(session, book_genre_id)
     original_genre = genres_service.get_genre_by_id(
@@ -310,12 +310,12 @@ def update_user_book_genre_by_id(
     )
     original_genre_id = original_genre.get('id')
 
-    genre_id = genres_service.get_genres_by_display_name_and_user_id(
+    existing_genre = genres_service.get_genre_by_display_name_and_user_id(
         session,
         display_name=genre_name,
         user_id=user_id,
     )
-    if not genre_id:
+    if not existing_genre:
         log.info(f'Creating new genre "{genre_name}" tied to user id: "{user_id}"')
         new_genre = genres_service.create_genre(
             session,
@@ -326,7 +326,7 @@ def update_user_book_genre_by_id(
 
     updated_book_genre = book_genres_service.update_book_genre(
         session,
-        genre_id=genre_id or new_genre.get('id'),
+        genre_id=existing_genre.get('id') if existing_genre else new_genre.get('id'),
         book_genre_id=book_genre_id
     )
 

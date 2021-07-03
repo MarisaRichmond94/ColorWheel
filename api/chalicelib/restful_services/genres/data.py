@@ -78,7 +78,7 @@ def get_genres_by_user_id(session: any, user_id: Union[str, uuid4]) -> list:
     return PopulatedGenreSchema(many=True).dump(genres) if genres else []
 
 
-def get_genres_by_display_name_and_user_id(
+def get_genre_by_display_name_and_user_id(
     session: any,
     display_name: str,
     user_id: Union[str, uuid4]
@@ -96,7 +96,7 @@ def get_genres_by_display_name_and_user_id(
     genre = (
         session
             .query(FctGenres)
-            .filter(display_name=display_name)
+            .filter(FctGenres.display_name == display_name)
             .filter(FctGenres.dim_user_id.in_([user_id, DEFAULT_USER_ID]))
             .one_or_none()
     )

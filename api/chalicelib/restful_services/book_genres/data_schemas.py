@@ -19,7 +19,7 @@ class BookGenreSchema(Schema):
 class PopulatedBookGenreSchema(Schema):
     """Populated data schema for a book_genre."""
     id = fields.UUID(required=True)
-    book = fields.UUID(required=True, attribute='fct_book_id')
+    book_id = fields.UUID(required=True, attribute='fct_book_id')
     genre = fields.Nested(GenreSchema, attribute='fct_genre')
 
     class Meta:

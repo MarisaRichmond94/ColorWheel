@@ -19,12 +19,12 @@ def populate_genres_for_user_book(session: any, user_book: dict) -> dict:
     user_book['primary_genre'] = next((
         user_book_genre
         for user_book_genre in user_book_genres
-        if user_book_genre.get('is_primary')
+        if user_book_genre.get('genre', {}).get('is_primary')
     ), None)
     user_book['secondary_genres'] = [
         user_book_genre
         for user_book_genre in user_book_genres
-        if not user_book_genre.get('is_primary')
+        if not user_book_genre.get('genre', {}).get('is_primary')
     ]
 
     return user_book
