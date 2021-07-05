@@ -7,7 +7,7 @@ const Footer = () => (
   <Row id='main-footer'>
     <Col>
       <p id='main-footer-text'>
-        Created By Marisa Richmond
+        Created By Marisa D. Richmond
       </p>
     </Col>
   </Row>

@@ -1,10 +1,17 @@
 $dark-background-font-color: white;
 $image-assets-path: '../../assets/images/';
+$primary-background-color: #404040;
+$secondary-background-color: #242424;
+$tertiery-background-color: #323232;
 
 %fill-container {
   height: 100vh;
   overflow: hidden auto;
   width: 100vw;
+}
+
+#app {
+  background-color: $primary-background-color;
 }
 
 body {

@@ -1,28 +1,26 @@
 import './index.scss';
 
-import { object } from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { AiOutlineFileSearch } from 'react-icons/ai';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { ImBooks } from 'react-icons/im';
-import { withRouter } from 'react-router';
+import { useHistory, useLocation } from 'react-router-dom';
 
 import SmartDropdown from '~/components/smart_dropdown';
 
 let stopNavigationMenuListener;
 
-const NavigationMenu = props => {
-  NavigationMenu.propTypes = {
-    history: object.isRequired,
-  };
+const NavigationMenu = () => {
+  const history = useHistory();
+  const location = useLocation();
 
   const [selectedOption, setSelectedOption] = useState(
-    window.location.pathname.split('/').join(''),
+    location.pathname.split('/').join(''),
   );
 
   useEffect(() => {
-    stopNavigationMenuListener = props.history.listen(location => {
-      const newPath = location.pathname.split('/').join('');
+    stopNavigationMenuListener = history.listen(loc => {
+      const newPath = loc.pathname.split('/').join('');
       if (newPath !== selectedOption) {
         setSelectedOption(newPath);
       }
@@ -31,11 +29,11 @@ const NavigationMenu = props => {
     return () => {
       if (stopNavigationMenuListener) stopNavigationMenuListener();
     };
-  }, [props.history, selectedOption]);
+  }, [history, selectedOption]);
 
   const onOptionSelect = option => {
     const isMockBE = window.location.search.includes('MOCK_BE');
-    window.historyPush(`/${option.displayName.toLowerCase()}${isMockBE ? '?MOCK_BE' : ''}`);
+    history.push(`/${option.displayName.toLowerCase()}${isMockBE ? '?MOCK_BE' : ''}`);
   };
 
   const options = [
@@ -55,4 +53,4 @@ const NavigationMenu = props => {
   );
 };
 
-export default withRouter(NavigationMenu);
+export default NavigationMenu;

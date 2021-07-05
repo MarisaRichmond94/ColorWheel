@@ -18,10 +18,10 @@ export function * authenticateSession() {
     if (Object.keys(authResults).length === keys.length) {
       yield fork(refreshSession, authResults.email);
     } else {
-      yield call(routeBackToLogin);
+      yield fork(routeBackToLogin);
     }
   } else {
-    yield call(routeBackToLogin);
+    yield fork(routeBackToLogin);
   }
 }
 

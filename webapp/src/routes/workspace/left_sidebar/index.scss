@@ -1,5 +1,7 @@
+@use 'src/app';
+
 #workspace-left-sidebar {
-  background-color: #323232;
+  background-color: app.$tertiery-background-color;
   height: 100%;
   width: 50px;
 }

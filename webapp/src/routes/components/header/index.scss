@@ -1,5 +1,7 @@
+@use 'src/app';
+
 #main-header {
-  background-color: #242424;
+  background-color: app.$secondary-background-color;
   height: 40px;
   padding: 0px 10px;
   position: fixed;

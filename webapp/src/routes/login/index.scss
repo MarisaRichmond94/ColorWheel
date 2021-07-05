@@ -1,7 +1,7 @@
-@use 'src/global';
+@use 'src/app';
 
 #login-page {
-  background: url(global.$image-assets-path + 'login_background.jpg') no-repeat center center fixed;
+  background: url(app.$image-assets-path + 'login_background.jpg') no-repeat center center fixed;
   background-size: cover;
   height: 100%;
 

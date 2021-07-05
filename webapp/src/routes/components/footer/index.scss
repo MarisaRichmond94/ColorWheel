@@ -1,5 +1,7 @@
+@use 'src/app';
+
 #main-footer {
-  background-color: #242424;
+  background-color: app.$secondary-background-color;
   bottom: 0;
   position: fixed;
   text-align: center;

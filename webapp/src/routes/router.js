@@ -1,8 +1,7 @@
 import { string } from 'prop-types';
 import React from 'react';
 import loadable from 'react-loadable';
-import { Redirect } from 'react-router';
-import { Route } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 
 const LoginRoute = loadable({
   loader: () => import('./login'),
@@ -30,12 +29,12 @@ const DefaultRedirect = props => {
 
 function SmartRouter() {
   return (
-  <>
-    <Route exact path='/' component={LoginRoute} />
-    <Route path='/explore' component={ExploreRoute} />
-    <Route path='/workspace' component={WorkspaceRoute} />
-    <Route render={() => <DefaultRedirect redirectPath={'/workspace'} />} />
-  </>
+    <Switch>
+      <Route exact path='/' component={LoginRoute} />
+      <Route path='/explore' component={ExploreRoute} />
+      <Route path='/workspace' component={WorkspaceRoute} />
+      <Route render={() => <DefaultRedirect redirectPath={'/workspace'} />} />
+    </Switch>
   );
 }
 

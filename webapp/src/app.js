@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import AutoLogoutModal from '~/components/auto_logout_modal';
-import Footer from '~/components/footer';
-import Header from '~/components/header';
 import Loading from '~/components/loading';
+import Footer from '~/routes/components/footer';
+import Header from '~/routes/components/header';
 import LoginPage from '~/routes/login';
 import SmartRouter from '~/routes/router';
 import types from '~/sagas/types';

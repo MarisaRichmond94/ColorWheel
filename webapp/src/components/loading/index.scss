@@ -1,9 +1,9 @@
-@use 'src/global';
+@use 'src/app';
 
 .loading-icon {
   padding-top: 20%;
 
   .loading-text {
-    color: global.$dark-background-font-color;
+    color: app.$dark-background-font-color;
   }
 }

@@ -16,9 +16,9 @@ const LeftSidebar = () => {
     leftSidebarElement.addEventListener('mouseleave', e => setIsHovered(false));
   }, []);
 
-  const handleViewChange = view => {
+  const buildLinkTo = view => {
     const isMock = window.location.search.includes('MOCK_BE');
-    window.historyPush(`/workspace?view=${view}${isMock ? '&MOCK_BE' : ''}`);
+    return `/workspace?view=${view}${isMock ? '&MOCK_BE' : ''}`;
   };
 
   return (
@@ -27,49 +27,49 @@ const LeftSidebar = () => {
         colorClass='red'
         icon={<GiHouse />}
         isHovered={isHovered}
-        onClick={() => handleViewChange('home')}
+        to={buildLinkTo('home')}
         text='home'
       />
       <SectionIcon
         colorClass='orange'
         icon={<GiBrain />}
         isHovered={isHovered}
-        onClick={() => handleViewChange('plan')}
+        to={buildLinkTo('plan')}
         text='plan'
       />
       <SectionIcon
         colorClass='yellow'
         icon={<GiLaptop />}
         isHovered={isHovered}
-        onClick={() => handleViewChange('write')}
+        to={buildLinkTo('write')}
         text='write'
       />
       <SectionIcon
         colorClass='green'
         icon={<GoChecklist />}
         isHovered={isHovered}
-        onClick={() => handleViewChange('edit')}
+        to={buildLinkTo('edit')}
         text='edit'
       />
       <SectionIcon
         colorClass='teal'
         icon={<AiOutlineFileSearch />}
         isHovered={isHovered}
-        onClick={() => handleViewChange('review')}
+        to={buildLinkTo('review')}
         text='review'
       />
       <SectionIcon
         colorClass='blue'
         icon={<GiBookCover />}
         isHovered={isHovered}
-        onClick={() => handleViewChange('revise')}
+        to={buildLinkTo('revise')}
         text='revise'
       />
       <SectionIcon
         colorClass='purple'
         icon={<GiSpellBook />}
         isHovered={isHovered}
-        onClick={() => handleViewChange('publish')}
+        to={buildLinkTo('publish')}
         text='publish'
       />
     </div>
