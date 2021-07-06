@@ -30,9 +30,9 @@ const DefaultRedirect = props => {
 function SmartRouter() {
   return (
     <Switch>
-      <Route exact path='/' component={LoginRoute} />
       <Route path='/explore' component={ExploreRoute} />
       <Route path='/workspace' component={WorkspaceRoute} />
+      <Route exact path='/' component={LoginRoute} />
       <Route render={() => <DefaultRedirect redirectPath={'/workspace'} />} />
     </Switch>
   );
