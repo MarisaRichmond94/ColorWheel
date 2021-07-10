@@ -9,6 +9,7 @@ const SmartFormInput = props => {
     classNames: string,
     formValue: string.isRequired,
     id: string.isRequired,
+    onKeyPress: func,
     placeholder: string.isRequired,
     setFormValue: func.isRequired,
     type: string,
@@ -29,6 +30,7 @@ const SmartFormInput = props => {
       id={props.id}
       name={Math.random().toString()}
       onChange={e => onChange(e.target.value)}
+      onKeyPress={e => props.onKeyPress(e)}
       placeholder={props.placeholder}
       spellCheck="false"
       type={props.type || 'text'}

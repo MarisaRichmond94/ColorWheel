@@ -5,9 +5,109 @@
   background-size: cover;
   height: 100%;
 
-  .inline-span {
-    display: inline-block;
-    line-height: 0;
+  #login-title {
+    text-align: center;
+    width: 100%;
+
+    img {
+      padding-top: 10vh;
+      width: 45%;
+    }
+  }
+
+  #login-form {
+    padding: 2vh;
+
+    div {
+      background-color: #1E1E1E;
+      border-radius: 10px;
+      opacity: 0.8;
+      padding: 15px 30px;
+
+      .input-row-wrapper {
+        padding: 2% 1% 1% 1%;
+
+        .input-col-wrapper {
+          border-bottom: 1px solid white;
+          border-radius: 0;
+          padding: 0;
+
+          .inline-span {
+            display: inline-block;
+            line-height: 0;
+            margin: 0;
+          }
+
+          .form-input-wrapper {
+            width: 98%;
+          }
+
+          .form-input-wrapper.password {
+            width: 94%;
+          }
+
+          .valid-icon {
+            color: green;
+            font-size: 20px;
+            width: 2%;
+          }
+
+          .invalid-icon {
+            color: white;
+            font-size: 20px;
+            width: 2%;
+          }
+        }
+      }
+
+      #submit-button-wrapper {
+        padding: 0;
+
+        div {
+          #submit-button:enabled {
+            background: #C5E376;
+            color: white;
+          }
+        }
+      }
+
+      #auth-warning-message {
+        color: red;
+      }
+    }
+  }
+
+  .login-prompt {
+    font-size: 20px;
+
+    .inline-span {
+      display: inline-block;
+      line-height: 0;
+      margin: 0;
+
+      .smart-button {
+        padding-bottom: 10px;
+      }
+    }
+
+    #login-prompt-login-button,
+    #login-prompt-signup-button {
+      font-size: 18px;
+    }
+  }
+
+  #login-footer {
+    background-color: app.$tertiery-background-color;;
+    bottom: 0;
     margin: 0;
+    position: fixed;
+    text-align: center;
+    width: 100%;
+
+    .footer-text {
+      color: white;
+      margin: 0;
+      padding: 5px;
+    }
   }
 }

@@ -1,5 +1,3 @@
-import './index.scss';
-
 import React from 'react';
 
 import source from '~/assets/images/login_title.png';

@@ -1,22 +1,23 @@
 import './index.scss';
 
-import React, { useState } from 'react';
+import React from 'react';
 
-import Footer from './footer';
-import Form from './form';
-import Prompt from './prompt';
-import Title from './title';
+import { LoginProvider } from '~/context/login';
+import Footer from '~/routes/login/footer';
+import Form from '~/routes/login/form';
+import Prompt from '~/routes/login/prompt';
+import Title from '~/routes/login/title';
 
 const LoginPage = () => {
-  const [isSignUpPage, setIsSignUpPage] = useState(false);
-
   return (
-    <div id='login-page'>
-      <Title />
-      <Form isSignUpPage={isSignUpPage} />
-      <Prompt isSignUpPage={isSignUpPage} setIsSignUpPage={setIsSignUpPage} />
-      <Footer />
-    </div>
+    <LoginProvider>
+      <div id='login-page'>
+        <Title />
+        <Form />
+        <Prompt />
+        <Footer />
+      </div>
+    </LoginProvider>
   );
 };
 
