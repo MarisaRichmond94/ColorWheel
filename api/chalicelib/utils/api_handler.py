@@ -6,7 +6,7 @@ from loguru import logger as log
 import marshmallow
 
 from utils.authorizer import authorizer
-from utils.db import session_scope
+from utils import db
 from utils.request import validate_request
 from utils.response import generate_fail_response, generate_success_response, Response
 
@@ -40,9 +40,9 @@ def api_handler(
             if error_response:
                 return error_response
 
-            with session_scope() as session:
+            with db.session_scope() as session:
+                db.SESSION = session
                 api.handled_request = request
-                api.handled_request.session = session
                 api.handled_request.user_id = (
                     api.current_request.context.get('authorizer', {}).get('user_id')
                 )

@@ -12,7 +12,6 @@ from utils.validation import validate_entity_is_unique, validate_params
 
 
 def create_book(
-    session: any,
     user_id: Union[str, uuid4],
     author: str,
     title: str,
@@ -23,7 +22,6 @@ def create_book(
     """Creates a new book.
 
     Args:
-        session: The current database session.
         user_id: The FK to the users table.
         author: The author to associate with the new book.
         image_key: The image_key to associate with the new book.
@@ -44,13 +42,11 @@ def create_book(
     )
     validate_entity_is_unique(
         func=data.get_book_by_title_and_user_id,
-        session=session,
         title=title,
         user_id=user_id
     )
 
     return data.create_book(
-        session,
         book_status_id=INITIAL_BOOK_STATUS_ID,
         user_id=user_id,
         author=author,
@@ -62,26 +58,24 @@ def create_book(
     )
 
 
-def get_books(session: any, user_id: Optional[Union[str, uuid4]] = None) -> list:
+def get_books(user_id: Optional[Union[str, uuid4]] = None) -> list:
     """Gets books from the table filtered by given params.
 
     Args:
-        session: The current database session.
         user_id: The FK to the user table.
 
     Returns:
         A list of books filtered by any given params.
     """
     if user_id:
-        return data.get_books_by_user_id(session, user_id=user_id)
-    return data.get_books(session)
+        return data.get_books_by_user_id(user_id=user_id)
+    return data.get_books()
 
 
-def get_book_by_id(session: any, book_id: Union[str, uuid4]) -> Optional[dict]:
+def get_book_by_id(book_id: Union[str, uuid4]) -> Optional[dict]:
     """Gets a book from the table by a given id.
 
     Args:
-        session: The current database session.
         book_id: The PK of a book.
 
     Returns:
@@ -91,11 +85,10 @@ def get_book_by_id(session: any, book_id: Union[str, uuid4]) -> Optional[dict]:
         InvalidParamException: If the given book_id is None.
     """
     validate_params(func='get_book_by_id', params={'book_id': book_id})
-    return data.get_book_by_id(session, book_id=book_id)
+    return data.get_book_by_id(book_id=book_id)
 
 
 def update_book(
-    session: any,
     book_id: Union[str, uuid4],
     user_id: Union[str, uuid4],
     title: Optional[str] = None,
@@ -107,7 +100,6 @@ def update_book(
     """Updates a book by a given id.
 
     Args:
-        session: The current database session.
         book_id: The PK of a book.
         title: The title to modify in the book with the given id.
         author: The author to modify in the book with the given id.
@@ -126,13 +118,11 @@ def update_book(
     if title:
         validate_entity_is_unique(
             func=data.get_book_by_title_and_user_id,
-            session=session,
             title=title,
             user_id=user_id
         )
 
     return data.update_book(
-        session,
         book_id=book_id,
         title=title,
         author=author,
@@ -142,11 +132,10 @@ def update_book(
     )
 
 
-def delete_books(session: any, user_id: Union[str, uuid4]) -> Optional[list]:
+def delete_books(user_id: Union[str, uuid4]) -> Optional[list]:
     """Deletes books from the table using the given params.
 
     Args:
-        session: The current database session.
         user_id: The FK to the user table.
 
     Returns:
@@ -156,14 +145,13 @@ def delete_books(session: any, user_id: Union[str, uuid4]) -> Optional[list]:
         InvalidParamException: If any of the given params are None.
     """
     validate_params(func='delete_books', params={'user_id': user_id})
-    return data.delete_books(session, user_id=user_id)
+    return data.delete_books(user_id=user_id)
 
 
-def delete_book_by_id(session: any, book_id: Union[str, uuid4]) -> Optional[dict]:
+def delete_book_by_id(book_id: Union[str, uuid4]) -> Optional[dict]:
     """Deletes a book from the table by the given id.
 
     Args:
-        session: The current database session.
         book_id: The PK of a book.
 
     Returns:
@@ -173,4 +161,4 @@ def delete_book_by_id(session: any, book_id: Union[str, uuid4]) -> Optional[dict
         InvalidParamException: If the given book_id is None.
     """
     validate_params(func='delete_book_by_id', params={'book_id': book_id})
-    return data.delete_book_by_id(session, book_id=book_id)
+    return data.delete_book_by_id(book_id=book_id)

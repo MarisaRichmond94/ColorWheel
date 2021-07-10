@@ -4,7 +4,7 @@ from chalice import AuthResponse
 from restful_services.sessions.business import get_session_by_token
 from restless_services.authentication.business import authenticate_user
 from utils.app import APP
-from utils.db import session_scope
+from utils import db
 
 
 @APP.authorizer()
@@ -18,13 +18,13 @@ def authorizer(auth_request) -> AuthResponse:
         An auth response containing allowed routes and a principal id.
     """
     if auth_request.token:
-        with session_scope() as db_session:
+        with db.session_scope() as db_session:
+            db.SESSION = db_session
             json_web_token = auth_request.token.split('Bearer')[1].strip()
-            session = get_session_by_token(db_session, token=json_web_token)
+            session = get_session_by_token(token=json_web_token)
 
             if session:
                 decoded_payload = authenticate_user(
-                    db_session,
                     email=session.get('user', {}).get('email'),
                     password=session.get('user', {}).get('password'),
                     json_web_token=json_web_token,

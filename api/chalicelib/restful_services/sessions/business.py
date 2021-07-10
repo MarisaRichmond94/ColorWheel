@@ -6,15 +6,10 @@ from utils.validation import validate_params
 from restful_services.sessions import data
 
 
-def create_session(
-    db_session: any,
-    user_id: Union[str, uuid4],
-    token: str,
-) -> Optional[dict]:
+def create_session(user_id: Union[str, uuid4], token: str) -> Optional[dict]:
     """Creates a new session in the fct_sessions table.
 
     Args:
-        db_session: The current database session.
         user_id: The primary key associated with a user entity in the dim_users table.
         token: An encoded JSON web token associated with the given user entity.
 
@@ -25,14 +20,13 @@ def create_session(
         InvalidParamException: If the user_id or token is None.
     """
     validate_params(func='create_session', params={'user_id': user_id, 'token': token})
-    return data.create_session(db_session, user_id=user_id, token=token)
+    return data.create_session(user_id=user_id, token=token)
 
 
-def get_session_by_token(db_session: any, token: str) -> Optional[dict]:
+def get_session_by_token(token: str) -> Optional[dict]:
     """Gets a session using the given token.
 
     Args:
-        db_session: The current database session.
         token: An encoded JSON web token associated with a session in the fct_sessions table.
 
     Returns:
@@ -42,14 +36,13 @@ def get_session_by_token(db_session: any, token: str) -> Optional[dict]:
         InvalidParamException: If the token is None.
     """
     validate_params(func='get_session_by_token', params={'token': token})
-    return data.get_session_by_token(db_session, token=token)
+    return data.get_session_by_token(token=token)
 
 
-def get_session_by_user(db_session: any, user_id: Union[str, uuid4]) -> Optional[dict]:
+def get_session_by_user(user_id: Union[str, uuid4]) -> Optional[dict]:
     """Gets a session using the given user_id.
 
     Args:
-        db_session: The current database session.
         user_id: The primary key associated with a user entity in the dim_users table.
 
     Returns:
@@ -59,4 +52,4 @@ def get_session_by_user(db_session: any, user_id: Union[str, uuid4]) -> Optional
         InvalidParamException: If the user_id is None.
     """
     validate_params(func='get_session_by_user', params={'user_id': user_id})
-    return data.get_session_by_user(db_session, user_id=user_id)
+    return data.get_session_by_user(user_id=user_id)

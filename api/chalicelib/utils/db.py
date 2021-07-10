@@ -8,6 +8,7 @@ from settings import db
 
 engine = create_engine(db.DATABASE_URI)
 Session = sessionmaker(bind=engine)
+SESSION = None
 
 
 @contextmanager

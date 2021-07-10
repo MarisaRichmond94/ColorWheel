@@ -6,16 +6,10 @@ from restful_services.users import data
 from restful_services.users.utils import hash_password
 
 
-def create_user(
-    session: any,
-    name: str,
-    email: str,
-    password: str,
-) -> Optional[dict]:
+def create_user(name: str, email: str, password: str) -> Optional[dict]:
     """Creates a new user in the dim_users table.
 
     Args:
-        session: The current database session.
         name: The full name (first and last) of a user.
         email: The unique email address to associated with the new user.
         password: A plain text string containing at least 10 characters.
@@ -32,18 +26,16 @@ def create_user(
     )
     hashed_password = hash_password.generate_hashed_password(password=password)
     return data.create_user(
-        session=session,
         name=name,
         email=email,
         password=hashed_password,
     )
 
 
-def get_user_by_email(session: any, email: str) -> Optional[dict]:
+def get_user_by_email(email: str) -> Optional[dict]:
     """Gets a user by the given email.
 
     Args:
-        session: The current database session.
         email: The unique email address associated with a user entity in the dim_users table.
 
     Returns:
@@ -53,4 +45,4 @@ def get_user_by_email(session: any, email: str) -> Optional[dict]:
         InvalidParamException: if email is None.
     """
     validate_params(func='get_user_by_email', params={'email': email})
-    return data.get_user_by_email(session, email)
+    return data.get_user_by_email(email)
