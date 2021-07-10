@@ -32,7 +32,7 @@ function SmartRouter() {
     <Switch>
       <Route path='/explore' component={ExploreRoute} />
       <Route path='/workspace' component={WorkspaceRoute} />
-      <Route exact path='/' component={LoginRoute} />
+      <Route path='/' component={LoginRoute} />
       <Route render={() => <DefaultRedirect redirectPath={'/workspace'} />} />
     </Switch>
   );
