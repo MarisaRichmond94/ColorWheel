@@ -1,3 +1,5 @@
+@use 'src/app';
+
 .smart-button {
   padding: 5px 15px;
 
@@ -29,4 +31,14 @@
   background: transparent;
   color: white;
   outline: 1px solid white;
+
+  &:active {
+    background: transparent;
+    color: app.$tertiery-background-color;
+
+    &:focus {
+      background: transparent;
+      color: app.$tertiery-background-color;
+    }
+  }
 }

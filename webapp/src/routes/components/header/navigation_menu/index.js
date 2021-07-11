@@ -33,6 +33,7 @@ const NavigationMenu = () => {
 
   const onOptionSelect = option => {
     const isMockBE = window.location.search.includes('MOCK_BE');
+    console.log({ history, option });
     history.push(`/${option.displayName.toLowerCase()}${isMockBE ? '?MOCK_BE' : ''}`);
   };
 

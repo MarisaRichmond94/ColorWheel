@@ -1,0 +1,40 @@
+@use 'src/app';
+
+#explore-page {
+  background: url(app.$image-assets-path + 'explore_background.jpg') no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  height: 100%;
+  margin: 0;
+  width: 100%;
+
+  .text-center.row {
+    padding-top: 15%;
+    width: 100%;
+  }
+
+  #explore-header {
+    color: white;
+    font-family: 'Nunito';
+    font-size: 80px;
+    font-weight: bold;
+    padding-bottom: 30px;
+  }
+
+  #explore-text {
+    color: white;
+    font-family: 'Nunito';
+    font-size: 25px;
+    font-weight: 400;
+    padding-bottom: 20px;
+    margin: auto;
+    text-align: center;
+    width: 45vw;
+  }
+
+  #explore-button-wrapper {
+    #explore-notify-button {
+      font-size: 20px;
+    }
+  }
+}
