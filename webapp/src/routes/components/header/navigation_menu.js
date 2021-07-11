@@ -1,5 +1,3 @@
-import './index.scss';
-
 import React, { useEffect, useState } from 'react';
 import { AiOutlineFileSearch } from 'react-icons/ai';
 import { GiHamburgerMenu } from 'react-icons/gi';

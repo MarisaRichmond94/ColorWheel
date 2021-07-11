@@ -1,5 +1,3 @@
-import './index.scss';
-
 import React from 'react';
 import { FaUserCog } from 'react-icons/fa';
 import { IoLogOutOutline, IoSettingsOutline } from 'react-icons/io5';

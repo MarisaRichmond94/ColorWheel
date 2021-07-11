@@ -9,9 +9,40 @@
   top: 0;
   width: 100vw;
   user-select: none;
-}
 
-.header-icon {
-  color: white;
-  font-size: 23px;
+  #main-header-icon {
+    cursor: pointer;
+    float: left;
+    height: 30px;
+    margin: 5px 10px 5px 0px;
+  }
+
+  #main-header-text {
+    color: white;
+    cursor: pointer;
+    float: left;
+    font-family: 'Affectionately Yours';
+    font-size: 35px;
+    line-height: 40px;
+  }
+
+  #header-navigation-menu-button {
+    margin-left: 10px;
+  }
+
+  .header-icon {
+    color: white;
+    font-size: 23px;
+  }
+
+  #main-header-greeting-text {
+    color: white;
+    font-family: 'Nunito';
+    font-size: 16px;
+    padding-top: 8px;
+  }
+
+  #header-cog-menu-button {
+    margin-left: 10px;
+  }
 }
